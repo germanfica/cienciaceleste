@@ -1,0 +1,71 @@
+.titulosadmin {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 30px;
+	color: #FFF;
+	font-weight: bold;
+	text-align: center;
+}
+.texto {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #FFF;
+	font-size: 12px;
+}
+.textobody {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #666;
+	font-size: 12px;
+}
+.titulo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 40px;
+	color: #FFF;
+}
+.catalogo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #006;
+	text-align: justify;
+}
+.titulo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	color: #333;
+}
+.costos {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bolder;
+	font-size: 14px;
+	color: #000;
+}
+.conexiones {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	color: #FFF;
+	text-align: center;
+}
+.textosverde {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFF;
+	font-weight: bolder;
+}
+.textosblanco {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #81C41B;
+}
+.textosverde2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFF;
+}
+.rojo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #F00;
+}
+.verde {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #0C0;
+}

@@ -1,0 +1,118 @@
+.alfayomega {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 30px;
+	color: #F00;
+	text-align: center;
+	vertical-align: top;
+	font-weight: bolder;
+}.textogrande {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	color: #000;
+	text-align: center;
+	vertical-align: top;
+	font-weight: bolder;
+}
+.texto {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #333;
+	text-align: justify;
+	vertical-align: top;
+}
+.textochiquito {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #666;
+	text-align: justify;
+	vertical-align: top;
+}
+
+.error {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #F00;
+	text-align: justify;
+}
+
+.textoinferior {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #000;
+	text-align: center;
+}
+
+.titulos {
+	font-family: "Lucida Handwriting";
+	font-size: 14px;
+	color: #FFF;
+	font-weight: bolder;
+	text-align: center;
+}
+.titulosnegros {
+	font-family: "Lucida Handwriting";
+	font-size: 14px;
+	color: #666;
+	font-weight: bolder;
+	text-align: center;
+}
+
+
+.textoblanco {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFF;
+	text-align: justify;
+}
+
+.links {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #333;
+	font-weight: bolder;
+}
+.linksinferior {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	font-weight: bolder;
+}
+
+.linksblanco {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFF;
+	font-weight: bolder;
+}
+
+.background {
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.backgroundsup {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url(fondolinkscentrosup.jpg)/*tpa=http://www.alfayomega.pe/congresos/III-CI-COSTARICA-2015/imagenes/fondolinkscentrosup.jpg*/;
+}
+
+.backgroundleft {
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url(fondolinksright.jpg)/*tpa=http://www.alfayomega.pe/congresos/III-CI-COSTARICA-2015/imagenes/fondolinksright.jpg*/;
+}
+.backgroundleftsup {
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url(fondolinksrightsup.jpg)/*tpa=http://www.alfayomega.pe/congresos/III-CI-COSTARICA-2015/imagenes/fondolinksrightsup.jpg*/;
+}
+
+.backgroundright {
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-image: url(fondolinksleft.jpg)/*tpa=http://www.alfayomega.pe/congresos/III-CI-COSTARICA-2015/imagenes/fondolinksleft.jpg*/;
+}
+.backgroundrightsup {
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-image: url(fondolinksleftsup.jpg)/*tpa=http://www.alfayomega.pe/congresos/III-CI-COSTARICA-2015/imagenes/fondolinksleftsup.jpg*/;
+}
