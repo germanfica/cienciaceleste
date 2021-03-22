@@ -7,3 +7,23 @@ Todos los archivos deben estar codificados en UTF-8 para que funcione con github
 - Seleccionar todo el contenido a convertir.
 - Ir a Encoding > Convert to UTF-8.
 - Guardar el archivo y listo.
+
+## Convert Multiple Files to UTF-8 Encoding
+
+Source: https://www.tecmint.com/convert-files-to-utf-8-encoding-in-linux/amp/
+
+**encoding.sh:**
+```bash
+#!/bin/bash
+#enter input encoding here
+FROM_ENCODING="value_here"
+#output encoding(UTF-8)
+TO_ENCODING="UTF-8"
+#convert
+CONVERT=" iconv  -f   $FROM_ENCODING  -t   $TO_ENCODING"
+#loop to convert multiple files 
+for  file  in  *.txt; do
+     $CONVERT   "$file"   -o  "${file%.txt}.utf8.converted"
+done
+exit 0
+```
