@@ -1,6 +1,6 @@
 #!/bin/bash
 #enter input encoding here
-FROM_ENCODING="ISO 8859-1"
+FROM_ENCODING="ISO-8859"
 #output encoding(UTF-8)
 TO_ENCODING="UTF-8"
 #convert
