@@ -39,4 +39,6 @@ file *
 ## Useful links
 
 - [ISO/IEC 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1)
-- 
+- [Removing Characters from String in Bash](https://linuxhint.com/remove_characters_string_bash)
+- [How to trim string in bash](https://linuxhint.com/trim_string_bash/)
+- [Shell Scripting Tutorial - Loops](https://www.shellscript.sh/loops.html)
