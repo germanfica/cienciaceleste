@@ -27,3 +27,16 @@ for  file  in  *.txt; do
 done
 exit 0
 ```
+
+## Get encoding of a file
+
+This will give you the encoding details of all the files in the current folder.
+
+```bash
+file *
+```
+
+## Useful links
+
+- [ISO/IEC 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1)
+- 
