@@ -14,7 +14,7 @@ echo $msg1
 #loop to change name of multiple new files
 for  file  in  *.utf8.converted; do
 	echo $file
-	echo ${file##*(.utf8.converted)}
+	echo $file | rev | cut -c16- | rev
 	mv "$file" "${file%.htm}.htm"
 done
 #message 2
