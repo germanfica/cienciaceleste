@@ -15,6 +15,7 @@ echo $msg1
 for  file  in  *.utf8.converted; do
 	#echo $file
 	#echo $file | rev | cut -c16- | rev
+	#%.utf8.converted es un trim!!
 	mv "$file" "${file%.utf8.converted}.htm"
 done
 #message 2
