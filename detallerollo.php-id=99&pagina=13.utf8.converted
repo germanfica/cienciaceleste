@@ -1,0 +1,48 @@
+Error al Conectar al Servidor<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>DIVINA REVELACION ALFA Y OMEGA</title>
+<style type="text/css">
+<!--
+@import url("estilos.css")/*tpa=http://www.alfayomega.pe/css/estilos.css*/;
+body {
+	background-color: #0CF;
+}
+-->
+</style></head>
+
+<body>
+<table  width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><img src="toplong.jpg" tppabs="http://www.alfayomega.pe/imagenes/toplong.jpg" width="1000" height="200" align="center"/></td>
+  </tr>
+  <tr >
+    <td background="fondolong.jpg" tppabs="http://www.alfayomega.pe/imagenes/fondolong.jpg"><table width="900" border="0" align="center" cellpadding="28" bgcolor="#FFFFFF">
+    	
+      <tr><td colspan="2" class='titulotexto' >
+      <div >
+                  <div align="left" id="google_translate_element"></div>
+                  <script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'es'
+  }, 'google_translate_element');
+}
+            </script>
+                  <script src="element.js-cb=googleTranslateElementInit.js" tppabs="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+                </div>
+      <!-- DIVINO ROLLO N° 99 --></td></tr>
+      <tr ><td  class='textolinkleft'><a href="divinosrollos.php-pagina=13.htm" tppabs="http://www.alfayomega.pe/divinosrollos.php?pagina=13" target='_self'>LISTADO DIVINOS ROLLOS</a></td>
+		<td   class='textolink' >
+      		<a href="detallerollo.php-id=98&pagina=13.htm" tppabs="http://www.alfayomega.pe/detallerollo.php?id=98&pagina=13" target='_self'>ANTERIOR</a>&nbsp;&nbsp;
+	  	  </td></tr>
+                </td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td><img src="bottomlong.jpg" tppabs="http://www.alfayomega.pe/imagenes/bottomlong.jpg" width="1000" height="100" /></td>
+  </tr>
+</table>
+</body>
+</html>
