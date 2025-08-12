@@ -84,6 +84,37 @@ id-100_pagina-8__The-Beginning.md
 
 ---
 
+## dedup
+
+El limpiador decide duplicados exclusivamente por contenido, no por el nombre del archivo.
+
+Cómo lo hace:
+
+1. Lee cada .md (UTF-8 por defecto).
+2. Normaliza el texto según flags: quita BOM, unifica EOL a LF, recorta espacios finales, opcionalmente ignora front matter YAML y colapsa líneas en blanco.
+3. Calcula un SHA-256 del contenido normalizado y usa ese hash para agrupar.
+4. Si dos archivos tienen el mismo hash, son duplicados aunque tengan nombres o rutas distintas. Si el nombre es igual pero el contenido cambia, se consideran distintos. Los nombres solo se usan para construir el destino y resolver colisiones con sufijos como "(1)".
+
+Detalles a tener en cuenta:
+
+* Límite de tamaño: por defecto omite archivos > 5 MB. Si necesitas revisar absolutamente todos, sube el límite con "--maxBytes 104857600" (por ejemplo, 100 MB).
+* Normalización: si querés igualdad más estricta "byte a byte" del texto, desactiva normalizaciones:
+
+  ```bash
+  node ./dist/clean-dedup.fixed.js \
+    --src ./md \
+    --dest ./complete \
+    --duplicates ./duplicates \
+    --ignore-front-matter false \
+    --collapse-blank-lines false \
+    --trim-trailing-spaces false \
+    --normalize-eol false \
+    --strip-bom false \
+    --dry-run
+  ```
+
+* Near-duplicates: este script está enfocado en duplicados exactos (tras la normalización). No usa similitud por nombre ni heurísticas de filename. Si algún día se requiere detectar casi-duplicados (pequeñas ediciones), se puede añadir un modo opcional con SimHash/LSH.
+
 ## License
 
 This project is released under the MIT License.
