@@ -6,6 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/index.js",
+    "checker": "node ./dist/checker.js",
+    "clean": "tsc --build --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +20,8 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@types/chardet": "^0.8.3",
+    "chardet": "^2.1.0",
     "cheerio": "^1.1.2",
     "fast-glob": "^3.3.3",
     "iconv-lite": "^0.6.3",
