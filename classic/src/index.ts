@@ -47,7 +47,10 @@ const ensureDir = async (dir: string): Promise<void> => {
 
 const readHtmlAsLatin1 = async (filePath: string): Promise<string> => {
     const raw = await fs.readFile(filePath);
-    return iconv.decode(raw, "latin1");
+    //return iconv.decode(raw, "latin1");
+    //return iconv.decode(raw, "win1252");
+    //return iconv.decode(raw, "iso-8859-1");
+    return iconv.decode(raw, "utf8");
 };
 
 const extractIdPagina = (fileName: string): { id: Nullable<string>; pagina: Nullable<string> } => {
