@@ -54,6 +54,10 @@ node ./dist/index.js --in "./mis_htm" --out "./markdown" --pattern "detallerollo
 node ./dist/index.js --in "../" --out "./markdown" --pattern "detallerollo.php-id=*\\&pagina=*.htm" --images true --concurrency 8
 ```
 
+```bash
+node ./dist/check-sequence.js --dir ./complete --checkPages true --pageStartAt 1
+```
+
 This command will:
 
 * Read all `.htm` files matching the provided pattern from `./mis_htm`.
