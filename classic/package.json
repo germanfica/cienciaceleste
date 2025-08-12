@@ -8,6 +8,7 @@
     "start": "node ./dist/index.js",
     "clean": "tsc --build --clean",
     "convert": "npm run clean && npm run build && node ./dist/index.js --in \"../\" --out \"./markdown\" --pattern \"detallerollo.php-id=*\\\\&pagina=*.htm\" --images true --concurrency 8",
+    "dedup": "npm run clean && npm run build && node ./dist/clean-dedup.js --src ./markdown --dest ./complete --duplicates ./duplicates --commit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
