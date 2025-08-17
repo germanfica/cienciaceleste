@@ -1,6 +1,8 @@
 # Ciencia Celeste
 Hice este repositorio con el objetivo de mejorar la interfaz para la lectura de los rollos. El sitio oficial es http://www.alfayomega.pe/.
 
+<img width="1037" height="512" alt="image" src="https://github.com/user-attachments/assets/e4a5a113-ffb0-4f5c-acf1-c9538ae26c16" />
+
 ## Bugs
 Todos los archivos deben estar codificados en UTF-8 para que funcione con github pages. Toca ir uno por uno para corregir. Con Notepad++ se puede convertir a UTF-8. El proceso es el siguiente:
 - Abrir el archivo con Notepad++.
