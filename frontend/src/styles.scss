@@ -115,3 +115,9 @@ img {
   //height: auto;      // si querés altura fija de tus JPGs, incluso podés poner height:auto; o quitarlo
   display: block;    // evita el "gap" de inline-img
 }
+
+// no queda exactamente igual que a <span>&nbsp;</span>
+// .textolink a:not(:last-child),
+// .textolink b:not(:last-child) {
+//   margin-right: 0.28em;
+// }
