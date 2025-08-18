@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-rollos',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './rollos.html',
   styleUrl: './rollos.scss'
 })
