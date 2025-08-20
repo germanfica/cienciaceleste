@@ -1,5 +1,6 @@
 # Utils
 output.txt
+CombineTypescriptFilesToOutput.ps1
 
 # Node
 node_modules/
