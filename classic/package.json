@@ -11,6 +11,7 @@
     "dedup": "npm run clean && npm run build && node ./dist/clean-dedup.js --src ./markdown --dest ./complete --duplicates ./duplicates --commit",
     "check-sequence": "npm run clean && npm run build && node ./dist/check-sequence.js --dir ./complete --checkPages true --pageStartAt 1",
     "rename:id": "npm run clean && npm run build && node ./dist/rename-to-id.js --dir ./complete --commit",
+    "index:readme": "npm run build && node ./dist/build-index.js --dir ./complete --out ./complete/README.md",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
