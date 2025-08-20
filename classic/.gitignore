@@ -12,6 +12,7 @@ markdown
 mis_htm
 complete
 duplicates
+public
 
 # Env & local
 .env

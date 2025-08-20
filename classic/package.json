@@ -12,6 +12,7 @@
     "check-sequence": "npm run clean && npm run build && node ./dist/check-sequence.js --dir ./complete --checkPages true --pageStartAt 1",
     "rename:id": "npm run clean && npm run build && node ./dist/rename-to-id.js --dir ./complete --commit",
     "index:readme": "npm run build && node ./dist/build-index.js --dir ./complete --out ./complete/README.md",
+    "md:json": "npm run build && node ./dist/md-to-json.js --src complete --out public/docs --index public/docs-index.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
