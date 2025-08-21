@@ -21,14 +21,16 @@ export class DocViewer implements OnInit, OnDestroy {
     private router: Router,
     private docs: Docs,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.sub = this.route.paramMap
       .pipe(switchMap(p => this.docs.getDoc(p.get("id")!)))
-      .subscribe({ next: d => {
+      .subscribe({
+        next: d => {
           this.doc = d;
           this.cdr.markForCheck(); // forzar refresco
-      }, error: () => this.router.navigateByUrl("/docs/404") });
+        }, error: () => this.router.navigateByUrl("/docs/404")
+      });
   }
   ngOnDestroy(): void { this.sub?.unsubscribe(); }
 

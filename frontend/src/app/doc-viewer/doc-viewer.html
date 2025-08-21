@@ -2,97 +2,97 @@
   <!-- <h1 class="sr-only">{{ d.titulo }}</h1> -->
 
   @for (b of d.bloques; track trackBlock($index, b)) {
-    @if (b.t === 'h1') { <h1 [attr.id]="b.id || null">{{ b.text }}</h1> }
-    @if (b.t === 'h2') { <h2 [attr.id]="b.id || null">{{ b.text }}</h2> }
-    @if (b.t === 'h3') { <h3 [attr.id]="b.id || null">{{ b.text }}</h3> }
-    @if (b.t === 'h4') { <h4 [attr.id]="b.id || null">{{ b.text }}</h4> }
-    @if (b.t === 'h5') { <h5 [attr.id]="b.id || null">{{ b.text }}</h5> }
-    @if (b.t === 'h6') { <h6 [attr.id]="b.id || null">{{ b.text }}</h6> }
+  @if (b.t === 'h1') { <h1 [attr.id]="b.id || null">{{ b.text }}</h1> }
+  @if (b.t === 'h2') { <h2 [attr.id]="b.id || null">{{ b.text }}</h2> }
+  @if (b.t === 'h3') { <h3 [attr.id]="b.id || null">{{ b.text }}</h3> }
+  @if (b.t === 'h4') { <h4 [attr.id]="b.id || null">{{ b.text }}</h4> }
+  @if (b.t === 'h5') { <h5 [attr.id]="b.id || null">{{ b.text }}</h5> }
+  @if (b.t === 'h6') { <h6 [attr.id]="b.id || null">{{ b.text }}</h6> }
 
-    @if (b.t === 'p') {
-      <p>
-        @for (s of b.inlines; track trackInline($index, s)) {
-          @switch (s.t) {
-            @case ('text') { {{ s.text }} }
-            @case ('strong') { <strong>{{ s.text }}</strong> }
-            @case ('em') { <em>{{ s.text }}</em> }
-            @case ('code') { <code>{{ s.text }}</code> }
-            @case ('link') {
-              <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-            }
-          }
-        }
-      </p>
+  @if (b.t === 'p') {
+  <p>
+    @for (s of b.inlines; track trackInline($index, s)) {
+    @switch (s.t) {
+    @case ('text') { {{ s.text }} }
+    @case ('strong') { <strong>{{ s.text }}</strong> }
+    @case ('em') { <em>{{ s.text }}</em> }
+    @case ('code') { <code>{{ s.text }}</code> }
+    @case ('link') {
+    <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
     }
+    }
+    }
+  </p>
+  }
 
-    @if (b.t === 'ul') {
-      <ul>
-        @for (item of b.items; track trackInlineArray($index, item)) {
-          <li>
-            @for (s of item; track trackInline($index, s)) {
-              @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') {
-                  <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                }
-              }
-            }
-          </li>
-        }
-      </ul>
+  @if (b.t === 'ul') {
+  <ul>
+    @for (item of b.items; track trackInlineArray($index, item)) {
+    <li>
+      @for (s of item; track trackInline($index, s)) {
+      @switch (s.t) {
+      @case ('text') { {{ s.text }} }
+      @case ('strong') { <strong>{{ s.text }}</strong> }
+      @case ('em') { <em>{{ s.text }}</em> }
+      @case ('code') { <code>{{ s.text }}</code> }
+      @case ('link') {
+      <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+      }
+      }
+      }
+    </li>
     }
+  </ul>
+  }
 
-    @if (b.t === 'ol') {
-      <ol>
-        @for (item of b.items; track trackInlineArray($index, item)) {
-          <li>
-            @for (s of item; track trackInline($index, s)) {
-              @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') {
-                  <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                }
-              }
-            }
-          </li>
-        }
-      </ol>
+  @if (b.t === 'ol') {
+  <ol>
+    @for (item of b.items; track trackInlineArray($index, item)) {
+    <li>
+      @for (s of item; track trackInline($index, s)) {
+      @switch (s.t) {
+      @case ('text') { {{ s.text }} }
+      @case ('strong') { <strong>{{ s.text }}</strong> }
+      @case ('em') { <em>{{ s.text }}</em> }
+      @case ('code') { <code>{{ s.text }}</code> }
+      @case ('link') {
+      <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+      }
+      }
+      }
+    </li>
     }
+  </ol>
+  }
 
-    @if (b.t === 'img') {
-      <figure>
-        <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" />
-      </figure>
-    }
+  @if (b.t === 'img') {
+  <figure>
+    <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" />
+  </figure>
+  }
 
-    @if (b.t === 'code') {
-      <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
-    }
+  @if (b.t === 'code') {
+  <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
+  }
 
-    @if (b.t === 'blockquote') {
-      <blockquote>
-        @for (s of b.inlines; track trackInline($index, s)) {
-          @switch (s.t) {
-            @case ('text') { {{ s.text }} }
-            @case ('strong') { <strong>{{ s.text }}</strong> }
-            @case ('em') { <em>{{ s.text }}</em> }
-            @case ('code') { <code>{{ s.text }}</code> }
-            @case ('link') {
-              <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-            }
-          }
-        }
-      </blockquote>
+  @if (b.t === 'blockquote') {
+  <blockquote>
+    @for (s of b.inlines; track trackInline($index, s)) {
+    @switch (s.t) {
+    @case ('text') { {{ s.text }} }
+    @case ('strong') { <strong>{{ s.text }}</strong> }
+    @case ('em') { <em>{{ s.text }}</em> }
+    @case ('code') { <code>{{ s.text }}</code> }
+    @case ('link') {
+    <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
     }
+    }
+    }
+  </blockquote>
+  }
   }
 
   @if (d.autor) {
-    <p class="mt-6 text-right font-semibold">Escribe: {{ d.autor }}</p>
+  <p class="mt-6 text-right font-semibold">Escribe: {{ d.autor }}</p>
   }
 </main>
