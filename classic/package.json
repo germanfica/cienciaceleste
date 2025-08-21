@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:all": "npm run convert && npm run dedup && npm run check-sequence && npm run rename:id && npm run index:readme && npm run md:json",
     "start": "node ./dist/index.js",
     "clean": "tsc --build --clean",
     "convert": "npm run clean && npm run build && node ./dist/index.js --in \"../docs/\" --out \"./markdown\" --pattern \"detallerollo.php-id=*\\\\&pagina=*.htm\" --images true --concurrency 8",
