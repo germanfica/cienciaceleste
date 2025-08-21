@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import fg from "fast-glob";
-import { load, type CheerioAPI } from "cheerio";
+import { load, type Cheerio, type CheerioAPI } from "cheerio";
 import iconv from "iconv-lite";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -62,11 +62,43 @@ const extractIdPagina = (fileName: string): { id: Nullable<string>; pagina: Null
     };
 };
 
+const isDecorativeImage = (url: string): boolean => {
+  const u = url.toLowerCase();
+  // Exclude layout images like "imagenes/fondolong.jpg" and "imagenes/bottomlong.jpg"
+  // Also exclude the same names if they appear under "images/"
+  return /(?:^|\/)(?:imagenes|images)\/(?:fondolong|bottomlong)\.jpe?g$/.test(u);
+};
+
+// decorative images to exclude
+const EXCLUDED_FILES = ["fondolong.jpg", "toplong.jpg" , "bottomlong.jpg"] as const;
+
+const notAttrEndsWith = (attr: "src" | "tppabs", files: readonly string[]): string =>
+  files.map(f => `:not([${attr}$="${f}"])`).join("");
+
+const joinSelectors = (...parts: string[]): string =>
+  parts.filter(Boolean).join(", ");
+
+// Preferred and fallback selectors (compact and readable)
+const ROLLOS_SELECTOR = joinSelectors(
+  `img[tppabs*="/images/rollos/"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`,
+  `img[tppabs*="/imagenes/rollos/"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
+);
+
+// If you later want to also consider tppabs endings, add:
+//   , `img[tppabs$=".jpg"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
+//   , `img[tppabs$=".jpeg"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
+const JPG_SELECTOR = joinSelectors(
+  `img[src$=".jpg"]${notAttrEndsWith("src", EXCLUDED_FILES)}`,
+  `img[src$=".jpeg"]${notAttrEndsWith("src", EXCLUDED_FILES)}`
+);
+
 const pickMainImageUrl = ($: CheerioAPI): Nullable<string> => {
-    const img = $('img[tppabs*="/images/rollos/"]').first();
+    //const img = $('img[tppabs*="/images/rollos/"]').first();
+    const img = $(ROLLOS_SELECTOR).first();
     if (img.length) return img.attr("tppabs") ?? null;
 
-    const alt = $('img[src$=".jpg"], img[src$=".jpeg"]').first();
+    //const alt = $('img[src$=".jpg"], img[src$=".jpeg"]').first();
+    const alt = $(JPG_SELECTOR).first();
     const url = alt.attr("tppabs") || alt.attr("src");
     return url ?? null;
 };
