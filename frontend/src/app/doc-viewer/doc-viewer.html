@@ -1,6 +1,6 @@
-<main class="prose mx-auto px-4 py-6" *ngIf="doc as d">
-  <!-- <h1 class="sr-only">{{ d.titulo }}</h1> -->
-
+@let d = (doc$ | async);
+@if (d) {
+<main class="prose mx-auto px-4 py-6">
   @for (b of d.bloques; track trackBlock($index, b)) {
   @if (b.t === 'h1') { <h1 [attr.id]="b.id || null">{{ b.text }}</h1> }
   @if (b.t === 'h2') { <h2 [attr.id]="b.id || null">{{ b.text }}</h2> }
@@ -96,3 +96,4 @@
   <p class="mt-6 text-right font-semibold">Escribe: {{ d.autor }}</p>
   }
 </main>
+}

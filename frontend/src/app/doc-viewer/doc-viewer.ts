@@ -1,38 +1,40 @@
-// doc-viewer.ts
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-
-import { Subscription, switchMap } from "rxjs";
-import { Block, DocJson, Inline } from "./md-types";
-import { Docs } from "./docs";
 import { CommonModule } from "@angular/common";
+import { EMPTY, Observable, switchMap, catchError, shareReplay } from "rxjs";
+import { Docs } from "./docs";
+import { Block, Inline, DocJson } from "./md-types";
 
 @Component({
   selector: "app-doc-viewer",
+  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: "./doc-viewer.html",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DocViewer implements OnInit, OnDestroy {
-  doc?: DocJson;
-  private sub?: Subscription;
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private docs: Docs,
-    private cdr: ChangeDetectorRef
-  ) { }
+export class DocViewer implements OnInit {
+  doc$!: Observable<DocJson>;
+
+  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs) { }
+
   ngOnInit(): void {
-    this.sub = this.route.paramMap
-      .pipe(switchMap(p => this.docs.getDoc(p.get("id")!)))
-      .subscribe({
-        next: d => {
-          this.doc = d;
-          this.cdr.markForCheck(); // forzar refresco
-        }, error: () => this.router.navigateByUrl("/docs/404")
-      });
+    this.doc$ = this.route.paramMap.pipe(
+      switchMap(p => {
+        const id = p.get("id");
+        if (!id) {
+          this.router.navigateByUrl("/docs/404");
+          return EMPTY; // no emite, no null
+        }
+        return this.docs.getDoc(String(id));
+      }),
+      // si hay error (404 del JSON), redirigimos y no emitimos
+      catchError(() => {
+        this.router.navigateByUrl("/docs/404");
+        return EMPTY;
+      }),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
   }
-  ngOnDestroy(): void { this.sub?.unsubscribe(); }
 
   // funciones de tracking
   trackBlock(i: number, b: Block) { return i; }
