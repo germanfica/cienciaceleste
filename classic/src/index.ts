@@ -1,4 +1,18 @@
-// src/index.ts
+// classic/src/index.ts
+//
+// - Skips pages that contain "Error al Conectar al Servidor".
+// - Avoids writing trivially empty Markdown files.
+// - First H1 becomes the title. Falls back to <title> or filename.
+// - Optionally includes the first non-decorative content image.
+// - Outputs filenames like: id-<ID>_pagina-<N>__<TITLE-UPPER>.md
+//
+// Usage:
+//   ts-node src/index.ts --in "../docs/" --out "./markdown" \
+//     --pattern "detallerollo.php-id=*\\&pagina=*.htm" --images true --concurrency 8 --verbose
+//
+// After tsc:
+//   node ./dist/index.js --in "../docs/" --out "./markdown" --pattern "detallerollo.php-id=*\\&pagina=*.htm"
+
 import fs from "node:fs/promises";
 import path from "node:path";
 import fg from "fast-glob";
@@ -9,235 +23,369 @@ import { hideBin } from "yargs/helpers";
 
 type Nullable<T> = T | null;
 
-interface CliArgs {
-    in: string;
-    out: string;
-    images: boolean;
-    pattern: string;
-    concurrency: number;
+// ---------------------------------------------------------------------------
+// Small utils
+// ---------------------------------------------------------------------------
+
+function normalizeSpaces(s: string): string {
+    return s.replace(/\s+/g, " ").trim();
 }
 
-interface ParsedDoc {
-    title: Nullable<string>;
-    bodyParas: string[];
-    signature: Nullable<string>;
-    imageUrl: Nullable<string>;
-    id: Nullable<string>;
-    pagina: Nullable<string>;
+function looksLikeServerError(html: string): boolean {
+    const txt = normalizeSpaces(html).toLowerCase();
+    return txt.includes("error al conectar al servidor");
 }
 
-const parseCli = (): CliArgs =>
-    yargs(hideBin(process.argv))
-        .option("in", { alias: "i", type: "string", demandOption: true, describe: "Carpeta de entrada con .htm" })
-        .option("out", { alias: "o", type: "string", demandOption: true, describe: "Carpeta de salida para .md" })
-        .option("images", { type: "boolean", default: true, describe: "Insertar imagen principal si existe" })
-        .option("pattern", {
-            type: "string",
-            default: "detallerollo.php-id=*\\&pagina=*.htm",
-            describe: "Patrón fast-glob para encontrar los .htm"
-        })
-        .option("concurrency", { type: "number", default: 8, describe: "Paralelismo al convertir" })
-        .strict()
-        .help()
-        .parseSync() as CliArgs;
+function isTriviallyEmptyMarkdown(md: string): boolean {
+    const cleaned = md
+        .replace(/!\[[^\]]*]\([^)]*\)/g, " ")   // images
+        .replace(/^#{1,6}\s+.*$/gm, " ")        // markdown headers
+        .replace(/[*_`>#\[\]()]/g, " ")         // md markers
+        .replace(/\s+/g, " ")
+        .trim();
+    return cleaned.length < 10;
+}
 
-const ensureDir = async (dir: string): Promise<void> => {
-    await fs.mkdir(dir, { recursive: true });
-};
+function logSkip(reason: string, file: string, verbose?: boolean): void {
+    if (verbose) console.log(`[skip] ${reason}: ${file}`);
+}
 
-const readHtmlAsLatin1 = async (filePath: string): Promise<string> => {
-    const raw = await fs.readFile(filePath);
-    //return iconv.decode(raw, "latin1");
-    //return iconv.decode(raw, "win1252");
-    //return iconv.decode(raw, "iso-8859-1");
-    return iconv.decode(raw, "utf8");
-};
+async function ensureDir(p: string): Promise<void> {
+    // fs.mkdir returns Promise<string | undefined>; swallow the value to keep Promise<void>
+    await fs.mkdir(p, { recursive: true });
+}
 
-const extractIdPagina = (fileName: string): { id: Nullable<string>; pagina: Nullable<string> } => {
-    const idMatch = fileName.match(/id=(\d+)/);
-    const pagMatch = fileName.match(/pagina=(\d+)/);
-    return {
-        id: idMatch?.[1] ?? null,
-        pagina: pagMatch?.[1] ?? null
+// ---------------------------------------------------------------------------
+// Encoding detection (lightweight)
+// ---------------------------------------------------------------------------
+
+function sniffEncodingFromHead(raw: Buffer): string | null {
+    const head = raw.slice(0, Math.min(raw.length, 4096)).toString("ascii").toLowerCase();
+    const m1 = head.match(/<meta[^>]+charset=["']?([\w\-]+)/i);
+    if (m1?.[1]) return m1[1];
+    const m2 = head.match(/content=["'][^"']*charset=([\w\-]+)/i);
+    if (m2?.[1]) return m2[1];
+    return null;
+}
+
+function decodeBuffer(raw: Buffer): string {
+    const enc = sniffEncodingFromHead(raw);
+    if (!enc) {
+        try {
+            return iconv.decode(raw, "utf8");
+        } catch {
+            return iconv.decode(raw, "win1252");
+        }
+    }
+    const normalized = enc.replace(/[^a-z0-9\-]/gi, "").toLowerCase();
+    const map: Record<string, string> = {
+        "utf8": "utf8",
+        "utf-8": "utf8",
+        "windows-1252": "win1252",
+        "win-1252": "win1252",
+        "cp1252": "win1252",
+        "iso-8859-1": "latin1"
     };
-};
+    const use = map[normalized] ?? normalized;
+    try {
+        return iconv.decode(raw, use as any);
+    } catch {
+        return iconv.decode(raw, "utf8");
+    }
+}
 
-const isDecorativeImage = (url: string): boolean => {
-  const u = url.toLowerCase();
-  // Exclude layout images like "imagenes/fondolong.jpg" and "imagenes/bottomlong.jpg"
-  // Also exclude the same names if they appear under "images/"
-  return /(?:^|\/)(?:imagenes|images)\/(?:fondolong|bottomlong)\.jpe?g$/.test(u);
-};
+// ---------------------------------------------------------------------------
+// File name helpers
+// ---------------------------------------------------------------------------
 
-// decorative images to exclude
-const EXCLUDED_FILES = ["fondolong.jpg", "toplong.jpg" , "bottomlong.jpg"] as const;
+function extractIdPagina(fileName: string): { id: Nullable<string>; pagina: Nullable<string> } {
+    const base = path.basename(fileName);
+    const idMatch = base.match(/id=(\d+)/i);
+    const pagMatch = base.match(/pagina=(\d+)/i);
+    // ensure we never return undefined (only string|null)
+    const id = idMatch?.[1] ?? null;
+    const pagina = pagMatch?.[1] ?? null;
+    return { id, pagina };
+}
 
-const notAttrEndsWith = (attr: "src" | "tppabs", files: readonly string[]): string =>
-  files.map(f => `:not([${attr}$="${f}"])`).join("");
+function toUpperKebabPreserveAccents(s: string): string {
+    return normalizeSpaces(s).replace(/\s+/g, "-").toUpperCase();
+}
 
-const joinSelectors = (...parts: string[]): string =>
-  parts.filter(Boolean).join(", ");
+function buildOutputName(srcFile: string, title: string): string {
+    const { id, pagina } = extractIdPagina(srcFile);
+    const titlePart = title ? toUpperKebabPreserveAccents(title) : "SIN-TITULO";
+    if (id && pagina) return `id-${id}_pagina-${pagina}__${titlePart}.md`;
+    if (id) return `id-${id}__${titlePart}.md`;
+    return `${titlePart}.md`;
+}
 
-// Preferred and fallback selectors (compact and readable)
-const ROLLOS_SELECTOR = joinSelectors(
-  `img[tppabs*="/images/rollos/"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`,
-  `img[tppabs*="/imagenes/rollos/"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
-);
+// ---------------------------------------------------------------------------
+// Image filtering
+// ---------------------------------------------------------------------------
 
-// If you later want to also consider tppabs endings, add:
-//   , `img[tppabs$=".jpg"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
-//   , `img[tppabs$=".jpeg"]${notAttrEndsWith("tppabs", EXCLUDED_FILES)}`
-const JPG_SELECTOR = joinSelectors(
-  `img[src$=".jpg"]${notAttrEndsWith("src", EXCLUDED_FILES)}`,
-  `img[src$=".jpeg"]${notAttrEndsWith("src", EXCLUDED_FILES)}`
-);
+function isDecorativeImage(url: string): boolean {
+    const u = (url || "").toLowerCase();
+    return (
+        /fondolong\.jpg$/.test(u) ||
+        /bottomlong\.jpg$/.test(u) ||
+        /toplong\.jpg$/.test(u) ||
+        /header/.test(u) ||
+        /footer/.test(u) ||
+        /background/.test(u)
+    );
+}
 
-const pickMainImageUrl = ($: CheerioAPI): Nullable<string> => {
-    //const img = $('img[tppabs*="/images/rollos/"]').first();
-    const img = $(ROLLOS_SELECTOR).first();
-    if (img.length) return img.attr("tppabs") ?? null;
+function resolveImgUrl(el: Cheerio<any>): string {
+    const tppabs = el.attr("tppabs") || "";
+    const src = el.attr("src") || "";
+    const candidate = tppabs || src;
+    return candidate.trim();
+}
 
-    //const alt = $('img[src$=".jpg"], img[src$=".jpeg"]').first();
-    const alt = $(JPG_SELECTOR).first();
-    const url = alt.attr("tppabs") || alt.attr("src");
-    return url ?? null;
-};
+// ---------------------------------------------------------------------------
+// HTML -> Markdown conversion
+// ---------------------------------------------------------------------------
 
-const normalizeWhitespace = (s: string): string => s.replace(/\s+/g, " ").trim();
+function firstNonEmptyText($: CheerioAPI, sel: string): string | null {
+    const t = $(sel).first().text();
+    const v = normalizeSpaces(t);
+    return v || null;
+}
 
-const toMarkdown = (
-    data: Pick<ParsedDoc, "title" | "bodyParas" | "signature" | "imageUrl">,
-    includeImages: boolean
-): string => {
-    const parts: string[] = [];
-    if (data.title) parts.push(`# ${data.title}`);
-    if (includeImages && data.imageUrl) parts.push(`![${data.title ?? "imagen"}](${data.imageUrl})`);
-    if (data.bodyParas.length) parts.push(data.bodyParas.join("\n\n"));
-    if (data.signature) parts.push(`*${data.signature}*`);
-    return parts.join("\n\n") + "\n";
-};
+function extractTitle($: CheerioAPI, fallback: string): string {
+    const h1 = firstNonEmptyText($, "h1");
+    if (h1) return h1;
 
-const sanitizeFileName = (input: string): string =>
-    input.replace(/[<>:"/\\|?*\x00-\x1F]/g, "_").replace(/\s+/g, " ").trim();
+    const docTitle = firstNonEmptyText($, "title");
+    if (docTitle) return docTitle;
 
-const outNameFor = (
-    _filePath: string,
-    title: Nullable<string>,
-    id: Nullable<string>,
-    pagina: Nullable<string>
-): string => {
-    const base = [`id-${id ?? "x"}`, `pagina-${pagina ?? "x"}`].join("_");
-    const titleSlug = title ? sanitizeFileName(title).slice(0, 80).replace(/\s+/g, "-") : "rollo";
-    return `${base}__${titleSlug}.md`;
-};
+    const boldLike = firstNonEmptyText($, "td b, td strong, .textorollo b, .textorollo strong");
+    if (boldLike) return boldLike;
 
-// Limitador de concurrencia minimalista y tipado
-const pLimit = (n: number) => {
-    let active = 0;
-    const queue: Array<{
-        job: () => Promise<unknown>;
-        resolve: (v: any) => void; // usar any evita el error de covarianza en T
-        reject: (e: any) => void;
-    }> = [];
+    return fallback;
+}
 
-    const next = (): void => {
-        if (active >= n || queue.length === 0) return;
-        active++;
-        const { job, resolve, reject } = queue.shift()!;
-        job()
-            .then((res) => {
-                active--;
-                resolve(res);
-                next();
-            })
-            .catch((err) => {
-                active--;
-                reject(err);
-                next();
+function extractParas($: CheerioAPI): string[] {
+    const rawLines: string[] = [];
+
+    const containers = [
+        "td.textorollo", ".textorollo", ".contenido", "div#contenido", "div.content"
+    ];
+
+    let containerFound = false;
+    for (const c of containers) {
+        if ($(c).length) {
+            containerFound = true;
+            $(c).each((_, el) => {
+                const $el = $(el);
+                const html = ($el.html() || "").replace(/<\s*br\s*\/?>/gi, "\n");
+                const text = normalizeSpaces($("<div>").html(html).text().replace(/\n+/g, "\n"));
+                for (const line of text.split("\n")) {
+                    const v = line.trim();
+                    if (v) rawLines.push(v);
+                }
             });
-    };
-
-    return <T>(job: () => Promise<T>): Promise<T> =>
-        new Promise<T>((resolve, reject) => {
-            queue.push({ job, resolve: resolve as (v: any) => void, reject: reject as (e: any) => void });
-            next();
-        });
-};
-
-const parseHtml = (html: string, fileName: string): ParsedDoc => {
-    // Quitar decodeEntities: ya no es una opción válida en los tipos de Cheerio v1
-    const $ = load(html);
-
-    const rawTitle = normalizeWhitespace($(".titulorollo").text());
-    const bodyParas = $("td.textorollo")
-        .map((_, el) => normalizeWhitespace($(el).text()))
-        .get()
-        .filter((t: string) => t.length > 0);
-
-    const signatureText = normalizeWhitespace($("td.textoderecha").first().text());
-    const imageUrl = pickMainImageUrl($);
-
-    const { id, pagina } = extractIdPagina(fileName);
-    const safeId: Nullable<string> = id ?? null;
-    const safePagina: Nullable<string> = pagina ?? null;
-    const safeSignature: Nullable<string> = signatureText || null;
-
-    return {
-        title: rawTitle || null,
-        bodyParas,
-        signature: safeSignature,
-        imageUrl,
-        id: safeId,
-        pagina: safePagina
-    };
-};
-
-const writeMarkdown = async (outDir: string, name: string, content: string): Promise<void> => {
-    const outFile = path.join(outDir, name);
-    await fs.writeFile(outFile, content, "utf8");
-};
-
-const run = async (): Promise<void> => {
-    const args = parseCli();
-    const { in: inDir, out: outDir, pattern, images, concurrency } = args;
-
-    await ensureDir(outDir);
-    const files = await fg(pattern, { cwd: inDir, absolute: true, onlyFiles: true, caseSensitiveMatch: false });
-
-    if (files.length === 0) {
-        console.warn("No se encontraron archivos con el patrón proporcionado.");
-        return;
+            break;
+        }
     }
 
-    const limit = pLimit(Math.max(1, concurrency));
-    let ok = 0;
-    let fail = 0;
+    if (!containerFound) {
+        $("p").each((_, p) => {
+            const t = normalizeSpaces($(p).text());
+            if (t) rawLines.push(t);
+        });
+    }
 
-    await Promise.all(
-        files.map((absPath) =>
-            limit(async () => {
-                const fileName = path.basename(absPath);
-                try {
-                    const html = await readHtmlAsLatin1(absPath);
-                    const parsed = parseHtml(html, fileName);
-                    const md = toMarkdown(parsed, images);
-                    const outName = outNameFor(absPath, parsed.title, parsed.id, parsed.pagina);
-                    await writeMarkdown(outDir, outName, md);
-                    ok++;
-                } catch (err) {
-                    fail++;
-                    const msg = err instanceof Error ? err.message : String(err);
-                    console.error(`Error en ${fileName}: ${msg}`);
+    const merged: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+        if (!buf.length) return;
+        merged.push(buf.join(" "));
+        buf = [];
+    };
+    for (const line of rawLines) {
+        buf.push(line);
+        if (line.length >= 80) flush();
+    }
+    flush();
+    return merged;
+}
+
+function extractFirstContentImage($: CheerioAPI): { alt: string; url: string } | null {
+    const candidates: Cheerio<any>[] = [];
+
+    $('img[tppabs*="/images/rollos/"]').each((_, el) => {
+        candidates.push($(el));
+    });
+
+    if (!candidates.length) {
+        $('img[src*="/images/rollos/"]').each((_, el) => {
+            candidates.push($(el));
+        });
+    }
+
+    if (!candidates.length) {
+        $("img").each((_, el) => {
+            const $img = $(el);
+            const url = resolveImgUrl($img);
+            if (url && !isDecorativeImage(url)) {
+                candidates.push($img);
+            }
+        });
+    }
+
+    for (const $img of candidates) {
+        const url = resolveImgUrl($img);
+        if (!url || isDecorativeImage(url)) continue;
+        const alt = normalizeSpaces($img.attr("alt") || "");
+        return { alt, url };
+    }
+    return null;
+}
+
+function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includeImages: boolean): string {
+    const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
+    const title = extractTitle($, fallbackTitle);
+    const paras = extractParas($);
+
+    const parts: string[] = [];
+    parts.push(`# ${title}`);
+    parts.push("");
+
+    if (includeImages) {
+        const img = extractFirstContentImage($);
+        if (img) {
+            const alt = img.alt || "image";
+            parts.push(`![${alt}](${img.url})`);
+            parts.push("");
+        }
+    }
+
+    for (const p of paras) {
+        parts.push(p);
+        parts.push("");
+    }
+
+    while (parts.length && parts[parts.length - 1] === "") parts.pop();
+    return parts.join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// Concurrency helper
+// ---------------------------------------------------------------------------
+
+async function mapWithConcurrency<T, R>(
+    items: T[],
+    limit: number,
+    worker: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+    const results: R[] = new Array(items.length);
+    let next = 0;
+    const running: Promise<void>[] = [];
+
+    async function runOne(i: number): Promise<void> {
+        // guard for noUncheckedIndexedAccess
+        const item = items[i];
+        if (item === undefined) return;
+        const r = await worker(item, i);
+        results[i] = r;
+    }
+
+    while (next < items.length || running.length) {
+        while (next < items.length && running.length < limit) {
+            const i = next++;
+            const p = runOne(i).then(
+                () => {
+                    const idx = running.indexOf(p);
+                    if (idx >= 0) running.splice(idx, 1);
+                },
+                () => {
+                    const idx = running.indexOf(p);
+                    if (idx >= 0) running.splice(idx, 1);
                 }
-            })
-        )
+            );
+            running.push(p);
+        }
+        if (running.length) {
+            await Promise.race(running);
+        }
+    }
+    return results;
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+async function main(): Promise<void> {
+    const argv = await yargs(hideBin(process.argv))
+        .option("in", { type: "string", demandOption: true, desc: "Input dir (HTML root)" })
+        .option("out", { type: "string", demandOption: true, desc: "Output dir (Markdown)" })
+        .option("pattern", { type: "string", demandOption: true, desc: "fast-glob pattern under --in" })
+        .option("images", { type: "boolean", default: true, desc: "Include first content image" })
+        .option("concurrency", { type: "number", default: 8, desc: "Parallelism" })
+        .option("verbose", { type: "boolean", default: false, desc: "Verbose logging for skips" })
+        .parse();
+
+    const IN = path.resolve(String(argv.in));
+    const OUT = path.resolve(String(argv.out));
+    const pattern = String(argv.pattern);
+    const includeImages = Boolean(argv.images);
+    const concurrency = Math.max(1, Number(argv.concurrency) || 1);
+    const verbose = Boolean(argv.verbose);
+
+    await ensureDir(OUT);
+
+    let okCount = 0;
+    let errCount = 0;
+    let skippedErrorPages = 0;
+    let skippedEmpty = 0;
+
+    const htmlFiles = await fg(pattern, { cwd: IN, absolute: true, dot: false });
+
+    await mapWithConcurrency(htmlFiles, concurrency, async (src, idx) => {
+        try {
+            const raw = await fs.readFile(src);
+            const html = decodeBuffer(raw);
+
+            // 1) Skip server error pages
+            if (looksLikeServerError(html)) {
+                skippedErrorPages++;
+                logSkip("server error page", src, verbose);
+                return;
+            }
+
+            const $ = load(html);
+            const markdown = convertHtmlToMarkdown($, src, includeImages);
+
+            // 2) Skip trivially empty markdown
+            if (isTriviallyEmptyMarkdown(markdown)) {
+                skippedEmpty++;
+                logSkip("empty markdown", src, verbose);
+                return;
+            }
+
+            const outName = buildOutputName(src, extractTitle($, path.basename(src)));
+            const destPath = path.join(OUT, outName);
+
+            await fs.writeFile(destPath, markdown, "utf8");
+            okCount++;
+        } catch (e) {
+            errCount++;
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error(`[error] ${src}\n  ${msg}`);
+        }
+    });
+
+    console.log(
+        `Listo. Convertidos: ${okCount}. Errores: ${errCount}. ` +
+        `Omitidos(error): ${skippedErrorPages}. Omitidos(vacío): ${skippedEmpty}. ` +
+        `Salida: ${OUT}`
     );
+}
 
-    console.log(`Listo. Convertidos: ${ok}. Errores: ${fail}. Salida: ${path.resolve(outDir)}`);
-};
-
-run().catch((err) => {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error(`Fallo inesperado: ${msg}`);
+main().catch((e) => {
+    console.error(e instanceof Error ? e.message : String(e));
     process.exit(1);
 });
