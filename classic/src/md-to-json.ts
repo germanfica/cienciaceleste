@@ -20,7 +20,8 @@ type InlineItem = { t: "text"; text: string };
 type BlockItem =
     | { t: "h1"; text: string; id: string }
     | { t: "img"; src: string; alt: string }
-    | { t: "p"; inlines: InlineItem[] };
+    | { t: "p"; inlines: InlineItem[] }
+    | { t: "author"; text: string };
 
 interface DocJson {
     id: string;
@@ -198,6 +199,10 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
         buffer.push(line);
     }
     flush();
+
+    if (autor) {
+        bloques.push({ t: "author", text: autor });
+    }
 
     return { titulo, autor, bloques };
 }

@@ -1,9 +1,11 @@
+@let d = (doc$ | async);
+
+@if (d) {
 <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
-        <td>
-            <img src="images/toplong.jpg" width="1000" height="200" />
-        </td>
+        <td><img src="images/toplong.jpg" width="1000" height="200" /></td>
     </tr>
+
     <tr>
         <td background="images/fondolong.jpg">
             <table width="900" border="0" align="center" cellpadding="28" bgcolor="#FFFFFF">
@@ -20,48 +22,129 @@
                     </td>
                 </tr>
 
+                <!-- TITULO -->
                 <tr>
                     <td colspan="2" class="titulorollo">
-                        <u>MENSAJE TELEPÁTICO DEL PADRE ETERNO AL MUNDO TERRESTRE; MENSAJE SEGUNDO; EL PRIMER MENSAJE
-                            FUÉ OCULTADO AL MUNDO POR LA ROCA RELIGIOSA.-
-                        </u>
+                        <u>{{ d.titulo || " " }}</u>
                     </td>
                 </tr>
 
-                <tr>
-                    <td colspan="2" class="textorollo">
-                        <!-- TODO: aquí mantenés el contenido tal cual lo tenías -->
-                        Sí hijos; se nace buscando la verdad; se inicia para el mundo del conocimiento, la revelación
-                        esperada por siglos y siglos; vuestro Creador se vale de doctrinas vivientes para hacer avanzar
-                        a los mundos; en el pasado os envió la ley Mosáica; le sucedió la doctrina Cristiana; la tercera
-                        la que se inicia, es la doctrina del Cordero de dios
+                <!-- CONTENIDO -->
 
-                    </td>
-                </tr>
+                @for (b of d.bloques; track trackBlock($index, b)) {
 
+                @if (b.t === "img") {
                 <tr>
                     <td colspan="10" align="center">
-                        <img src="https://germanfica.com/cienciaceleste/mensaje1.jpg" width="800" />
+                        <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
                     </td>
                 </tr>
-
+                }
+                @else if (b.t !== "h1" && b.t !== "author") {
                 <tr>
                     <td colspan="2" class="textorollo">
-                        Sí hijito; este dibujo celeste significa que toda justicia sale del mismo modo como se
-                        reproducen los seres;
+                        <!-- @if (b.t === "h1") { <h1 [attr.id]="b.id || null">{{ b.text }}</h1> }
+                        @if (b.t === "h2") { <h2 [attr.id]="b.id || null">{{ b.text }}</h2> }
+                        @if (b.t === "h3") { <h3 [attr.id]="b.id || null">{{ b.text }}</h3> }
+                        @if (b.t === "h4") { <h4 [attr.id]="b.id || null">{{ b.text }}</h4> }
+                        @if (b.t === "h5") { <h5 [attr.id]="b.id || null">{{ b.text }}</h5> }
+                        @if (b.t === "h6") { <h6 [attr.id]="b.id || null">{{ b.text }}</h6> } -->
+
+                        @if (b.t === "p") {
+                        @for (s of b.inlines; track trackInline($index, s)) {
+                        @switch (s.t) {
+                        @case ("text") { {{ s.text }} }
+                        @case ("strong") { <strong>{{ s.text }}</strong> }
+                        @case ("em") { <em>{{ s.text }}</em> }
+                        @case ("code") { <code>{{ s.text }}</code> }
+                        @case ("link") {
+                        <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+                        }
+                        }
+                        }
+                        }
+
+                        @if (b.t === "ul") {
+                        <ul>
+                            @for (item of b.items; track trackInlineArray($index, item)) {
+                            <li>
+                                @for (s of item; track trackInline($index, s)) {
+                                @switch (s.t) {
+                                @case ("text") { {{ s.text }} }
+                                @case ("strong") { <strong>{{ s.text }}</strong> }
+                                @case ("em") { <em>{{ s.text }}</em> }
+                                @case ("code") { <code>{{ s.text }}</code> }
+                                @case ("link") {
+                                <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+                                }
+                                }
+                                }
+                            </li>
+                            }
+                        </ul>
+                        }
+
+                        @if (b.t === "ol") {
+                        <ol>
+                            @for (item of b.items; track trackInlineArray($index, item)) {
+                            <li>
+                                @for (s of item; track trackInline($index, s)) {
+                                @switch (s.t) {
+                                @case ("text") { {{ s.text }} }
+                                @case ("strong") { <strong>{{ s.text }}</strong> }
+                                @case ("em") { <em>{{ s.text }}</em> }
+                                @case ("code") { <code>{{ s.text }}</code> }
+                                @case ("link") {
+                                <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+                                }
+                                }
+                                }
+                            </li>
+                            }
+                        </ol>
+                        }
+
+                        <!-- @if (b.t === "img") {
+                        <figure>
+                            <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
+                        </figure>
+                        } -->
+
+                        @if (b.t === "code") {
+                        <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
+                        }
+
+                        @if (b.t === "blockquote") {
+                        <blockquote>
+                            @for (s of b.inlines; track trackInline($index, s)) {
+                            @switch (s.t) {
+                            @case ("text") { {{ s.text }} }
+                            @case ("strong") { <strong>{{ s.text }}</strong> }
+                            @case ("em") { <em>{{ s.text }}</em> }
+                            @case ("code") { <code>{{ s.text }}</code> }
+                            @case ("link") {
+                            <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
+                            }
+                            }
+                            }
+                        </blockquote>
+                        }
+
                     </td>
-
                 </tr>
+                }
+                }
 
+                <!-- AUTOR -->
                 <tr>
-                    <td colspan="2" class="textoderecha">Escribe: El Alfa y la Omega</td>
+                    <td colspan="2" class="textoderecha">Escribe: {{ d.autor }}</td>
                 </tr>
             </table>
         </td>
     </tr>
+
     <tr>
-        <td>
-            <img src="images/bottomlong.jpg" width="1000" height="100" />
-        </td>
+        <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
     </tr>
 </table>
+}

@@ -13,7 +13,8 @@ export type Block =
   | { t: "ol"; items: Inline[][] }
   | { t: "code"; lang?: string; code: string }
   | { t: "img"; src: string; alt?: string }
-  | { t: "blockquote"; inlines: Inline[] };
+  | { t: "blockquote"; inlines: Inline[] }
+  | { t: "author"; text: string };
 
 export interface DocJson {
   id: string|number;
