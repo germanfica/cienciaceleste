@@ -309,7 +309,150 @@ function extractFirstContentImage($: CheerioAPI): { alt: string; url: string } |
     return null;
 }
 
-function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includeImages: boolean): string {
+function extractContentImage($: CheerioAPI, $node: Cheerio<any>): { alt: string; url: string } | null {
+    const node = $node.get(0);
+    if (!node) return null;
+    const tag = (node.name || "").toLowerCase();
+
+    // 1) coleccionar imgs en el contexto actual
+    const imgs: Cheerio<any>[] = [];
+    if (tag === "img") {
+        imgs.push($node);
+    } else {
+        $node.find("img").each((_, el) => { imgs.push($(el)); });
+    }
+    if (!imgs.length) return null;
+
+    // 2) util para elegir por prioridad y filtrar decorativas
+    const pickBy = (pred: (img: Cheerio<any>) => boolean): Cheerio<any> | null => {
+        for (const $img of imgs) {
+            const url = resolveImgUrl($img);
+            if (!url || isDecorativeImage(url)) continue;
+            if (pred($img)) return $img;
+        }
+        return null;
+    };
+
+    const hasRollosInTppabs = ($img: Cheerio<any>) => /\/images\/rollos\//i.test($img.attr("tppabs") || "");
+    const hasRollosInSrc = ($img: Cheerio<any>) => /\/images\/rollos\//i.test($img.attr("src") || "");
+
+    // 3) misma lógica que tu extractFirstContentImage: prioridad por tppabs, luego src, luego cualquier no decorativa
+    const picked =
+        pickBy(hasRollosInTppabs) ||
+        pickBy(hasRollosInSrc) ||
+        pickBy(() => true);
+
+    if (!picked) return null;
+
+    // 4) construir {alt,url} garantizando tipos (alt:string por exactOptionalPropertyTypes)
+    const url = resolveImgUrl(picked);
+    let alt = normalizeSpaces(picked.attr("alt") ?? "");
+
+    // si es <figure> y no hay alt, intentamos con el figcaption
+    if (!alt && tag === "figure") {
+        const fc = normalizeSpaces($node.find("figcaption").first().text() || "");
+        if (fc) alt = fc;
+    }
+
+    if (!alt) alt = "image";
+    return { alt, url };
+}
+
+
+function convertHtmlToMarkdown(
+    $: CheerioAPI,
+    srcNameForFallback: string,
+    includeImages: boolean
+): string {
+    const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
+    const rolloTitle = extractRolloTitle($, fallbackTitle);
+
+    const parts: string[] = [];
+    parts.push(`# ${rolloTitle}`);
+    parts.push("");
+
+    // anti-duplicados
+    const seenParas = new Set<string>();
+    const seenImgUrls = new Set<string>();
+    const normKey = (s: string) => normalizeSpaces(s).toLowerCase();
+
+    const emitTextorollo = ($node: Cheerio<any>) => {
+        const $clone = $node.clone();
+        $clone.find("script,style").remove();
+        const html = ($clone.html() || "").replace(/<\s*br\s*\/?>/gi, " ");
+        const text = normalizeSpaces($("<div>").html(html).text()).trim();
+        const key = normKey(text);
+        if (text && !seenParas.has(key)) {
+            seenParas.add(key);
+            parts.push(text);
+            parts.push("");
+        }
+    };
+
+    const emitImg = ($img: Cheerio<any>) => {
+        if (!includeImages) return;
+        const url = resolveImgUrl($img);
+        if (!url || isDecorativeImage(url) || seenImgUrls.has(url)) return;
+
+        // priorizamos imágenes de /images/rollos/ pero aceptamos cualquier no decorativa
+        const ok =
+            /\/images\/rollos\//i.test($img.attr("tppabs") || "") ||
+            /\/images\/rollos\//i.test($img.attr("src") || "") ||
+            true;
+
+        if (ok) {
+            seenImgUrls.add(url);
+            const alt = normalizeSpaces($img.attr("alt") || "") || "image";
+            parts.push(`![${alt}](${url})`);
+            parts.push("");
+        }
+    };
+
+    // Walker en orden de documento: solo .textorollo y <img>
+    const walk = (node: any) => {
+        if (!node) return;
+
+        if (node.type === "tag") {
+            const $el = $(node);
+            const name = (node.name || "").toLowerCase();
+
+            // Si es una celda o bloque con .textorollo => emitir y NO descender (evita duplicados)
+            if ($el.is("td.textorollo, .textorollo")) {
+                emitTextorollo($el);
+                return;
+            }
+
+            // Si es una imagen => emitir aquí mismo
+            if (name === "img") {
+                emitImg($el);
+                return;
+            }
+
+            // En cualquier otro caso, seguimos en profundidad
+            $el.contents().each((_, ch) => walk(ch));
+        }
+        // ignoramos nodos de texto/comentario fuera de .textorollo
+    };
+
+    // arrancamos desde <body> para mantener el orden real del documento
+    $("body").contents().each((_, n) => walk(n));
+
+    // Autor al final
+    const author = extractAuthor($);
+    if (author) {
+        if (parts.length && parts[parts.length - 1] !== "") parts.push("");
+        parts.push(`*${author}*`);
+        parts.push("");
+    }
+
+    while (parts.length && parts[parts.length - 1] === "") parts.pop();
+    return parts.join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// Old version (for reference, can be removed later)
+// ---------------------------------------------------------------------------
+function convertHtmlToMarkdowOld($: CheerioAPI, srcNameForFallback: string, includeImages: boolean): string {
     const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
     const title = extractRolloTitle($, fallbackTitle);
     const paras = extractParas($);
