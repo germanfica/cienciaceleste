@@ -16,11 +16,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-type InlineItem = { t: "text"; text: string };
+type Inline = { t: "text"; text: string };
 type Block =
     | { t: "h1"; text: string; id: string }
     | { t: "img"; src: string; alt: string }
-    | { t: "p"; inlines: InlineItem[] }
+    | { t: "p"; inlines: Inline[] }
     | { t: "author"; text: string };
 
 interface DocJson {
