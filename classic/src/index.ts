@@ -21,6 +21,14 @@ import iconv from "iconv-lite";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+/**
+ * Collection title used across the project.
+ */
+const COLLECTION_TITLE = "DIVINA REVELACION ALFA Y OMEGA" as const;
+
 type Nullable<T> = T | null;
 
 // ---------------------------------------------------------------------------
@@ -197,12 +205,19 @@ function firstNonEmptyText($: CheerioAPI, sel: string): string | null {
     return v || null;
 }
 
-function extractTitle($: CheerioAPI, fallback: string): string {
-    const h1 = firstNonEmptyText($, "h1");
-    if (h1) return h1;
+function extractRolloTitle($: CheerioAPI, fallback: string): string {
+    const rollo = firstNonEmptyText($, ".titulorollo"); // specific class for rollo titles
+    if (rollo) return rollo;
 
+    return fallback;
+}
+
+function extractTitle($: CheerioAPI, fallback: string): string {
     const docTitle = firstNonEmptyText($, "title");
     if (docTitle) return docTitle;
+
+    const h1 = firstNonEmptyText($, "h1");
+    if (h1) return h1;
 
     const boldLike = firstNonEmptyText($, "td b, td strong, .textorollo b, .textorollo strong");
     if (boldLike) return boldLike;
@@ -290,7 +305,7 @@ function extractFirstContentImage($: CheerioAPI): { alt: string; url: string } |
 
 function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includeImages: boolean): string {
     const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
-    const title = extractTitle($, fallbackTitle);
+    const title = extractRolloTitle($, fallbackTitle);
     const paras = extractParas($);
 
     const parts: string[] = [];
@@ -410,7 +425,7 @@ async function main(): Promise<void> {
                 return;
             }
 
-            const outName = buildOutputName(src, extractTitle($, path.basename(src)));
+            const outName = buildOutputName(src, COLLECTION_TITLE); // extractTitle($, path.basename(src))
             const destPath = path.join(OUT, outName);
 
             await fs.writeFile(destPath, markdown, "utf8");
@@ -424,7 +439,7 @@ async function main(): Promise<void> {
 
     console.log(
         `Listo. Convertidos: ${okCount}. Errores: ${errCount}. ` +
-        `Omitidos(error): ${skippedErrorPages}. Omitidos(vacío): ${skippedEmpty}. ` +
+        `Omitidos(error_pages): ${skippedErrorPages}. Omitidos(vacío): ${skippedEmpty}. ` +
         `Salida: ${OUT}`
     );
 }
