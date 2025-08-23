@@ -55,6 +55,50 @@ async function ensureDir(p: string): Promise<void> {
     await fs.mkdir(p, { recursive: true });
 }
 
+// async function readFileAsUtf8(filePath: string): Promise<string> {
+//     const raw = await fs.readFile(filePath);
+//     //return iconv.decode(raw, "latin1");
+//     //return iconv.decode(raw, "win1252");
+//     //return iconv.decode(raw, "iso-8859-1");
+//     return iconv.decode(raw, "utf8");
+// }
+
+// async function readFileAsUtf8(raw: Buffer): Promise<string> {
+//     //return iconv.decode(raw, "latin1");
+//     //return iconv.decode(raw, "win1252");
+//     //return iconv.decode(raw, "iso-8859-1");
+//     return iconv.decode(raw, "utf8");
+// }
+
+/**
+ * Decodes a raw HTML buffer as UTF-8.
+ *
+ * Background:
+ * Legacy `.htm` files used in the conversion were all
+ * batch-converted to UTF-8 in commit
+ * `dc64e3748e912c836ededc7fc9184ff7a1ceee9b` (Mar 25, 2021).
+ *
+ * However, these files still contain legacy
+ * `<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">`
+ * tags from before the conversion.
+ *
+ * To avoid ambiguity and ensure consistent parsing,
+ * we deliberately ignore the misleading ISO-8859-1 declaration
+ * and always decode buffers as UTF-8.
+ *
+ * This prevents unnecessary confusion during conversion
+ * and guarantees stable, uniform results across all documents.
+ *
+ * @param raw - The raw file buffer read from disk.
+ * @returns The decoded string, interpreted as UTF-8 text.
+ */
+function decodeBufferUtf8(raw: Buffer): string {
+    //return iconv.decode(raw, "latin1");
+    //return iconv.decode(raw, "win1252");
+    //return iconv.decode(raw, "iso-8859-1");
+    return iconv.decode(raw, "utf8");
+}
+
 // ---------------------------------------------------------------------------
 // Encoding detection (lightweight)
 // ---------------------------------------------------------------------------
@@ -347,7 +391,7 @@ async function main(): Promise<void> {
     await mapWithConcurrency(htmlFiles, concurrency, async (src, idx) => {
         try {
             const raw = await fs.readFile(src);
-            const html = decodeBuffer(raw);
+            const html = decodeBufferUtf8(raw); // decodeBuffer(raw);
 
             // 1) Skip server error pages
             if (looksLikeServerError(html)) {
