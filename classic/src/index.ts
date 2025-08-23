@@ -212,6 +212,11 @@ function extractRolloTitle($: CheerioAPI, fallback: string): string {
     return fallback;
 }
 
+function extractAuthor($: CheerioAPI): string | null {
+    const t = normalizeSpaces($("td.textoderecha").first().text());
+    return t || null;
+}
+
 function extractTitle($: CheerioAPI, fallback: string): string {
     const docTitle = firstNonEmptyText($, "title");
     if (docTitle) return docTitle;
@@ -307,6 +312,7 @@ function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includ
     const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
     const title = extractRolloTitle($, fallbackTitle);
     const paras = extractParas($);
+    const author = extractAuthor($);
 
     const parts: string[] = [];
     parts.push(`# ${title}`);
@@ -324,6 +330,12 @@ function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includ
     for (const p of paras) {
         parts.push(p);
         parts.push("");
+    }
+
+    if (author) {
+        // aseguro un salto antes de la firma si el último no está vacío
+        if (parts.length && parts[parts.length - 1] !== "") parts.push("");
+        parts.push(`*${author}*`);
     }
 
     while (parts.length && parts[parts.length - 1] === "") parts.pop();
