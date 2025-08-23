@@ -17,7 +17,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 type InlineItem = { t: "text"; text: string };
-type BlockItem =
+type Block =
     | { t: "h1"; text: string; id: string }
     | { t: "img"; src: string; alt: string }
     | { t: "p"; inlines: InlineItem[] }
@@ -27,7 +27,7 @@ interface DocJson {
     id: string;
     titulo: string;
     autor: string | null;
-    bloques: BlockItem[];
+    bloques: Block[];
 }
 
 interface CliArgs {
@@ -93,7 +93,7 @@ function extractAuthor(line: string): string | null {
     return cleaned || null;
 }
 
-function parseMarkdown(md: string): { titulo: string; autor: string | null; bloques: BlockItem[] } {
+function parseMarkdown(md: string): { titulo: string; autor: string | null; bloques: Block[] } {
     const text = md.replace(/\r\n?/g, "\n");
     const lines = text.split("\n");
 
@@ -147,7 +147,7 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
         }
     }
 
-    const bloques: BlockItem[] = [];
+    const bloques: Block[] = [];
     bloques.push({ t: "h1", text: titulo, id: toSlug(titulo) });
 
     if (imageUrl) {
