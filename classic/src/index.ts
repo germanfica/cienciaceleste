@@ -24,6 +24,7 @@ import { hideBin } from "yargs/helpers";
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
+const AUTHOR = "El Alfa y la Omega" as const;
 /**
  * Collection title used across the project.
  */
@@ -312,7 +313,8 @@ function convertHtmlToMarkdown($: CheerioAPI, srcNameForFallback: string, includ
     const fallbackTitle = path.basename(srcNameForFallback, path.extname(srcNameForFallback));
     const title = extractRolloTitle($, fallbackTitle);
     const paras = extractParas($);
-    const author = extractAuthor($);
+    // const author = extractAuthor($) || AUTHOR; // use fixed author if none found
+    const author = extractAuthor($); // allow no author if none found
 
     const parts: string[] = [];
     parts.push(`# ${title}`);
