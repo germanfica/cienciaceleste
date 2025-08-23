@@ -97,13 +97,12 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
     const text = md.replace(/\r\n?/g, "\n");
     const lines = text.split("\n");
 
+    // Title (first H1)
     let titulo = "Untitled";
     let tituloLineIndex = -1;
-
-    // Title (first H1)
     for (let i = 0; i < lines.length; i++) {
         const raw = lines[i];
-        if (raw === undefined) continue; // satisfies noUncheckedIndexedAccess
+        if (raw === undefined) continue; // noUncheckedIndexedAccess guard
         const line = raw.trim();
         if (!line) continue;
         const h1 = line.match(/^#\s+(.*)$/);
@@ -130,36 +129,28 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
         }
     }
 
-    // Image (first Markdown image)
-    const imgRe = /!\[(.*?)]\((.*?)\)/;
-    let imageAlt = "";
-    let imageUrl = "";
-    let imageLineIndex = -1;
-    for (let i = 0; i < lines.length; i++) {
-        const raw = lines[i];
-        if (raw === undefined) continue;
-        const m = raw.match(imgRe);
-        if (m) {
-            imageAlt = (m[1] ?? "").trim();
-            imageUrl = (m[2] ?? "").trim();
-            imageLineIndex = i;
-            break;
-        }
-    }
+    // // Image (first Markdown image)
+    // const imgRe = /!\[(.*?)]\((.*?)\)/;
+    // let imageAlt = "";
+    // let imageUrl = "";
+    // let imageLineIndex = -1;
+    // for (let i = 0; i < lines.length; i++) {
+    //     const raw = lines[i];
+    //     if (raw === undefined) continue;
+    //     const m = raw.match(imgRe);
+    //     if (m) {
+    //         imageAlt = (m[1] ?? "").trim();
+    //         imageUrl = (m[2] ?? "").trim();
+    //         imageLineIndex = i;
+    //         break;
+    //     }
+    // }
 
     const bloques: Block[] = [];
     bloques.push({ t: "h1", text: titulo, id: toSlug(titulo) });
 
-    if (imageUrl) {
-        bloques.push({ t: "img", src: imageUrl, alt: imageAlt });
-    }
-
-    // Paragraphs: join contiguous non-empty lines, skipping title/image/author lines
-    const skip = new Set<number>();
-    if (tituloLineIndex >= 0) skip.add(tituloLineIndex);
-    if (imageLineIndex >= 0) skip.add(imageLineIndex);
-    if (autorLineIndex >= 0) skip.add(autorLineIndex);
-
+    // 3) Recorrido en orden preservando flujo p/img (ignorando titulo y autor)
+    const imgOnlyRe = /^\s*!\[(.*?)\]\((.*?)\)\s*$/;
     let buffer: string[] = [];
     const flush = (): void => {
         if (buffer.length === 0) return;
@@ -171,13 +162,12 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
     };
 
     for (let i = 0; i < lines.length; i++) {
-        if (skip.has(i)) {
+        if (i === tituloLineIndex || i === autorLineIndex) {
             flush();
             continue;
         }
         const raw = lines[i];
         if (raw === undefined) {
-            // In practice should not happen, but satisfies noUncheckedIndexedAccess.
             flush();
             continue;
         }
@@ -186,16 +176,25 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
             flush();
             continue;
         }
-        if (imgRe.test(line)) {
-            // Skip any additional bare image lines beyond the first detected image.
+
+        // Imagen en linea propia
+        const m = imgOnlyRe.exec(line);
+        if (m) {
+            flush();
+            const alt = (m[1] ?? "").trim();
+            const src = (m[2] ?? "").trim();
+            if (src) {
+                bloques.push({ t: "img", src, alt });
+            }
+            continue;
+        }
+
+        // Evitar capturar "autor" intermedio
+        if (extractAuthor(line) !== null) {
             flush();
             continue;
         }
-        if (extractAuthor(line)) {
-            // Skip any author-marked lines in the middle.
-            flush();
-            continue;
-        }
+
         buffer.push(line);
     }
     flush();
