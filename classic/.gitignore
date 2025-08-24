@@ -2,6 +2,9 @@
 output.txt
 CombineTypescriptFilesToOutput.ps1
 
+# Compiled output
+out/
+
 # Node
 node_modules/
 dist/
