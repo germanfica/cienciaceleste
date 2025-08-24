@@ -8,10 +8,14 @@
   "engines": {
     "node": ">=22"
   },
-  "scripts": {},
+  "scripts": {
+    "hola": "gulp hola",
+    "gulp": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js"
+  },
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "devDependencies": {
+    "gulp": "^5.0.1"
+  }
 }
