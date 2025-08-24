@@ -9,8 +9,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "build:md": "gulp build:md",
-    "build:all": "gulp build:all",
+    "build:md:rollos": "gulp build:md:rollos",
+    "build:all:rollos": "gulp build:all:rollos",
     "gulp": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js"
   },
   "keywords": [],
