@@ -1,0 +1,17 @@
+{
+  "name": "cienciaceleste",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "",
+  "main": "./out/index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
