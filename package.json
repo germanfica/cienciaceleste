@@ -17,6 +17,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "fancy-log": "^2.0.0",
     "gulp": "^5.0.1"
   }
 }
