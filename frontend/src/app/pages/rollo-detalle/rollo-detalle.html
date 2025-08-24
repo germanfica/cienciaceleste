@@ -1,3 +1,4 @@
+@if (nav$ | async; as nav) {
 @let d = (doc$ | async);
 
 @if (d) {
@@ -15,11 +16,15 @@
 
                 <tr>
                     <td class="textolinkleft">
-                        <a routerLink="/rollos">LISTADO DIVINOS ROLLOS</a>
+                        <a [routerLink]="['/rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS ROLLOS</a>
                     </td>
                     <td class="textolink">
-                        <a href="detallerollo.php-id=1&pagina=1.htm">ANTERIOR</a>&nbsp;&nbsp;
-                        <a href="detallerollo.php-id=2&pagina=1.htm">SIGUIENTE</a>
+                        @if (nav.hasPrev) {
+                        <a [routerLink]="['/rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
+                        }
+                        @if (nav.hasNext) {
+                        <a [routerLink]="['/rollos', nav.nextId]">SIGUIENTE</a>
+                        }
                     </td>
                 </tr>
 
@@ -58,9 +63,7 @@
                         @case ("strong") { <strong>{{ s.text }}</strong> }
                         @case ("em") { <em>{{ s.text }}</em> }
                         @case ("code") { <code>{{ s.text }}</code> }
-                        @case ("link") {
-                        <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                        }
+                        @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
                         }
                         }
                         }
@@ -75,9 +78,8 @@
                                 @case ("strong") { <strong>{{ s.text }}</strong> }
                                 @case ("em") { <em>{{ s.text }}</em> }
                                 @case ("code") { <code>{{ s.text }}</code> }
-                                @case ("link") {
-                                <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                                }
+                                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                    }}</a> }
                                 }
                                 }
                             </li>
@@ -95,9 +97,8 @@
                                 @case ("strong") { <strong>{{ s.text }}</strong> }
                                 @case ("em") { <em>{{ s.text }}</em> }
                                 @case ("code") { <code>{{ s.text }}</code> }
-                                @case ("link") {
-                                <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                                }
+                                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                    }}</a> }
                                 }
                                 }
                             </li>
@@ -123,14 +124,12 @@
                             @case ("strong") { <strong>{{ s.text }}</strong> }
                             @case ("em") { <em>{{ s.text }}</em> }
                             @case ("code") { <code>{{ s.text }}</code> }
-                            @case ("link") {
-                            <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a>
-                            }
+                            @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                }}</a> }
                             }
                             }
                         </blockquote>
                         }
-
                     </td>
                 </tr>
                 }
@@ -148,4 +147,5 @@
         <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
     </tr>
 </table>
+}
 }
