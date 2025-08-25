@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Home } from "./pages/home/home";
+import { Home } from "./home/home";
 import { Rollos } from "./pages/rollos/rollos";
 import { RolloDetalle } from './pages/rollo-detalle/rollo-detalle';
 import { DocViewer } from './doc-viewer/doc-viewer';
