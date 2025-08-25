@@ -28,8 +28,8 @@ const buildAllMini = series(
 // Pipelines para divinas leyes
 const buildMdLeyes = series(
   leyes.convert,
-  // leyes.dedup,
-  // leyes.checkSequence
+  leyes.dedup,
+  leyes.checkSequence
 );
 
 const buildAllLeyes = series(

@@ -76,13 +76,13 @@ const mdJson = series(
   ])
 );
 
-// 7) generate-index-pages: paginado (10 por página)
+// 7) generate-index-pages: paginado (100 por página)
 const indexPages = series(
   buildTS,
   nodeOut("generate-index-pages.js", [
     `--index ./public/docs/${NS}/docs-index.json`,
     `--out ./public/docs/${NS}/index/pages`,
-    "--pageSize 10",
+    "--pageSize 100",
   ])
 );
 

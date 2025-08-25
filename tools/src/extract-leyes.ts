@@ -33,20 +33,21 @@ function getPageNumberFromFilename(file: string): number {
 
 async function writeLey(outDir: string, globalId: number, ley: LeyLite): Promise<void> {
   const idStr = leftPad(globalId);
-  const frontMatter =
-    `---
-type: "divina-ley"
-id: ${globalId}
-id_str: "${idStr}"
-page: ${ley.page}
-index_in_page: ${ley.indexInPage}
-shown_number_in_page: ${ley.shownNumber ?? "null"}
-source_file: "${ley.sourceFile}"
----
-`;
+//   const frontMatter =
+//     `---
+// type: "divina-ley"
+// id: ${globalId}
+// id_str: "${idStr}"
+// page: ${ley.page}
+// index_in_page: ${ley.indexInPage}
+// shown_number_in_page: ${ley.shownNumber ?? "null"}
+// source_file: "${ley.sourceFile}"
+// ---
+// `;
 
-  const md = `${frontMatter}\n${ley.text}\n`;
-  const filename = `ley-${idStr}.md`;
+//   const md = `${frontMatter}\n${ley.text}\n`;
+  const md = `# ${ley.text}`;
+  const filename = `${idStr}.md`;
   await fs.writeFile(path.join(outDir, filename), md, "utf8");
 }
 
