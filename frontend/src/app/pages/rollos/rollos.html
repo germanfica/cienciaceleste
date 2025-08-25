@@ -1,0 +1,98 @@
+@let p = (page$ | async);
+@if (p) {
+<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td><img src="images/toplong.jpg" width="1000" height="200" /></td>
+    </tr>
+
+    <tr>
+        <td background="images/fondolong.jpg">
+            <table width="97%" border="0" align="center" cellpadding="10">
+                <tr>
+                    <td class="white-bg-color">
+                        <table width="100%" cellpadding="10">
+                            <!-- PAGINADOR SUPERIOR -->
+                            <tr>
+                                <td class="textolink" colspan="2">
+                                    @if (p.hasPrev) {
+                                    <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page - 1 }">
+                                        < Anterior</a><span>&nbsp;</span>
+                                            }
+
+                                            @let nums = (pages$ | async);
+                                            @if (nums) {
+                                            @for (n of nums; track trackPage($index, n)) {
+                                            @if (n === p.page) {
+                                            <b>{{ n }}</b>
+                                            } @else {
+                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+                                            }
+                                            <span>&nbsp;</span>
+                                            }
+                                            }
+
+                                            @if (p.hasNext) {
+                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
+                                                ></a>
+                                            }
+                                </td>
+                            </tr>
+
+                            <tr class="titulotexto">
+                                <td colspan="2" valign="top">
+                                    La numeración indicada no se corresponde en algunos casos con la numeración real de
+                                    los rollos, solamente indican un número correlativo.
+                                </td>
+                            </tr>
+
+                            <!-- LISTA DE ITEMS -->
+                            @for (row of p.items; track trackItemId($index, row)) {
+                            <tr class="texto">
+                                <td valign="top">{{ row.id }}</td>
+                                <td valign="top">
+                                    <!-- Detalle del rollo: /rollos/:id (ajusta si usas otra ruta) -->
+                                    <a [routerLink]="['/rollos', row.id]" target="_self">
+                                        <u>{{ row.titulo }}</u>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                            }
+
+                            <!-- PAGINADOR INFERIOR (opcional, idéntico al superior) -->
+                            <tr>
+                                <td class="textolink" colspan="2">
+                                    @if (p.hasPrev) {
+                                    <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page - 1 }">
+                                        < Anterior</a><span>&nbsp;</span>
+                                            }
+                                            @let nums2 = (pages$ | async);
+                                            @if (nums2) {
+                                            @for (n of nums2; track trackPage($index, n)) {
+                                            @if (n === p.page) {
+                                            <b>{{ n }}</b>
+                                            } @else {
+                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+                                            }
+                                            <span>&nbsp;</span>
+                                            }
+                                            }
+                                            @if (p.hasNext) {
+                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
+                                                ></a>
+                                            }
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
+    </tr>
+</table>
+}

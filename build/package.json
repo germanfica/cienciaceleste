@@ -1,0 +1,12 @@
+{
+  "name": "dev-build",
+  "version": "1.0.0",
+  "license": "MIT",
+  "devDependencies": {},
+  "type": "commonjs",
+  "scripts": {},
+  "optionalDependencies": {},
+  "info": {
+    "note": "This package.json belongs to build/package.json"
+  }
+}

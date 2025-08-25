@@ -1,0 +1,134 @@
+/* You can add global styles to this file, and also import other style files */
+@charset "utf-8";
+.titulomenu {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFF;
+	font-weight: bold;
+	text-align: left;
+}
+.menu {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #006;
+	text-align: left;
+}
+.texto {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #006;
+	text-align: justify;
+}
+.textorollo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 47px;
+	color: #006;
+	text-align: justify;
+}
+
+.titulotexto {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #006;
+	font-weight: bold;
+	text-align: center;
+}
+.textofotos {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000;
+	text-align: center;
+}
+.textocentrado {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #006;
+	text-align: center;
+}
+.textolink {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	text-align: right;
+}
+.textoderecha {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 35px;
+	color: #006;
+	text-align: right;
+}
+.textolinkleft {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	text-align: left;
+}
+.textoderechablanco {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFF;
+	text-align: right;
+	font-weight: bolder;
+}
+.titulotextoderecha {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #006;
+	font-weight: bold;
+	text-align: left;
+}
+.titulorollo {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 38px;
+	color: #006;
+	font-weight: bold;
+	text-align: justify;
+}
+
+.texto {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 30px;
+	color: #000;
+}
+
+
+/* Custom */
+
+body { background-color: #0CF; }
+
+a:link { text-decoration: none; }
+
+a:visited { text-decoration: none; }
+
+a:hover { text-decoration: underline; }
+
+a:active { text-decoration: none; }
+
+// .textolinkleft a,
+// .textolink a {
+//   text-decoration: underline;
+// }
+
+// .textolinkpaginacion {
+// 	font-family: Arial, Helvetica, sans-serif;
+// 	font-size: 13px;
+// 	text-align: right;
+// }
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+	border: 0;
+}
+
+.white-bg-color { background-color: #FFFFFF; }
+
+img {
+  //max-width: none;   // evita que Angular te fuerce el escalado
+  //height: auto;      // si querés altura fija de tus JPGs, incluso podés poner height:auto; o quitarlo
+  display: block;    // evita el "gap" de inline-img
+}
+
+// no queda exactamente igual que a <span>&nbsp;</span>
+// .textolink a:not(:last-child),
+// .textolink b:not(:last-child) {
+//   margin-right: 0.28em;
+// }

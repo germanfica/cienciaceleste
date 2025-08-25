@@ -1,0 +1,64 @@
+{
+  "page": 13,
+  "pageSize": 10,
+  "range": {
+    "start": 121,
+    "end": 130
+  },
+  "items": [
+    {
+      "id": 121,
+      "titulo": "DIVINO ORÍGEN DE LOS QUERUBÍNES; LA ESCENCIA DEL UNIVERSO EXPANSIVO PENSANTE; COMO NACEN LAS GALAXIAS; LA GALAXIA TRINO; SU JERARQUÍA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 122,
+      "titulo": "DIVINO ORÍGEN DE LOS NÚMEROS; EL PRIMER NÚMERO; LA SUCESIÓN ETERNA DE LOS NÚMEROS EN EL UNIVERSO VIVIENTE EXPANSIVO; LA DIVINA EVOLUCIÓN DE LOS NÚMEROS; LO QUE ERAN LOS NÚMEROS CELESTIALES.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 123,
+      "titulo": "DIVINO ORÍGEN DE LOS ESPÍRITUS; COMO NACEN Y COMO SE LES FORMA EL PRIMER CUERPO DE CARNE; ESPÍRITU Y CARNE NACEN DE UN MISMO PUNTO SOLAR.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 124,
+      "titulo": "DIVINO ORÍGEN DE LAS IDEAS HUMANAS; COMO SE FORMÓ LA PRIMERA IDEA; PRINCIPIO UNIVERSAL DE TODOS LOS PENSARES HUMANOS; 318 VIRTUDES FORMAN UNA IDEA INVISIBLE; ALFA Y OMEGA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 125,
+      "titulo": "DIVINO ORÍGEN DE LAS GALAXIAS; EL UNIVERSO EXPANSIVO PENSANTE; EL NÚMERO DE MATERIAS JAMÁS PODRÁ SER CALCULADO; LA GALAXIA TRINO.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 126,
+      "titulo": "DIVINO ORÍGEN DE LAS FILOSOFÍAS; RELACIÓN ENTRE EL COMUNISMO TERRESTRE Y EL COMUNISMO CELESTIAL; EL COMUNISMO NACE CON LA MATERIA Y EL ESPÍRITU; LAS ALIANZAS SON COMUNES A TODOS.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 127,
+      "titulo": "DIVINO ORÍGEN DE LAS ESPECIES; CADA CRIATURA ES PRODUCTO DE UN SOL; CADA MUNDO ES UNA MAGNETIZACIÓN MATERIALIZADA; EL CORDERO DE DIOS.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 128,
+      "titulo": "DIVINO ORÍGEN DE LAS DIVINAS BALANZAS SOLARES; COMO SUCEDIÓ EL PRINCIPIO DEL PENSAR HUMANO; LA CAUSA DE SU PROPIA FORMA; FORMA QUE TENDRÁ EN EL FUTURO.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 129,
+      "titulo": "DIVINO ORÍGEN DE LA VIRTUD VIVIENTE; RELACIÓN NUMÉRICA ENTRE LOS PENSARES HUMANOS; LA DESIGUALDAD ENTRE LAS IDEAS; ORÍGEN GALÁCTICO DE CADA ACCIÓN HUMANA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 130,
+      "titulo": "DIVINO ORÍGEN DE LA VIDA HUMANA; COMO SE HACE UNA ENCARNACIÓN; COMO NACE UN BEBÉ; LA UNIÓN ENTRE LAS MOLÉCULAS DE CARNE Y LAS VIRTUDES.-",
+      "autor": "El Alfa y la Omega"
+    }
+  ],
+  "hasPrev": true,
+  "hasNext": true,
+  "totalIds": 263,
+  "totalPages": 27
+}

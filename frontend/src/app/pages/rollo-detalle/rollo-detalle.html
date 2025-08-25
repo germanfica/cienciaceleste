@@ -1,0 +1,151 @@
+@if (nav$ | async; as nav) {
+@let d = (doc$ | async);
+
+@if (d) {
+<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td><img src="images/toplong.jpg" width="1000" height="200" /></td>
+    </tr>
+
+    <tr>
+        <td background="images/fondolong.jpg">
+            <table width="900" border="0" align="center" cellpadding="28" bgcolor="#FFFFFF">
+                <tr>
+                    <td colspan="2" class="titulotexto"></td>
+                </tr>
+
+                <tr>
+                    <td class="textolinkleft">
+                        <a [routerLink]="['/rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS ROLLOS</a>
+                    </td>
+                    <td class="textolink">
+                        @if (nav.hasPrev) {
+                        <a [routerLink]="['/rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
+                        }
+                        @if (nav.hasNext) {
+                        <a [routerLink]="['/rollos', nav.nextId]">SIGUIENTE</a>
+                        }
+                    </td>
+                </tr>
+
+                <!-- TITULO -->
+                <tr>
+                    <td colspan="2" class="titulorollo">
+                        <u>{{ d.titulo || " " }}</u>
+                    </td>
+                </tr>
+
+                <!-- CONTENIDO -->
+
+                @for (b of d.bloques; track trackBlock($index, b)) {
+
+                @if (b.t === "img") {
+                <tr>
+                    <td colspan="10" align="center">
+                        <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
+                    </td>
+                </tr>
+                }
+                @else if (b.t !== "h1" && b.t !== "author") {
+                <tr>
+                    <td colspan="2" class="textorollo">
+                        <!-- @if (b.t === "h1") { <h1 [attr.id]="b.id || null">{{ b.text }}</h1> }
+                        @if (b.t === "h2") { <h2 [attr.id]="b.id || null">{{ b.text }}</h2> }
+                        @if (b.t === "h3") { <h3 [attr.id]="b.id || null">{{ b.text }}</h3> }
+                        @if (b.t === "h4") { <h4 [attr.id]="b.id || null">{{ b.text }}</h4> }
+                        @if (b.t === "h5") { <h5 [attr.id]="b.id || null">{{ b.text }}</h5> }
+                        @if (b.t === "h6") { <h6 [attr.id]="b.id || null">{{ b.text }}</h6> } -->
+
+                        @if (b.t === "p") {
+                        @for (s of b.inlines; track trackInline($index, s)) {
+                        @switch (s.t) {
+                        @case ("text") { {{ s.text }} }
+                        @case ("strong") { <strong>{{ s.text }}</strong> }
+                        @case ("em") { <em>{{ s.text }}</em> }
+                        @case ("code") { <code>{{ s.text }}</code> }
+                        @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                        }
+                        }
+                        }
+
+                        @if (b.t === "ul") {
+                        <ul>
+                            @for (item of b.items; track trackInlineArray($index, item)) {
+                            <li>
+                                @for (s of item; track trackInline($index, s)) {
+                                @switch (s.t) {
+                                @case ("text") { {{ s.text }} }
+                                @case ("strong") { <strong>{{ s.text }}</strong> }
+                                @case ("em") { <em>{{ s.text }}</em> }
+                                @case ("code") { <code>{{ s.text }}</code> }
+                                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                    }}</a> }
+                                }
+                                }
+                            </li>
+                            }
+                        </ul>
+                        }
+
+                        @if (b.t === "ol") {
+                        <ol>
+                            @for (item of b.items; track trackInlineArray($index, item)) {
+                            <li>
+                                @for (s of item; track trackInline($index, s)) {
+                                @switch (s.t) {
+                                @case ("text") { {{ s.text }} }
+                                @case ("strong") { <strong>{{ s.text }}</strong> }
+                                @case ("em") { <em>{{ s.text }}</em> }
+                                @case ("code") { <code>{{ s.text }}</code> }
+                                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                    }}</a> }
+                                }
+                                }
+                            </li>
+                            }
+                        </ol>
+                        }
+
+                        <!-- @if (b.t === "img") {
+                        <figure>
+                            <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
+                        </figure>
+                        } -->
+
+                        @if (b.t === "code") {
+                        <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
+                        }
+
+                        @if (b.t === "blockquote") {
+                        <blockquote>
+                            @for (s of b.inlines; track trackInline($index, s)) {
+                            @switch (s.t) {
+                            @case ("text") { {{ s.text }} }
+                            @case ("strong") { <strong>{{ s.text }}</strong> }
+                            @case ("em") { <em>{{ s.text }}</em> }
+                            @case ("code") { <code>{{ s.text }}</code> }
+                            @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text
+                                }}</a> }
+                            }
+                            }
+                        </blockquote>
+                        }
+                    </td>
+                </tr>
+                }
+                }
+
+                <!-- AUTOR -->
+                <tr>
+                    <td colspan="2" class="textoderecha">Escribe: {{ d.autor }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
+    </tr>
+</table>
+}
+}
