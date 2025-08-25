@@ -2,7 +2,7 @@ const { series } = require("gulp");
 const rollos = require("./rollos");
 const { cleanInit, cleanPost } = require("./clean");
 const mini = require("./divinos-minirollos");
-// const leyes = require("./divinas-leyes");
+const leyes = require("./divinas-leyes");
 
 // Pipelines para rollos
 const buildMdRollos = series(rollos.convert, rollos.dedup, rollos.checkSequence);
@@ -26,12 +26,27 @@ const buildAllMini = series(
 );
 
 // Pipelines para divinas leyes
-// const buildAllLeyes = series(/* leyes.convert, leyes.dedup, … */);
+const buildMdLeyes = series(
+  leyes.convert,
+  // leyes.dedup,
+  // leyes.checkSequence
+);
+
+const buildAllLeyes = series(
+  cleanInit,
+  buildMdLeyes,
+  leyes.renameId,
+  leyes.indexReadme,
+  leyes.mdJson,
+  leyes.indexPages,
+  cleanPost
+);
 
 module.exports = {
   buildMdRollos,
   buildAllRollos,
   buildMdMiniRollos,
   buildAllMini,
-  // buildAllLeyes,
+  buildMdLeyes,
+  buildAllLeyes,
 };

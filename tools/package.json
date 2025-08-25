@@ -16,8 +16,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.15.0",
     "@types/yargs": "^17.0.33",
+    "fs-extra": "^11.3.1",
     "typescript": "^5.9.2"
   },
   "dependencies": {
