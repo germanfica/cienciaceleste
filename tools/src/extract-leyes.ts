@@ -5,7 +5,7 @@ import { load } from "cheerio";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-type Ley = {
+type LeyLite = {
   page: number;
   indexInPage: number;
   shownNumber: number | null;
@@ -31,14 +31,47 @@ function getPageNumberFromFilename(file: string): number {
   return Number.isNaN(n) ? Number.MAX_SAFE_INTEGER : n;
 }
 
-async function extractFromFile(file: string): Promise<Ley[]> {
+async function writeLey(outDir: string, globalId: number, ley: LeyLite): Promise<void> {
+  const idStr = leftPad(globalId);
+  const frontMatter =
+    `---
+type: "divina-ley"
+id: ${globalId}
+id_str: "${idStr}"
+page: ${ley.page}
+index_in_page: ${ley.indexInPage}
+shown_number_in_page: ${ley.shownNumber ?? "null"}
+source_file: "${ley.sourceFile}"
+---
+`;
+
+  const md = `${frontMatter}\n${ley.text}\n`;
+  const filename = `ley-${idStr}.md`;
+  await fs.writeFile(path.join(outDir, filename), md, "utf8");
+}
+
+async function extractFromFileAndWrite(
+  file: string,
+  outDir: string,
+  onProgress?: (wroteOnThisPage: number) => void
+): Promise<number> {
   const html = await fs.readFile(file, "utf8");
   const $ = load(html);
 
   const page = getPageNumberFromFilename(file);
-  const leyes: Ley[] = [];
-
   let skippedIntro = false;
+  let indexInPage = 0;
+  let wrote = 0;
+
+  // Vamos a ir escribiendo al vuelo. Para mantener el ID global en orden,
+  // dejaremos que main() asigne el ID y nos pase un writer.
+  // En este diseño, devolvemos las leyes por "yield"... pero para evitar
+  // generar arrays, ejecutaremos la escritura desde aquí mediante un callback
+  // que nos inyectará main() a través de un closure.
+  const writer = (globalThis as any).__LEY_WRITER__ as undefined | ((ley: LeyLite) => Promise<void>);
+  if (!writer) {
+    throw new Error("Internal: writer not set");
+  }
 
   $("tr.texto").each((_, el) => {
     const $tds = $(el).find("td");
@@ -57,24 +90,42 @@ async function extractFromFile(file: string): Promise<Ley[]> {
       const left = normalizeWhitespace($tds.eq(0).text());
       const right = normalizeWhitespace($tds.eq(1).text());
 
-      // Aceptar sólo filas de ley: left debe ser número
-      if (!/^\d+$/.test(left)) return;
+      if (!/^\d+$/.test(left)) return; // sólo filas con número a la izquierda
 
-      const shownNumber = parseInt(left, 10);
+      const shownNumber = Number.parseInt(left, 10);
+      if (right.length === 0) return;
 
-      if (right.length > 0) {
-        leyes.push({
-          page,
-          indexInPage: leyes.length + 1,
-          shownNumber: Number.isNaN(shownNumber) ? null : shownNumber,
-          text: right,
-          sourceFile: path.basename(file),
-        });
-      }
+      indexInPage += 1;
+      const ley: LeyLite = {
+        page,
+        indexInPage,
+        shownNumber: Number.isNaN(shownNumber) ? null : shownNumber,
+        text: right,
+        sourceFile: path.basename(file),
+      };
+
+      // Encolamos la escritura inmediata (sin array intermedio)
+      // Ojo: no await dentro de .each de cheerio: guardamos promesa y esperamos luego.
+      const pending: Promise<void>[] = ((globalThis as any).__PENDING_WRITES__ ||= []);
+      pending.push(writer(ley).then(() => { wrote += 1; }));
     }
   });
 
-  return leyes;
+  // Vaciamos el DOM y damos oportunidad al GC.
+  $.root().empty();
+
+  // Esperamos que terminen todas las escrituras de esta página
+  const pending = ((globalThis as any).__PENDING_WRITES__ ||= []) as Promise<void>[];
+  if (pending.length) {
+    await Promise.all(pending.splice(0, pending.length));
+  }
+
+  // Ceder el event loop y permitir GC si está expuesto
+  await new Promise<void>((r) => setImmediate(r));
+  (global as any).gc?.();
+
+  onProgress?.(wrote);
+  return wrote;
 }
 
 async function main(): Promise<void> {
@@ -82,14 +133,19 @@ async function main(): Promise<void> {
     .option("in", { type: "string", default: "../docs", describe: "Directorio raíz donde están los HTML" })
     .option("out", { type: "string", default: "./markdown/divinas-leyes", describe: "Directorio de salida para los Markdown" })
     .option("pattern", { type: "string", default: "divinasleyes.php-pagina=*.htm", describe: "Patrón glob para localizar las páginas de leyes" })
-    .option("concurrency", { type: "number", default: 8, describe: "Lecturas concurrentes de archivos" })
+    .option("from", { type: "number", describe: "Página inicial (inclusive) para procesar", default: undefined })
+    .option("to", { type: "number", describe: "Página final (inclusive) para procesar", default: undefined })
+    .option("concurrency", { type: "number", default: 1, describe: "Ignorado (forzado a 1 para mantener orden y memoria baja)" })
+    .option("progress", { type: "boolean", default: true, describe: "Mostrar progreso cada 100 leyes" })
     .help()
     .parse();
 
   const inDir = path.resolve(String(argv.in ?? ""));
   const outDir = path.resolve(String(argv.out ?? ""));
   const pattern = String(argv.pattern ?? "");
-  const concurrency = Math.max(1, Number(argv.concurrency ?? 1));
+  const from = (argv.from ?? undefined) as number | undefined;
+  const to = (argv.to ?? undefined) as number | undefined;
+  const showProgress = Boolean(argv.progress);
 
   const files: string[] = (await fg(pattern, {
     cwd: inDir,
@@ -97,6 +153,12 @@ async function main(): Promise<void> {
     onlyFiles: true,
     absolute: true,
   }))
+    .filter(f => {
+      const p = getPageNumberFromFilename(f);
+      if (from !== undefined && p < from) return false;
+      if (to !== undefined && p > to) return false;
+      return true;
+    })
     .sort((a, b) => getPageNumberFromFilename(a) - getPageNumberFromFilename(b));
 
   if (files.length === 0) {
@@ -106,81 +168,40 @@ async function main(): Promise<void> {
 
   await fs.ensureDir(outDir);
 
-  const queue: Promise<void>[] = [];
-  let active = 0;
-  let i = 0;
-  const results: Ley[][] = [];
-
-  const launch = (file: string): Promise<void> =>
-    extractFromFile(file)
-      .then((leyes) => { results.push(leyes); })
-      .catch((err: unknown) => {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.error(`❌ Error leyendo ${file}:`, msg);
-        results.push([]);
-      })
-      .finally(() => { active--; });
-
-  async function runNext(): Promise<void> {
-    while (active < concurrency && i < files.length) {
-      const file = files[i++];
-      if (file === undefined) break;
-      active++;
-      const p = launch(file);
-      queue.push(p);
-    }
-    if (active > 0) {
-      await Promise.race(queue);
-      await runNext();
-    }
-  }
-
-  await runNext();
-  await Promise.all(queue);
-
-  const all: Ley[] = results
-    .flat()
-    .sort((a, b) => (a.page - b.page) || (a.indexInPage - b.indexInPage));
-
+  let globalId = 0;
   let written = 0;
-  let errors = 0;
+  let pagesOk = 0;
 
-  for (let idx = 0; idx < all.length; idx++) {
-    const ley = all[idx];
-    if (!ley) continue;
-
-    const globalId = idx + 1;
-    const idStr = leftPad(globalId);
-
-    const frontMatter =
-      `---
-type: "divina-ley"
-id: ${globalId}
-id_str: "${idStr}"
-page: ${ley.page}
-index_in_page: ${ley.indexInPage}
-shown_number_in_page: ${ley.shownNumber ?? "null"}
-source_file: "${ley.sourceFile}"
----
-`;
-
-    const md = `${frontMatter}\n${ley.text}\n`;
-
-    try {
-      const filename = `ley-${idStr}.md`;
-      await fs.writeFile(path.join(outDir, filename), md, "utf8");
-      written++;
-    } catch (e: unknown) {
-      errors++;
-      const msg = e instanceof Error ? e.message : String(e);
-      console.error(`❌ Error escribiendo ley ${globalId}:`, msg);
+  // Writer CLARO y sin arrays: asigna ID global y escribe
+  (globalThis as any).__LEY_WRITER__ = async (ley: LeyLite) => {
+    globalId += 1;
+    await writeLey(outDir, globalId, ley);
+    if (showProgress && globalId % 100 === 0) {
+      //console.log(`... ${globalId} leyes escritas`);
     }
+  };
+
+  for (const file of files) {
+    const page = getPageNumberFromFilename(file);
+    const wroteOnPage = await extractFromFileAndWrite(file, outDir, (count) => {
+      // noop; queda para logging si querés por página
+    }).catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`❌ Error leyendo ${path.basename(file)} (página ${page}):`, msg);
+      return 0;
+    });
+
+    if (wroteOnPage > 0) {
+      pagesOk += 1;
+      written += wroteOnPage;
+    }
+
+    // Seguridad extra entre páginas (GC y ceder loop)
+    await new Promise<void>((r) => setImmediate(r));
+    (global as any).gc?.();
   }
 
-  console.log(
-    `Listo. Convertidos: ${written}. Errores: ${errors}. Omitidos(error_pages): 0. Omitidos(vacío): ${all.length - written}. ` +
-    `Salida: ${outDir}`
-  );
+  console.log(`Listo. Leyes escritas: ${written}. Páginas procesadas: ${pagesOk}/${files.length}. Salida: ${outDir}`);
 }
 
 main().catch((err: unknown) => {
