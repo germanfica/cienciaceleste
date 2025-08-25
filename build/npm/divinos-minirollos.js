@@ -13,7 +13,7 @@ const buildTS = npmRun("build");
 // Namespace y patrón específicos de "divino-minirollo"
 const NS = "divino-minirollo";
 // Importante: escapar el & como \& para que llegue bien al script
-const PATTERN = "detalleminirollo.php-id=*&pagina=*.htm";
+const PATTERN = "detalleminirollo.php-id=*\\&pagina=*.htm";
 // const PATTERN = "detallerollo.php-id=*\\&pagina=*.htm"; // FUNCIONA
 //const PATTERN = "detalleminirollo.php-id=*\\&pagina=*.htm";
 
@@ -22,7 +22,7 @@ const PATTERN = "detalleminirollo.php-id=*&pagina=*.htm";
 const convert = series(
 	clean,
 	buildTS,
-	nodeOut("index.js", [
+	nodeOut("extract-minirollo.js", [
 		"--in ../docs/",
 		`--out ./markdown/${NS}`,
 		`--pattern "${PATTERN}"`,
