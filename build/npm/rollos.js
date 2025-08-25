@@ -9,7 +9,7 @@ const convert = series(
   buildTS,
   nodeOut("index.js", [
     "--in ../docs/",
-    "--out ./markdown",
+    "--out ./markdown/rollo",
     `--pattern "detallerollo.php-id=*\\&pagina=*.htm"`,
     "--images true",
     "--concurrency 8",
@@ -18,32 +18,32 @@ const convert = series(
 
 const dedup = series(buildTS,
   nodeOut("clean-dedup.js", [
-    "--src ./markdown",
-    "--dest ./complete",
-    "--duplicates ./duplicates",
+    "--src ./markdown/rollo",
+    "--dest ./complete/rollo",
+    "--duplicates ./duplicates/rollo",
     "--commit",
   ])
 );
 
 const checkSequence = series(buildTS,
   nodeOut("check-sequence.js", [
-    "--dir ./complete",
+    "--dir ./complete/rollo",
     "--checkPages true",
     "--pageStartAt 1",
   ])
 );
 
 const renameId = series(buildTS,
-  nodeOut("rename-to-id.js", ["--dir ./complete", "--commit"])
+  nodeOut("rename-to-id.js", ["--dir ./complete/rollo", "--commit"])
 );
 
 const indexReadme = series(buildTS,
-  nodeOut("build-index.js", ["--dir ./complete", "--out ./complete/README.md"])
+  nodeOut("build-index.js", ["--dir ./complete/rollo", "--out ./complete/rollo/README.md"])
 );
 
 const mdJson = series(buildTS,
   nodeOut("md-to-json.js", [
-    "--src complete",
+    "--src complete/rollo",
     "--out public/docs/rollo",
     "--index public/docs/rollo/docs-index.json",
   ])
