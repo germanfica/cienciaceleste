@@ -1,7 +1,9 @@
 const { series } = require("gulp");
 const { npmRun, nodeOut } = require("./helpers");
+const { cleanInit, cleanPost } = require("./clean");
 
-const clean = npmRun("clean");
+//const clean = npmRun("clean");
+const clean = cleanInit;
 const buildTS = npmRun("build");
 
 const convert = series(
@@ -59,6 +61,7 @@ const indexPages = series(buildTS,
 
 module.exports = {
   clean,
+  cleanPost,
   buildTS,
   convert,
   dedup,
