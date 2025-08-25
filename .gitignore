@@ -11,11 +11,6 @@ dist/
 coverage/
 .tmp/
 .nyc_output/
-markdown
-mis_htm
-complete
-duplicates
-public
 
 # Env & local
 .env
