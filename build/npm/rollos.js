@@ -9,7 +9,7 @@ const buildTS = npmRun("build");
 const convert = series(
   clean,
   buildTS,
-  nodeOut("index.js", [
+  nodeOut("extract-rollo.js", [
     "--in ../docs/",
     "--out ./markdown/rollo",
     `--pattern "detallerollo.php-id=*\\&pagina=*.htm"`,
