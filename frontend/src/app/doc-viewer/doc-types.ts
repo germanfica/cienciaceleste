@@ -19,3 +19,10 @@ export interface DocIndexPage {
   totalIds: number;                      // max ID visto (p.ej. 263)
   totalPages: number;                    // ceil(maxId / pageSize)
 }
+export type DetailNav = {
+  page: number;
+  hasPrev: boolean;
+  hasNext: boolean;
+  prevId: number; // 0 cuando no hay anterior
+  nextId: number; // 0 cuando no hay siguiente
+};

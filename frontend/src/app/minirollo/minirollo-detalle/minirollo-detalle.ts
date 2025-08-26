@@ -1,19 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { Docs } from "../../doc-viewer/docs";
-import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
-import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, catchError, forkJoin, map, of, shareReplay, switchMap } from "rxjs";
+import { Block, DocJson, Inline } from '../../doc-viewer/md-types';
+import { Docs } from "../../doc-viewer/docs";
 import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
 
 @Component({
-  selector: 'app-rollo-detalle',
+  selector: 'app-minirollo-detalle',
   imports: [CommonModule, RouterModule],
-  templateUrl: './rollo-detalle.html',
-  styleUrl: './rollo-detalle.scss',
+  templateUrl: './minirollo-detalle.html',
+  styleUrl: './minirollo-detalle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RolloDetalle implements OnInit {
+export class MinirolloDetalle {
   doc$!: Observable<DocJson>;
   nav$!: Observable<DetailNav>;
 
@@ -30,7 +30,7 @@ export class RolloDetalle implements OnInit {
           this.router.navigateByUrl("/docs/404");
           return EMPTY; // no emite, no null
         }
-        return this.docs.getRolloDoc(String(id));
+        return this.docs.getMiniRolloDoc(String(id));
       }),
       // si hay error (404 del JSON), redirigimos y no emitimos
       catchError(() => {
@@ -50,7 +50,7 @@ export class RolloDetalle implements OnInit {
 
         const pageGuess = Math.floor((currentId - 1) / this.DEFAULT_PAGE_SIZE) + 1;
 
-        return this.docs.getRolloIndexPageRemote(pageGuess).pipe(
+        return this.docs.getMiniRolloIndexPageRemote(pageGuess).pipe(
           switchMap((meta: DocIndexPage) => {
             const items = meta.items || [];
             const i = items.findIndex(it => it.id === currentId);
@@ -64,13 +64,13 @@ export class RolloDetalle implements OnInit {
             const needNextFromNextPage = i === items.length - 1 && meta.hasNext;
 
             const prevId$ = needPrevFromPrevPage
-              ? this.docs.getRolloIndexPageRemote(meta.page - 1).pipe(
+              ? this.docs.getMiniRolloIndexPageRemote(meta.page - 1).pipe(
                 map(prevPage => (prevPage.items.length ? prevPage.items[prevPage.items.length - 1].id : 0))
               )
               : of(i > 0 ? items[i - 1].id : 0);
 
             const nextId$ = needNextFromNextPage
-              ? this.docs.getRolloIndexPageRemote(meta.page + 1).pipe(
+              ? this.docs.getMiniRolloIndexPageRemote(meta.page + 1).pipe(
                 map(nextPage => (nextPage.items.length ? nextPage.items[0].id : 0))
               )
               : of(i < items.length - 1 ? items[i + 1].id : 0);

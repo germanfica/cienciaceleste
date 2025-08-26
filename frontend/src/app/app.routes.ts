@@ -4,12 +4,14 @@ import { Rollos } from "./rollo/rollos/rollos";
 import { RolloDetalle } from './rollo/rollo-detalle/rollo-detalle';
 import { DocViewer } from './doc-viewer/doc-viewer';
 import { Minirollos } from './minirollo/minirollos/minirollos';
+import { MinirolloDetalle } from './minirollo/minirollo-detalle/minirollo-detalle';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
   { path: "divinos-rollos", component: Rollos, title: "Divinos Rollos Telepáticos - Listado" },
   { path: "divinos-rollos/:id", component: RolloDetalle, title: "Divinos Rollos Telepáticos - Detalle" },
   { path: "divinos-minirollos", component: Minirollos, title: "Divinos Mini Rollos Telepáticos - Listado" },
+  { path: "divinos-minirollos/:id", component: MinirolloDetalle, title: "Divinos Mini Rollos Telepáticos - Detalle" },
   { path: "doc-viewer/:id", component: DocViewer, title: "Divinos Rollos Telepáticos - Detalle" },
   { path: "**", redirectTo: "" }
 ];
