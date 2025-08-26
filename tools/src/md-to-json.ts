@@ -1,4 +1,4 @@
-// scripts/md-to-json.ts
+// src/md-to-json.ts
 // Markdown → JSON (TypeScript 5, strict=true, zero deps, ESM)
 //
 // Assumptions:
@@ -21,7 +21,8 @@ type Block =
     | { t: "h1"; text: string; id: string }
     | { t: "img"; src: string; alt: string }
     | { t: "p"; inlines: Inline[] }
-    | { t: "author"; text: string };
+    | { t: "author"; text: string }
+    | { t: "articleNo"; value: number; };
 
 interface DocJson {
     id: string;
@@ -93,6 +94,25 @@ function extractAuthor(line: string): string | null {
     return cleaned || null;
 }
 
+function extractArticleNo(line: string): number | null {
+    // Caso 1: línea entera "Artículo Nº X"
+    const re = /^\*{0,2}\s*Art[ií]culo\s*N[ºo]\s*(\d+)\s*\*{0,2}$/i;
+    let m = re.exec(line.trim());
+    if (m) return Number(m[1]);
+
+    // Caso 2: título con "#"
+    const re2 = /^#\s+.*Art[ií]culo\s*N[ºo]\s*(\d+)/i;
+    m = re2.exec(line);
+    if (m) return Number(m[1]);
+
+    // Caso 3: cualquier parte de la línea (links, listas, etc.)
+    const re3 = /Art[ií]culo\s*N[ºo]\s*(\d+)/i;
+    m = re3.exec(line);
+    if (m) return Number(m[1]);
+
+    return null;
+}
+
 function parseMarkdown(md: string): { titulo: string; autor: string | null; bloques: Block[] } {
     const text = md.replace(/\r\n?/g, "\n");
     const lines = text.split("\n");
@@ -149,6 +169,14 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
     const bloques: Block[] = [];
     bloques.push({ t: "h1", text: titulo, id: toSlug(titulo) });
 
+    // NEW: intentar extraer Artículo Nº del título
+    let articleNoSeen = false;
+    const nFromTitle = extractArticleNo(titulo);
+    if (nFromTitle !== null) {
+        bloques.push({ t: "articleNo", value: nFromTitle });
+        articleNoSeen = true;
+    }
+
     // 3) Recorrido en orden preservando flujo p/img (ignorando titulo y autor)
     const imgOnlyRe = /^\s*!\[(.*?)\]\((.*?)\)\s*$/;
     let buffer: string[] = [];
@@ -193,6 +221,18 @@ function parseMarkdown(md: string): { titulo: string; autor: string | null; bloq
         if (extractAuthor(line) !== null) {
             flush();
             continue;
+        }
+
+        // Solo agregar si aún no se agregó desde el título
+        if (!articleNoSeen) {
+            // Capturar artículo Nº
+            const articleNo = extractArticleNo(line);
+            if (articleNo !== null) {
+                //console.log("Artículo Nº found:", articleNo);
+                flush();
+                bloques.push({ t: "articleNo", value: articleNo });
+                continue;
+            }
         }
 
         buffer.push(line);

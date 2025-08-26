@@ -14,7 +14,8 @@ export type Block =
   | { t: "code"; lang?: string; code: string }
   | { t: "img"; src: string; alt?: string }
   | { t: "blockquote"; inlines: Inline[] }
-  | { t: "author"; text: string };
+  | { t: "author"; text: string }
+  | { t: "articleNo"; value: number; }
 
 export interface DocJson {
   id: string|number;
