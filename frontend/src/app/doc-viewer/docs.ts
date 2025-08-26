@@ -32,4 +32,8 @@ export class Docs {
     return this.http.get<DocIndexPage>(`/docs/divino-minirollo/index/pages/${page}.json`);
   }
 
+  getDivinaLeyIndexPageRemote(page: number): Observable<DocIndexPage> {
+    return this.http.get<DocIndexPage>(`/docs/divinas-leyes/index/pages/${page}.json`);
+  }
+
 }
