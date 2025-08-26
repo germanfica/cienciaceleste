@@ -16,14 +16,14 @@
 
                 <tr>
                     <td class="textolinkleft">
-                        <a [routerLink]="['divinos-rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS ROLLOS</a>
+                        <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS ROLLOS</a>
                     </td>
                     <td class="textolink">
                         @if (nav.hasPrev) {
-                        <a [routerLink]="['divinos-rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
+                        <a [routerLink]="['/divinos-rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
                         }
                         @if (nav.hasNext) {
-                        <a [routerLink]="['divinos-rollos', nav.nextId]">SIGUIENTE</a>
+                        <a [routerLink]="['/divinos-rollos', nav.nextId]">SIGUIENTE</a>
                         }
                     </td>
                 </tr>
