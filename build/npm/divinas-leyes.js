@@ -16,7 +16,6 @@ const PATTERN = "divinasleyes.php-pagina=*.htm";
 
 // 1) Convert: HTML -> Markdown
 const convert = series(
-  clean,
   buildTS,
   nodeOut("extract-leyes.js", [
     "--in ../docs/",
@@ -95,7 +94,6 @@ const buildAll = series(
   indexReadme,
   mdJson,
   indexPages,
-  cleanPost
 );
 
 module.exports = {

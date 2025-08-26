@@ -23,6 +23,7 @@
     "build:md:rollos": "gulp build:md:rollos",
     "build:all:mini": "gulp build:all:mini",
     "build:all:rollos": "gulp build:all:rollos",
+    "build:all:docs": "gulp build:all:docs",
     "gulp": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js"
   },
   "keywords": [],

@@ -8,7 +8,8 @@ const {
     buildMdMiniRollos,
     buildAllMini,
     buildMdLeyes,
-    buildAllLeyes
+    buildAllLeyes,
+    buildAllDocs,
 } = require("./npm/pipelines");
 const { frontendStart, frontendBuild, frontendWatch, frontendTest, frontendBuildProd } = require("./npm/frontend");
 
@@ -25,9 +26,12 @@ task("build:all:rollos", buildAllRollos);
 task("build:md:mini", buildMdMiniRollos);
 task("build:all:mini", buildAllMini);
 
-// Leyes
+// Divinas Leyes
 task("build:md:leyes", buildMdLeyes);
 task("build:all:leyes", buildAllLeyes);
+
+// Rollos + Mini + Divinas Leyes
+task("build:all:docs", buildAllDocs);
 
 // Frontend
 task("frontend:start", frontendStart);

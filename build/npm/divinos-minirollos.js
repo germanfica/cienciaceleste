@@ -20,7 +20,6 @@ const PATTERN = "detalleminirollo.php-id=*\\&pagina=*.htm";
 
 // 1) Convert: descarga/convierte HTML a markdown
 const convert = series(
-	clean,
 	buildTS,
 	nodeOut("extract-minirollo.js", [
 		"--in ../docs/",
@@ -99,7 +98,6 @@ const buildAll = series(
 	indexReadme,
 	mdJson,
 	indexPages,
-	cleanPost
 );
 
 module.exports = {
