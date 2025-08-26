@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
 import { Docs } from "../../doc-viewer/docs";
-import { RolloIndexPage } from "../../doc-viewer/rollo-types";
+import { DocIndexPage } from "../../doc-viewer/doc-types";
 
 @Component({
   selector: "app-rollos",
@@ -15,7 +15,7 @@ import { RolloIndexPage } from "../../doc-viewer/rollo-types";
 })
 export class Rollos implements OnInit {
   // Página actual del índice remoto
-  page$!: Observable<RolloIndexPage>;
+  page$!: Observable<DocIndexPage>;
   // Arreglo [1..totalPages] para render del paginador
   pages$!: Observable<number[]>;
 
