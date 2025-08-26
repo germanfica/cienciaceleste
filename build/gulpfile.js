@@ -9,7 +9,8 @@ const {
     buildAllMini,
     buildMdLeyes,
     buildAllLeyes
-} = require("./npm/pipelines"); // buildAllMini, buildAllLeyes
+} = require("./npm/pipelines");
+const { frontendStart, frontendBuild, frontendWatch, frontendTest } = require("./npm/frontend");
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -27,6 +28,12 @@ task("build:all:mini", buildAllMini);
 // Leyes
 task("build:md:leyes", buildMdLeyes);
 task("build:all:leyes", buildAllLeyes);
+
+// Frontend
+task("frontend:start", frontendStart);
+task("frontend:build", frontendBuild);
+task("frontend:watch", frontendWatch);
+task("frontend:test", frontendTest);
 
 // Default: full rollos
 task("default", buildAllRollos);
