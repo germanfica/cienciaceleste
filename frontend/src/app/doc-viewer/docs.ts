@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { DocJson } from "./md-types";
-import { RolloIndexPage } from "./rollo-types";
+import { DocIndexPage } from "./doc-types";
 
 @Injectable({ providedIn: "root" })
 export class Docs {
@@ -17,15 +17,19 @@ export class Docs {
   }
 
   getMiniRolloDoc(id: string | number): Observable<DocJson> {
-    return this.http.get<DocJson>(`/docs/mini-rollo/${id}.json`);
+    return this.http.get<DocJson>(`/docs/divino-minirollo/${id}.json`);
   }
 
   getLeyDoc(id: string | number): Observable<DocJson> {
     return this.http.get<DocJson>(`/docs/divina-ley/${id}.json`);
   }
 
-  getRolloIndexPageRemote(page: number): Observable<RolloIndexPage> {
-    return this.http.get<RolloIndexPage>(`/docs/rollo/index/pages/${page}.json`);
+  getRolloIndexPageRemote(page: number): Observable<DocIndexPage> {
+    return this.http.get<DocIndexPage>(`/docs/rollo/index/pages/${page}.json`);
+  }
+
+  getMiniRolloIndexPageRemote(page: number): Observable<DocIndexPage> {
+    return this.http.get<DocIndexPage>(`/docs/divino-minirollo/index/pages/${page}.json`);
   }
 
 }

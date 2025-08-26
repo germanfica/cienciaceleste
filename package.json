@@ -11,7 +11,11 @@
   "scripts": {
     "clean:init": "gulp clean:init",
     "clean:post": "gulp clean:post",
+    "build:md:leyes": "gulp build:md:leyes",
+    "build:all:leyes": "gulp build:all:leyes",
+    "build:md:mini": "gulp build:md:mini",
     "build:md:rollos": "gulp build:md:rollos",
+    "build:all:mini": "gulp build:all:mini",    
     "build:all:rollos": "gulp build:all:rollos",
     "gulp": "node --max-old-space-size=8192 ./node_modules/gulp/bin/gulp.js"
   },

@@ -4,31 +4,22 @@
   "type": "module",
   "private": true,
   "description": "Internal TypeScript tools for converting HTML documents into Markdown and JSON, deduplicating, validating sequences, and generating structured indexes.",
-  "main": "./out/index.js",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "build": "tsc",
-    "build:md": "npm run convert && npm run dedup && npm run check-sequence ",
-    "build:all": "npm run convert && npm run dedup && npm run check-sequence && npm run rename:id && npm run index:readme && npm run md:json && npm run index:pages",
-    "start": "node ./out/index.js",
     "clean": "tsc --build --clean",
-    "convert": "npm run clean && npm run build && node ./out/index.js --in \"../docs/\" --out \"./markdown\" --pattern \"detallerollo.php-id=*\\\\&pagina=*.htm\" --images true --concurrency 8",
-    "dedup": "npm run clean && npm run build && node ./out/clean-dedup.js --src ./markdown --dest ./complete --duplicates ./duplicates --commit",
-    "check-sequence": "npm run clean && npm run build && node ./out/check-sequence.js --dir ./complete --checkPages true --pageStartAt 1",
-    "rename:id": "npm run clean && npm run build && node ./out/rename-to-id.js --dir ./complete --commit",
-    "index:readme": "npm run build && node ./out/build-index.js --dir ./complete --out ./complete/README.md",
-    "md:json": "npm run build && node ./out/md-to-json.js --src complete --out public/docs/rollo --index public/docs/rollo/docs-index.json",
-    "index:pages": "npm run build && node ./out/generate-index-pages.js --index ./public/docs/rollo/docs-index.json --out ./public/docs/rollo/index/pages --pageSize 10",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.15.0",
     "@types/yargs": "^17.0.33",
+    "fs-extra": "^11.3.1",
     "typescript": "^5.9.2"
   },
   "dependencies": {

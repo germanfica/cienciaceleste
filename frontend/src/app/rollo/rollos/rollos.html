@@ -15,7 +15,7 @@
                             <tr>
                                 <td class="textolink" colspan="2">
                                     @if (p.hasPrev) {
-                                    <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page - 1 }">
+                                    <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page - 1 }">
                                         < Anterior</a><span>&nbsp;</span>
                                             }
 
@@ -25,14 +25,14 @@
                                             @if (n === p.page) {
                                             <b>{{ n }}</b>
                                             } @else {
-                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+                                            <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: n }">{{ n }}</a>
                                             }
                                             <span>&nbsp;</span>
                                             }
                                             }
 
                                             @if (p.hasNext) {
-                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
+                                            <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
                                                 ></a>
                                             }
                                 </td>
@@ -50,8 +50,8 @@
                             <tr class="texto">
                                 <td valign="top">{{ row.id }}</td>
                                 <td valign="top">
-                                    <!-- Detalle del rollo: /rollos/:id (ajusta si usas otra ruta) -->
-                                    <a [routerLink]="['/rollos', row.id]" target="_self">
+                                    <!-- Detalle del rollo: /divinos-rollos/:id (ajusta si usas otra ruta) -->
+                                    <a [routerLink]="['/divinos-rollos', row.id]" target="_self">
                                         <u>{{ row.titulo }}</u>
                                     </a>
                                 </td>
@@ -63,7 +63,7 @@
                             <tr>
                                 <td class="textolink" colspan="2">
                                     @if (p.hasPrev) {
-                                    <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page - 1 }">
+                                    <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page - 1 }">
                                         < Anterior</a><span>&nbsp;</span>
                                             }
                                             @let nums2 = (pages$ | async);
@@ -72,13 +72,13 @@
                                             @if (n === p.page) {
                                             <b>{{ n }}</b>
                                             } @else {
-                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+                                            <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: n }">{{ n }}</a>
                                             }
                                             <span>&nbsp;</span>
                                             }
                                             }
                                             @if (p.hasNext) {
-                                            <a [routerLink]="['/rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
+                                            <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente
                                                 ></a>
                                             }
                                 </td>

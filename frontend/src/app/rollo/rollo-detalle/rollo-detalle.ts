@@ -4,15 +4,7 @@ import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, catchError, forkJoin, map, of, shareReplay, switchMap } from "rxjs";
-import { RolloIndexPage } from "../../doc-viewer/rollo-types";
-
-type DetailNav = {
-  page: number;
-  hasPrev: boolean;
-  hasNext: boolean;
-  prevId: number; // 0 cuando no hay anterior
-  nextId: number; // 0 cuando no hay siguiente
-};
+import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
 
 @Component({
   selector: 'app-rollo-detalle',
@@ -59,7 +51,7 @@ export class RolloDetalle implements OnInit {
         const pageGuess = Math.floor((currentId - 1) / this.DEFAULT_PAGE_SIZE) + 1;
 
         return this.docs.getRolloIndexPageRemote(pageGuess).pipe(
-          switchMap((meta: RolloIndexPage) => {
+          switchMap((meta: DocIndexPage) => {
             const items = meta.items || [];
             const i = items.findIndex(it => it.id === currentId);
 

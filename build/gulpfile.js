@@ -2,7 +2,14 @@
 const { task } = require("gulp");
 const { clean } = require("./npm/rollos");
 const { cleanInit, cleanPost } = require("./npm/clean");
-const { buildMdRollos, buildAllRollos } = require("./npm/pipelines"); // buildAllMini, buildAllLeyes
+const {
+    buildMdRollos,
+    buildAllRollos,
+    buildMdMiniRollos,
+    buildAllMini,
+    buildMdLeyes,
+    buildAllLeyes
+} = require("./npm/pipelines"); // buildAllMini, buildAllLeyes
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -14,10 +21,12 @@ task("build:md:rollos", buildMdRollos);
 task("build:all:rollos", buildAllRollos);
 
 // Mini rollos
-// task("build:all:mini", buildAllMini);
+task("build:md:mini", buildMdMiniRollos);
+task("build:all:mini", buildAllMini);
 
 // Leyes
-// task("build:all:leyes", buildAllLeyes);
+task("build:md:leyes", buildMdLeyes);
+task("build:all:leyes", buildAllLeyes);
 
 // Default: full rollos
 task("default", buildAllRollos);

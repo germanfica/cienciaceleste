@@ -1,21 +1,21 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
-import { Docs } from "../../doc-viewer/docs";
-import { RolloIndexPage } from "../../doc-viewer/rollo-types";
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { catchError, EMPTY, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { DocIndexPage } from '../../doc-viewer/doc-types';
+import { Docs } from '../../doc-viewer/docs';
 
 @Component({
-  selector: "app-rollos",
+  selector: 'app-minirollos',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: "./rollos.html",
-  styleUrl: "./rollos.scss",
+  templateUrl: './minirollos.html',
+  styleUrl: './minirollos.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Rollos implements OnInit {
+export class Minirollos {
   // Página actual del índice remoto
-  page$!: Observable<RolloIndexPage>;
+  page$!: Observable<DocIndexPage>;
   // Arreglo [1..totalPages] para render del paginador
   pages$!: Observable<number[]>;
 
@@ -31,7 +31,7 @@ export class Rollos implements OnInit {
         const n = Number(q.get("page") || "1");
         return Number.isFinite(n) && n >= 1 ? n : 1;
       }),
-      switchMap(n => this.docs.getRolloIndexPageRemote(n)),
+      switchMap(n => this.docs.getMiniRolloIndexPageRemote(n)),
       catchError(() => {
         // Si 404 u otro error, volvemos a la página 1
         this.router.navigate([], { relativeTo: this.route, queryParams: { page: 1 } });
