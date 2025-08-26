@@ -103,7 +103,7 @@ function extractTitle($: CheerioAPI): string {
 function applyAuthorSignature(parts: string[], author?: string): void {
 	if (!author) return;
 	if (parts.length && parts[parts.length - 1] !== "") parts.push("");
-	parts.push(`*${author}*`);
+	parts.push(`*Escribe: ${author}*`);
 }
 
 function normalizeSpaces(s: string): string {
