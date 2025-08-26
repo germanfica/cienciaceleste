@@ -66,6 +66,20 @@ function extractAuthor($: CheerioAPI): string | undefined {
 	return author || undefined;
 }
 
+function stripArticleBoilerplate(s: string): string {
+	// Caso completo: "ESCRITURA TELEPÁTICA DICTADA POR EL DIVINO PADRE JEHOVÁ.- ARTICULO Nº 1.- "
+	const RE_PREFIX_FULL =
+		/^\s*ESCRITURA\s+TELEP[ÁA]TICA\s+DICTADA\s+POR\s+EL\s+DIVINO\s+PADRE\s+JEHOV[ÁA]\s*[.\-–—]*\s*ART[ÍI]CULO\s*N[º°]?\s*\d+\s*[.\-–—]*\s*/i;
+
+	// Por si viniera solo "ARTICULO Nº 1.- " sin la parte anterior:
+	const RE_PREFIX_ART_ONLY =
+		/^\s*ART[ÍI]CULO\s*N[º°]?\s*\d+\s*[.\-–—]*\s*/i;
+
+	let t = s.replace(RE_PREFIX_FULL, "");
+	t = t.replace(RE_PREFIX_ART_ONLY, "");
+	return t;
+}
+
 function extractTitle($: CheerioAPI): string {
 	const td = $("td.titulorollo").first(); // en minirollos también está
 	if (!td.length) return "";
@@ -76,7 +90,8 @@ function extractTitle($: CheerioAPI): string {
 	// Si hay varias líneas, descartamos la primera (posible "ESCRIBE: ...")
 	if (parts.length > 1) {
 		const restHtml = parts.slice(1).join("<br>");
-		const restText = load(restHtml).root().text();
+		let restText = load(restHtml).root().text();
+		restText = stripArticleBoilerplate(restText);
 		return normalizeSpaces(restText);
 	}
 
