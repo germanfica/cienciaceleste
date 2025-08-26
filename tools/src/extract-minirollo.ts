@@ -47,12 +47,52 @@ function isTriviallyEmptyMarkdown(md: string): boolean {
 	return cleaned.length < 10;
 }
 
-function extractTitle($: CheerioAPI, fallback: string): string {
-	const t1 = normalize($(".titulorollo").first().text()); // en minirollos también está
-	if (t1) return t1;
-	const t2 = normalize($("title").first().text());
-	if (t2) return t2;
-	return fallback;
+function extractAuthor($: CheerioAPI): string | undefined {
+	const td = $("td.titulorollo").first();
+	if (!td.length) return undefined;
+
+	const html = td.html() ?? "";
+	const [firstLineHtml = ""] = html.split(/<br\s*\/?>/i);
+	const firstLineText = load(firstLineHtml).root().text().trim();
+
+	const re = /^ESCRIBE\s*[:.\-–—]?\s*(.+?)\s*$/i;
+	const m = re.exec(firstLineText);
+	if (!m) return undefined;
+
+	const rawAuthor = m[1];            // string | undefined
+	if (!rawAuthor) return undefined;  // narrow a string
+
+	const author = rawAuthor.replace(/\s*[.\-–—]+$/, "").trim();
+	return author || undefined;
+}
+
+function extractTitle($: CheerioAPI): string {
+	const td = $("td.titulorollo").first(); // en minirollos también está
+	if (!td.length) return "";
+
+	const html = td.html() ?? "";
+	const parts = html.split(/<br\s*\/?>/i);
+
+	// Si hay varias líneas, descartamos la primera (posible "ESCRIBE: ...")
+	if (parts.length > 1) {
+		const restHtml = parts.slice(1).join("<br>");
+		const restText = load(restHtml).root().text();
+		return normalizeSpaces(restText);
+	}
+
+	// Sin <br>, devolvemos el texto completo
+	return normalizeSpaces(td.text());
+}
+
+/** Agrega "*author*" al final de parts con un salto previo si hace falta. */
+function applyAuthorSignature(parts: string[], author?: string): void {
+	if (!author) return;
+	if (parts.length && parts[parts.length - 1] !== "") parts.push("");
+	parts.push(`*${author}*`);
+}
+
+function normalizeSpaces(s: string): string {
+	return s.replace(/\s+/g, " ").trim();
 }
 
 function extractParagraphsMini($: CheerioAPI): string[] {
@@ -126,11 +166,16 @@ async function main() {
 			if (looksLikeServerError(html)) { skErr++; if (verbose) console.log("[skip] server error:", src); return; }
 
 			const $ = load(html);
-			const title = extractTitle($, path.basename(src, path.extname(src)));
+			const title = extractTitle($);
+			const author = extractAuthor($);
 			const paras = extractParagraphsMini($);
 
 			const parts = [`# ${title}`, ""];
 			for (const p of paras) { parts.push(p, ""); }
+
+			// Autor al final (firma)
+			applyAuthorSignature(parts, author);
+
 			while (parts.length && parts.at(-1) === "") parts.pop();
 
 			const md = parts.join("\n");
