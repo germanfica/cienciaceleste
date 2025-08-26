@@ -17,7 +17,7 @@ export class Docs {
   }
 
   getMiniRolloDoc(id: string | number): Observable<DocJson> {
-    return this.http.get<DocJson>(`/docs/mini-rollo/${id}.json`);
+    return this.http.get<DocJson>(`/docs/divino-minirollo/${id}.json`);
   }
 
   getLeyDoc(id: string | number): Observable<DocJson> {
@@ -26,6 +26,10 @@ export class Docs {
 
   getRolloIndexPageRemote(page: number): Observable<DocIndexPage> {
     return this.http.get<DocIndexPage>(`/docs/rollo/index/pages/${page}.json`);
+  }
+
+  getMiniRolloIndexPageRemote(page: number): Observable<DocIndexPage> {
+    return this.http.get<DocIndexPage>(`/docs/divino-minirollo/index/pages/${page}.json`);
   }
 
 }
