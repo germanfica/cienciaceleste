@@ -37,6 +37,10 @@ async function frontendBuild() {
   return runNpm("build", parseExtraArgs());
 }
 
+async function frontendBuildProd() {
+  return runNpm("build:production", parseExtraArgs());
+}
+
 async function frontendWatch() {
   // watcher queda en primer plano hasta Ctrl+C
   return runNpm("watch", parseExtraArgs());
@@ -49,6 +53,7 @@ async function frontendTest() {
 module.exports = {
   frontendStart,
   frontendBuild,
+  frontendBuildProd,
   frontendWatch,
   frontendTest,
 };

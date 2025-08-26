@@ -10,11 +10,9 @@
   },
   "scripts": {
     "start": "gulp frontend:start",
-    "build": "gulp frontend:build",
-    "watch": "gulp frontend:watch",
-    "test": "gulp frontend:test",
     "frontend:start": "gulp frontend:start",
     "frontend:build": "gulp frontend:build",
+    "frontend:build:prod": "gulp frontend:build:prod",
     "frontend:watch": "gulp frontend:watch",
     "frontend:test": "gulp frontend:test",
     "clean:init": "gulp clean:init",
