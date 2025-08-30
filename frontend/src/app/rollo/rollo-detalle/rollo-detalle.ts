@@ -4,7 +4,7 @@ import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
-import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
+import { DetailNav } from "../../doc-viewer/doc-types";
 import { Navbar } from "../../navbar/navbar";
 import { Navigation } from "../../navbar/navigation";
 
