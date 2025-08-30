@@ -16,14 +16,27 @@ import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
 export class RolloDetalle implements OnInit {
   doc$!: Observable<DocJson>;
   nav$!: Observable<DetailNav>;
+  id$!: Observable<number>;
 
   private readonly DEFAULT_PAGE_SIZE = 10;
 
   constructor(private route: ActivatedRoute, private router: Router, private docs: Docs) { }
 
   ngOnInit(): void {
-    // Documento
-    this.doc$ = this.route.paramMap.pipe(
+    this.id$ = this.buildId$();
+    this.doc$ = this.buildDoc$();
+    this.nav$ = this.buildNav$();
+  }
+
+  private buildId$(): Observable<number> {
+    return this.route.paramMap.pipe(
+      map(pm => Number(pm.get("id") || "0")),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  private buildDoc$(): Observable<DocJson> {
+    return this.route.paramMap.pipe(
       switchMap(p => {
         const id = p.get("id");
         if (!id) {
@@ -39,10 +52,10 @@ export class RolloDetalle implements OnInit {
       }),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+  }
 
-    // Navegación Anterior/Siguiente sin nulls
-    this.nav$ = this.route.paramMap.pipe(
-      map(pm => Number(pm.get("id") || "0")),
+  private buildNav$(): Observable<DetailNav> {
+    return this.id$.pipe(
       switchMap(currentId => {
         if (!Number.isFinite(currentId) || currentId <= 0) {
           return of({ page: 1, hasPrev: false, hasNext: false, prevId: 0, nextId: 0 } as DetailNav);
@@ -93,6 +106,9 @@ export class RolloDetalle implements OnInit {
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }
+
+  // private buildDetailNav$(meta: DocIndexPage, currentId: number): Observable<DetailNav> {
+  // }
 
   // funciones de tracking
   trackBlock(i: number, b: Block) { return i; }
