@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit, Inject } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
-import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
+import { Observable } from "rxjs";
 import { Docs } from "../../doc-viewer/docs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
