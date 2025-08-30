@@ -20,8 +20,6 @@ export class MinirolloDetalle {
   nav$!: Observable<DetailNav>;
   id$!: Observable<number>;
 
-  private readonly DEFAULT_PAGE_SIZE = 10;
-
   constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private navigation: Navigation) { }
 
   ngOnInit(): void {
