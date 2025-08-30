@@ -11,5 +11,7 @@ import { DetailNav } from '../doc-viewer/doc-types';
   styleUrl: './navbar.scss'
 })
 export class Navbar {
-  @Input() nav$!: Observable<DetailNav>;
+  @Input({ required: true }) nav$!: Observable<DetailNav>;
+  @Input({ required: true }) listRoute: string = '';  // ej. '/divinos-rollos'
+  @Input({ required: true }) listLabel: string = 'LISTADO'; // ej. 'LISTADO DIVINOS ROLLOS'
 }
