@@ -22,7 +22,7 @@ export class Minirollos {
   constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private pagination: Pagination) { }
 
   ngOnInit(): void {
-    this.page$ = this.pagination.createPage$(n => this.docs.getRolloIndexPageRemote(n));
+    this.page$ = this.pagination.createPage$(n => this.docs.getMiniRolloIndexPageRemote(n));
     this.pages$ = this.pagination.createPages$(this.page$);
   }
 
