@@ -4,8 +4,9 @@ import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
-import { DocIndexPage } from "../../doc-viewer/doc-types";
+import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
 import { Navbar } from "../../navbar/navbar";
+import { Navigation } from "../../navbar/navigation";
 
 @Component({
   selector: 'app-rollo-detalle',
@@ -16,15 +17,17 @@ import { Navbar } from "../../navbar/navbar";
 })
 export class RolloDetalle implements OnInit {
   doc$!: Observable<DocJson>;
+  nav$!: Observable<DetailNav>;
   id$!: Observable<number>;
 
-  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs) {
-    this.fetchIndexPage = this.docs.getRolloIndexPageRemote.bind(this.docs);
+  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private navigation: Navigation) {
   }
 
   ngOnInit(): void {
     this.id$ = this.buildId$();
     this.doc$ = this.buildDoc$();
+
+    this.nav$ = this.buildNav$();
   }
 
   private buildId$(): Observable<number> {
@@ -53,7 +56,12 @@ export class RolloDetalle implements OnInit {
     );
   }
 
-  fetchIndexPage: (page: number) => Observable<DocIndexPage>;
+  private buildNav$(): Observable<DetailNav> {
+    return this.navigation.createNav$(
+      this.id$,
+      (page: number) => this.docs.getRolloIndexPageRemote(page)
+    );
+  }
 
   // funciones de tracking
   trackBlock(i: number, b: Block) { return i; }

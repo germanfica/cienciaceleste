@@ -1,3 +1,4 @@
+@if (nav$ | async; as nav) {
 @let d = (doc$ | async);
 
 @if (d) {
@@ -16,7 +17,7 @@
                 <!-- NAVEGACION -->
                 <tr>
                     <td colspan="2">
-                        <app-navbar [id$]="id$" [fetchIndexPage]="fetchIndexPage"></app-navbar>
+                        <app-navbar [nav$]="nav$"></app-navbar>
                     </td>
                 </tr>
                 <!-- FIN NAVEGACION -->
@@ -140,4 +141,5 @@
         <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
     </tr>
 </table>
+}
 }
