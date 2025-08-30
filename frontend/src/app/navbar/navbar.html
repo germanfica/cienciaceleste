@@ -1,16 +1,15 @@
 @if (nav$ | async; as nav) {
 <nav class="rollo-nav" aria-label="Navegación">
     <div class="rollo-nav__left">
-        <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS
-            ROLLOS</a>
+        <a [routerLink]="[listRoute]" [queryParams]="{ page: nav.page }">{{ listLabel }}</a>
     </div>
 
     <div class="rollo-nav__right">
         @if (nav.hasPrev) {
-        <a [routerLink]="['/divinos-rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
+        <a [routerLink]="[listRoute, nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
         }
         @if (nav.hasNext) {
-        <a [routerLink]="['/divinos-rollos', nav.nextId]">SIGUIENTE</a>
+        <a [routerLink]="[listRoute, nav.nextId]">SIGUIENTE</a>
         }
     </div>
 </nav>

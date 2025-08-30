@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { EMPTY, Observable, catchError, forkJoin, map, of, shareReplay, switchMap } from "rxjs";
+import { EMPTY, Observable, catchError, map, shareReplay, switchMap } from "rxjs";
 import { Block, DocJson, Inline } from '../../doc-viewer/md-types';
 import { Docs } from "../../doc-viewer/docs";
-import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
+import { DetailNav } from "../../doc-viewer/doc-types";
+import { Navigation } from '../../navbar/navigation';
+import { Navbar } from "../../navbar/navbar";
 
 @Component({
   selector: 'app-minirollo-detalle',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Navbar],
   templateUrl: './minirollo-detalle.html',
   styleUrl: './minirollo-detalle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,14 +18,27 @@ import { DetailNav, DocIndexPage } from "../../doc-viewer/doc-types";
 export class MinirolloDetalle {
   doc$!: Observable<DocJson>;
   nav$!: Observable<DetailNav>;
+  id$!: Observable<number>;
 
   private readonly DEFAULT_PAGE_SIZE = 10;
 
-  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs) { }
+  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private navigation: Navigation) { }
 
   ngOnInit(): void {
-    // Documento
-    this.doc$ = this.route.paramMap.pipe(
+    this.id$ = this.buildId$();
+    this.doc$ = this.buildDoc$();
+    this.nav$ = this.buildNav$();
+  }
+
+  private buildId$(): Observable<number> {
+    return this.route.paramMap.pipe(
+      map(pm => Number(pm.get("id") || "0")),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  private buildDoc$(): Observable<DocJson> {
+    return this.route.paramMap.pipe(
       switchMap(p => {
         const id = p.get("id");
         if (!id) {
@@ -39,58 +54,12 @@ export class MinirolloDetalle {
       }),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+  }
 
-    // Navegación Anterior/Siguiente sin nulls
-    this.nav$ = this.route.paramMap.pipe(
-      map(pm => Number(pm.get("id") || "0")),
-      switchMap(currentId => {
-        if (!Number.isFinite(currentId) || currentId <= 0) {
-          return of({ page: 1, hasPrev: false, hasNext: false, prevId: 0, nextId: 0 } as DetailNav);
-        }
-
-        const pageGuess = Math.floor((currentId - 1) / this.DEFAULT_PAGE_SIZE) + 1;
-
-        return this.docs.getMiniRolloIndexPageRemote(pageGuess).pipe(
-          switchMap((meta: DocIndexPage) => {
-            const items = meta.items || [];
-            const i = items.findIndex(it => it.id === currentId);
-
-            if (i === -1) {
-              // Si no se encuentra, mejor no inventar vecinos
-              return of({ page: meta.page, hasPrev: false, hasNext: false, prevId: 0, nextId: 0 } as DetailNav);
-            }
-
-            const needPrevFromPrevPage = i === 0 && meta.hasPrev;
-            const needNextFromNextPage = i === items.length - 1 && meta.hasNext;
-
-            const prevId$ = needPrevFromPrevPage
-              ? this.docs.getMiniRolloIndexPageRemote(meta.page - 1).pipe(
-                map(prevPage => (prevPage.items.length ? prevPage.items[prevPage.items.length - 1].id : 0))
-              )
-              : of(i > 0 ? items[i - 1].id : 0);
-
-            const nextId$ = needNextFromNextPage
-              ? this.docs.getMiniRolloIndexPageRemote(meta.page + 1).pipe(
-                map(nextPage => (nextPage.items.length ? nextPage.items[0].id : 0))
-              )
-              : of(i < items.length - 1 ? items[i + 1].id : 0);
-
-            const hasPrev = i > 0 || meta.hasPrev;
-            const hasNext = i < items.length - 1 || meta.hasNext;
-
-            return forkJoin({ prevId: prevId$, nextId: nextId$ }).pipe(
-              map(({ prevId, nextId }) => ({
-                page: meta.page,
-                hasPrev,
-                hasNext,
-                prevId,
-                nextId
-              } as DetailNav))
-            );
-          })
-        );
-      }),
-      shareReplay({ bufferSize: 1, refCount: true })
+  private buildNav$(): Observable<DetailNav> {
+    return this.navigation.createNav$(
+      this.id$,
+      (page: number) => this.docs.getMiniRolloIndexPageRemote(page)
     );
   }
 
