@@ -11,6 +11,7 @@ import { Navigation } from "../../navbar/navigation";
 @Component({
   selector: 'app-rollo-detalle',
   imports: [CommonModule, RouterModule, Navbar],
+  providers: [Navigation],
   templateUrl: './rollo-detalle.html',
   styleUrl: './rollo-detalle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

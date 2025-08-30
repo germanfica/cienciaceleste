@@ -11,6 +11,7 @@ import { Navbar } from "../../navbar/navbar";
 @Component({
   selector: 'app-minirollo-detalle',
   imports: [CommonModule, RouterModule, Navbar],
+  providers: [Navigation],
   templateUrl: './minirollo-detalle.html',
   styleUrl: './minirollo-detalle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

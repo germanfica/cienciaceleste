@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable, of, shareReplay, switchMap } from 'rxjs';
 import { DetailNav, DocIndexPage } from '../doc-viewer/doc-types';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class Navigation {
   private readonly DEFAULT_PAGE_SIZE = 10;
 
