@@ -25,7 +25,12 @@ export class DivinasLeyes {
 
   ngOnInit(): void {
     // Leemos ?page=N (default 1) y pedimos el JSON remoto
-    this.page$ = this.route.queryParamMap.pipe(
+    this.page$ = this.buildPage$();
+    this.pages$ = this.buildPages$();
+  }
+
+  private buildPage$(): Observable<DocIndexPage> {
+    return this.route.queryParamMap.pipe(
       map(q => {
         const n = Number(q.get("page") || "1");
         return Number.isFinite(n) && n >= 1 ? n : 1;
@@ -37,9 +42,11 @@ export class DivinasLeyes {
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true })
-    );
+    )
+  }
 
-    this.pages$ = this.page$.pipe(
+  private buildPages$(): Observable<number[]> {
+    return this.page$.pipe(
       map(p => Array.from({ length: p.totalPages }, (_, i) => i + 1)),
       shareReplay({ bufferSize: 1, refCount: true })
     );
