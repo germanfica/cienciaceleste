@@ -12,6 +12,7 @@ const {
     buildAllDocs,
 } = require("./npm/pipelines");
 const { frontendStart, frontendBuild, frontendWatch, frontendTest, frontendBuildProd, frontendBuildProdGhpages } = require("./npm/frontend");
+const { deployGhpages } = require("./npm/deploy-ghpages");
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -40,6 +41,7 @@ task("frontend:build:prod", frontendBuildProd);
 task("frontend:build:prod:ghpages", frontendBuildProdGhpages);
 task("frontend:watch", frontendWatch);
 task("frontend:test", frontendTest);
+task("frontend:deploy:ghpages", deployGhpages);
 
 // Default: full rollos
 task("default", buildAllRollos);
