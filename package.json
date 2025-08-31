@@ -13,6 +13,7 @@
     "frontend:start": "gulp frontend:start",
     "frontend:build": "gulp frontend:build",
     "frontend:build:prod": "gulp frontend:build:prod",
+    "frontend:build:prod:ghpages": "gulp frontend:build:prod:ghpages",
     "frontend:watch": "gulp frontend:watch",
     "frontend:test": "gulp frontend:test",
     "clean:init": "gulp clean:init",

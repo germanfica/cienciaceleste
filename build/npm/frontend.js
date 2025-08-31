@@ -41,6 +41,10 @@ async function frontendBuildProd() {
   return runNpm("build:production", parseExtraArgs());
 }
 
+async function frontendBuildProdGhpages() {
+  return runNpm("build:production:ghpages", parseExtraArgs());
+}
+
 async function frontendWatch() {
   // watcher queda en primer plano hasta Ctrl+C
   return runNpm("watch", parseExtraArgs());
@@ -54,6 +58,7 @@ module.exports = {
   frontendStart,
   frontendBuild,
   frontendBuildProd,
+  frontendBuildProdGhpages,
   frontendWatch,
   frontendTest,
 };

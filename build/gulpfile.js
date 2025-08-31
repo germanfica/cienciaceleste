@@ -11,7 +11,7 @@ const {
     buildAllLeyes,
     buildAllDocs,
 } = require("./npm/pipelines");
-const { frontendStart, frontendBuild, frontendWatch, frontendTest, frontendBuildProd } = require("./npm/frontend");
+const { frontendStart, frontendBuild, frontendWatch, frontendTest, frontendBuildProd, frontendBuildProdGhpages } = require("./npm/frontend");
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -37,6 +37,7 @@ task("build:all:docs", buildAllDocs);
 task("frontend:start", frontendStart);
 task("frontend:build", frontendBuild);
 task("frontend:build:prod", frontendBuildProd);
+task("frontend:build:prod:ghpages", frontendBuildProdGhpages);
 task("frontend:watch", frontendWatch);
 task("frontend:test", frontendTest);
 
