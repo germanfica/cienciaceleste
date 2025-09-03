@@ -52,7 +52,28 @@ function publishGhpages(cb) {
   );
 }
 
+const pkg = require("../../frontend/package.json");
+
+function getBaseHref() {
+  const buildScript = pkg.scripts["build:production:ghpages"];
+  const match = buildScript.match(/--base-href\s+"([^"]+)"/);
+  return match ? match[1] : "/";
+}
+
+function fixManifestPath(cb) {
+  const baseHref = getBaseHref(); // o process.env.BASE_HREF
+  const indexFile = path.join(DIST_DIR, "index.html");
+  let html = fs.readFileSync(indexFile, "utf8");
+  html = html.replace(
+    /href="manifest.webmanifest"/,
+    `href="${baseHref}manifest.webmanifest"`
+  );
+  fs.writeFileSync(indexFile, html);
+  console.log(`✔ Fixed manifest.webmanifest path to ${baseHref}manifest.webmanifest`);
+  cb();
+}
+
 // Pipeline para Gulp
-const deployGhpages = series(buildProdGhpages, copy404, publishGhpages);
+const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, publishGhpages);
 
 module.exports = { deployGhpages };

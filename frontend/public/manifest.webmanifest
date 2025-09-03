@@ -1,9 +1,13 @@
 {
-  "name": "cienciaceleste",
+  "name": "Ciencia Celeste",
   "short_name": "cienciaceleste",
+  "description": "Divinos Rollos Telepáticos - Ciencia Celeste",
+  "theme_color": "#1976d2",
+  "background_color": "#0CF",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "orientation": "portrait",
+  "scope": "/cienciaceleste/",
+  "start_url": "/cienciaceleste/",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
