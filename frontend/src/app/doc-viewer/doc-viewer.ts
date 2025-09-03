@@ -25,7 +25,7 @@ export class DocViewer implements OnInit {
           this.router.navigateByUrl("/docs/404");
           return EMPTY; // no emite, no null
         }
-        return this.docs.getDoc(String(id));
+        return this.docs.getRolloDoc(String(id));
       }),
       // si hay error (404 del JSON), redirigimos y no emitimos
       catchError(() => {
