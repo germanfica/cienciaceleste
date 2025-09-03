@@ -6,8 +6,8 @@
   "background_color": "#0CF",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/cienciaceleste/",
+  "start_url": "/cienciaceleste/",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
