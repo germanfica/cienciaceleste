@@ -7,3 +7,11 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <router-outlet />
+
+<!-- botón install dinámico -->
+ {{ canInstall() }}
+@if (canInstall()) {
+<button (click)="installPwa()">
+  Instalar app
+</button>
+}
