@@ -7,7 +7,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/cienciaceleste/",
-  "start_url": "/cienciaceleste/index.html",
+  "start_url": "/cienciaceleste/",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
