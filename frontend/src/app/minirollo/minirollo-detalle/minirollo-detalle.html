@@ -28,8 +28,7 @@
         <!-- FIN TITULO -->
 
         <!-- CONTENIDO -->
-        @for (b of d.bloques; track trackBlock($index, b)) {
-
+        @for (b of d.bloques; let blockIdx = $index; track trackBlock(blockIdx, b)) {
         @if (b.t === 'img') {
         <tr>
           <td colspan="10" align="center">
@@ -37,78 +36,36 @@
           </td>
         </tr>
         }
+
         @else if (b.t !== 'h1' && b.t !== 'author') {
         <tr>
           <td colspan="2" class="catalogo">
             @if (b.t === 'p') {
-            @for (s of b.inlines; track trackInline($index, s)) {
-            @switch (s.t) {
-            @case ('text') { {{ s.text }} }
-            @case ('strong') { <strong>{{ s.text }}</strong> }
-            @case ('em') { <em>{{ s.text }}</em> }
-            @case ('code') { <code>{{ s.text }}</code> }
-            @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-            }
-            }
-            }
+            @let toks = tokenizeBlock(d.id, b, blockIdx);
+            <p [attr.data-block-idx]="blockIdx">
+              @for (t of toks; track trackWord($index, t)) {
+              @switch (t.kind) {
+              @case ('word') {
+              <w class="w"
+                 [id]="t.wordId!"
+                 [attr.data-w]="t.wordIndexInBlock!"
+                 (click)="onWordClick(t.wordId, d.id, blockIdx)">
+                {{ t.text }}
+              </w>
 
-            @if (b.t === 'ul') {
-            <ul>
-              @for (item of b.items; track trackInlineArray($index, item)) {
-              <li>
-                @for (s of item; track trackInline($index, s)) {
-                @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-                }
-                }
-              </li>
+              <!-- Checkpoints comentados por ahora -->
               }
-            </ul>
-            }
-
-            @if (b.t === 'ol') {
-            <ol>
-              @for (item of b.items; track trackInlineArray($index, item)) {
-              <li>
-                @for (s of item; track trackInline($index, s)) {
-                @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-                }
-                }
-              </li>
-              }
-            </ol>
-            }
-
-            @if (b.t === 'code') {
-            <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
-            }
-
-            @if (b.t === 'blockquote') {
-            <blockquote>
-              @for (s of b.inlines; track trackInline($index, s)) {
-              @switch (s.t) {
-              @case ('text') { {{ s.text }} }
-              @case ('strong') { <strong>{{ s.text }}</strong> }
-              @case ('em') { <em>{{ s.text }}</em> }
-              @case ('code') { <code>{{ s.text }}</code> }
-              @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+              @case ('space') { {{ t.text }} }
+              @case ('punct') { {{ t.text }} }
               }
               }
-            </blockquote>
+            </p>
             }
           </td>
         </tr>
         }
         }
+        <!-- FIN CONTENIDO -->
 
         <tr>
           <td></td>
