@@ -189,34 +189,29 @@ export class MinirolloDetalle {
 
 
 
-resumeFromSaved(docId?: string | number) {
-  if (docId == null) return;
-  const raw = localStorage.getItem(this.lsKey(docId));
-  if (!raw) return;
+  resumeFromSaved(docId?: string | number) {
+    if (!docId) return;
+    const raw = localStorage.getItem(this.lsKey(docId));
+    if (!raw) return;
 
-  try {
-    const { wordId } = JSON.parse(raw);
+    try {
+      const { wordId } = JSON.parse(raw);
+      if (!wordId) return;
 
-    if (wordId) {
-      this.zone.onStable.pipe(take(1)).subscribe(() => {
-        requestAnimationFrame(() => {
-          const el = document.getElementById(wordId);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const y = rect.top + window.scrollY;
-            window.scrollTo({ top: y, behavior: 'auto' });
-            this.flash(wordId);
-          } else {
-            console.warn('No encontré el elemento con id', wordId);
-          }
-        });
+      const sub = this.zone.onStable.subscribe(() => {
+        const el = document.getElementById(wordId);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const y = rect.top + window.scrollY;
+          window.scrollTo({ top: y - 20, behavior: 'auto' });
+          this.flash(wordId);
+          sub.unsubscribe(); // 👈 dejar de escuchar una vez encontrado
+        }
       });
+    } catch {
+      this.scrollToWord(raw, { smooth: false, center: true });
     }
-  } catch {
-    // fallback: ids viejos
-    this.scrollToWord(raw, { smooth: false, center: true });
   }
-}
 
 
 
