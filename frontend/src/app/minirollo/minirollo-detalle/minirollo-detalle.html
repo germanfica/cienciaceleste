@@ -10,19 +10,13 @@
   <tr>
     <td background="images/fondolong.jpg">
       <table width="900" border="0" align="center" cellpadding="20" bgcolor="#FFFFFF">
+        <!-- NAVEGACION -->
         <tr>
-          <td class="textolinkleft">
-            <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: nav.page }">LISTADO MINIROLLOS</a>
-          </td>
-          <td class="textolink">
-            @if (nav.hasPrev) {
-            <a [routerLink]="['/divinos-minirollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
-            }
-            @if (nav.hasNext) {
-            <a [routerLink]="['/divinos-minirollos', nav.nextId]">SIGUIENTE</a>
-            }
+          <td colspan="2">
+            <app-navbar [nav$]="nav$" listRoute="/divinos-minirollos" listLabel="LISTADO MINIROLLOS"></app-navbar>
           </td>
         </tr>
+        <!-- FIN NAVEGACION -->
 
         <!-- TITULO -->
         <tr>
@@ -31,6 +25,7 @@
             ESCRITURA TELEPÁTICA DICTADA POR EL DIVINO PADRE JEHOVÁ.- ARTICULO Nº {{ d.id }}.- {{ d.titulo || ' ' }}
           </td>
         </tr>
+        <!-- FIN TITULO -->
 
         <!-- CONTENIDO -->
         @for (b of d.bloques; track trackBlock($index, b)) {

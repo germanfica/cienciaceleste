@@ -7,7 +7,6 @@ const clean = cleanInit;
 const buildTS = npmRun("build");
 
 const convert = series(
-  clean,
   buildTS,
   nodeOut("extract-rollo.js", [
     "--in ../docs/",

@@ -1,4 +1,71 @@
-.textolinkleft a,
-.textolink a {
-  text-decoration: underline;
-}
+// /* ===== Base (>= 1031px): conserva el diseño de escritorio tal cual ===== */
+// :host {
+//   display: block;
+// }
+
+// /* Tablas con ancho fijo como en el HTML original */
+// table[width="1000"] {
+//   width: 1000px !important;
+//   max-width: 1000px;
+//   margin-inline: auto;
+//   border-collapse: collapse;
+// }
+// table[width="900"] {
+//   width: 900px !important;
+//   max-width: 900px;
+//   margin-inline: auto;
+//   border-collapse: collapse;
+// }
+
+// /* Tipografías y paddings tal cual escritorio */
+// .titulorollo { font-size: 38px; line-height: 1.2; text-align: justify; }
+// .textorollo  { font-size: 22px; line-height: 1.7; }
+// .textolinkleft, .textolink { font-size: 18px; }
+// .textoderecha { text-align: right; }
+// td[bgcolor="#FFFFFF"] { padding: 28px; }
+
+// /* No forzamos imágenes fluidas en escritorio para no tocar el look */
+// img { height: auto; }
+
+// /* ===== Responsive sólo debajo de 1031 px ===== */
+// @media (max-width: 1030px) {
+//   /* Hacer las tablas fluidas */
+//   table, table[width="1000"], table[width="900"] {
+//     width: 100% !important;
+//     max-width: 100% !important;
+//   }
+
+//   /* Imágenes fluidas */
+//   img { max-width: 100%; height: auto; }
+
+//   /* Ajustes generales para pantallas menores a 1031 px */
+//   .titulorollo { font-size: 30px; line-height: 1.25; }
+//   .textorollo  { font-size: 18px; line-height: 1.6; }
+//   .textolinkleft, .textolink {
+//     display: inline-block;
+//     width: 100%;
+//     text-align: center;
+//     margin: 6px 0;
+//     font-size: 16px;
+//   }
+//   .textoderecha { text-align: center; }
+//   td[bgcolor="#FFFFFF"] { padding: 22px; }
+
+//   /* ——— Sub-breakpoint: tablet ≤ 1024px ——— */
+//   @media (max-width: 1024px) {
+//     .titulorollo { font-size: 28px; }
+//     .textorollo  { font-size: 17px; }
+//     td[bgcolor="#FFFFFF"] { padding: 20px; }
+//   }
+
+//   /* ——— Sub-breakpoint: mobile ≤ 768px ——— */
+//   @media (max-width: 768px) {
+//     .titulorollo { font-size: 24px; }
+//     .textorollo  { font-size: 16px; line-height: 1.55; }
+//     .textolinkleft, .textolink { font-size: 15px; margin: 4px 0; }
+//     td[bgcolor="#FFFFFF"] { padding: 16px; }
+
+//     /* Asegurar que imágenes dentro de celdas ocupen todo el ancho */
+//     td img { width: 100%; }
+//   }
+// }

@@ -14,19 +14,14 @@
                     <td colspan="2" class="titulotexto"></td>
                 </tr>
 
+                <!-- NAVEGACION -->
                 <tr>
-                    <td class="textolinkleft">
-                        <a [routerLink]="['/rollos']" [queryParams]="{ page: nav.page }">LISTADO DIVINOS ROLLOS</a>
-                    </td>
-                    <td class="textolink">
-                        @if (nav.hasPrev) {
-                        <a [routerLink]="['/rollos', nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;
-                        }
-                        @if (nav.hasNext) {
-                        <a [routerLink]="['/rollos', nav.nextId]">SIGUIENTE</a>
-                        }
+                    <td colspan="2">
+                        <app-navbar [nav$]="nav$" listRoute="/divinos-rollos"
+                            listLabel="LISTADO DIVINOS ROLLOS"></app-navbar>
                     </td>
                 </tr>
+                <!-- FIN NAVEGACION -->
 
                 <!-- TITULO -->
                 <tr>
