@@ -1,7 +1,7 @@
 // src/app/doc-viewer/scroll-progress.ts
 import { Injectable, Inject, NgZone, PLATFORM_ID } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Observable, Subscription, fromEvent, of } from 'rxjs';
+import { Observable, Subscription, fromEvent } from 'rxjs';
 import { auditTime, map } from 'rxjs/operators';
 
 type ScrollTarget = Window | HTMLElement;
@@ -48,8 +48,15 @@ export class ScrollProgress {
     this.currentKey = key;
     this.currentTarget = target;
 
-    // 1) Restaurar antes de enganchar listeners
-    this.restore({ key: opts.key, target, behavior: opts.restoreBehavior ?? 'auto', version: opts.version });
+    // 1) Restaurar después de render (con requestAnimationFrame)
+    requestAnimationFrame(() => {
+      this.restore({
+        key: opts.key,
+        target,
+        behavior: opts.restoreBehavior ?? 'auto',
+        version: opts.version
+      });
+    });
 
     // 2) Enganchar listeners (scroll + 'pagehide'/'visibilitychange')
     this.zone.runOutsideAngular(() => {
