@@ -1,3 +1,4 @@
+// src/app/doc-viewer/scroll-tracker.ts
 import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ScrollProgress, TrackOptions } from './scroll-progress';
 

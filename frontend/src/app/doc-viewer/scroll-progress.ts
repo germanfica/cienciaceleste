@@ -1,4 +1,4 @@
-// src/app/shared/scroll-progress.service.ts
+// src/app/doc-viewer/scroll-progress.ts
 import { Injectable, Inject, NgZone, PLATFORM_ID } from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Observable, Subscription, fromEvent, of } from 'rxjs';
