@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1757859208231,
+  "timestamp": 1757860955411,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -425,6 +425,8 @@
         "/cienciaceleste/r12-1.jpg",
         "/cienciaceleste/r12.jpg",
         "/cienciaceleste/r33-1.jpg",
+        "/cienciaceleste/screenshots/screenshot-desktop.png",
+        "/cienciaceleste/screenshots/screenshot-mobile.png",
         "/cienciaceleste/todo lo salido del reino.jpg",
         "/cienciaceleste/todos aquellos padres y madres.jpg",
         "/cienciaceleste/todos aquellos que hicieron una sola carne.jpg",
@@ -861,6 +863,8 @@
     "/cienciaceleste/r12-1.jpg": "009ad8b385b2c5ed8355926d04d7bce710b724bb",
     "/cienciaceleste/r12.jpg": "009ad8b385b2c5ed8355926d04d7bce710b724bb",
     "/cienciaceleste/r33-1.jpg": "3042a6e4130fbcefc60fcf4e881d993d15209d12",
+    "/cienciaceleste/screenshots/screenshot-desktop.png": "b26b18d64c222d66854b779b94a6232a7d5587e8",
+    "/cienciaceleste/screenshots/screenshot-mobile.png": "660cb48f03a2c9aa4b7a8546ac2522a2c921b7c5",
     "/cienciaceleste/styles-E32HY5BW.css": "e6139dd67b87cfe1f9d0ee9a131271edc9c5f050",
     "/cienciaceleste/todo lo salido del reino.jpg": "365b05b408a36513e3d478d4c9b1c2da703ee957",
     "/cienciaceleste/todos aquellos padres y madres.jpg": "2b2bf78de144145a67ef0fb7dbcaebc8cb9bc5f3",
