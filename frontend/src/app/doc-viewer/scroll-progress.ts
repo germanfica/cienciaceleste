@@ -81,6 +81,12 @@ export class ScrollProgress {
         if (document.visibilityState === 'hidden') this.saveProgress(key, target, opts.version);
       }));
 
+      // --- OPCIÓN A + B ---
+      // A) Confiamos en que el navegador restaure scroll automáticamente con BFCache
+      // B) Pero también guardamos al navegar atrás/adelante para tener consistencia en localStorage
+      sub.add(fromEvent(window, 'beforeunload').subscribe(() => this.saveProgress(key, target, opts.version)));
+      sub.add(fromEvent(window, 'popstate').subscribe(() => this.saveProgress(key, target, opts.version)));
+
       this.sub = sub;
     });
   }
