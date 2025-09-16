@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1757995892666,
+  "timestamp": 1757996207145,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -392,6 +392,7 @@
         "/cienciaceleste/icons/icon-144x144.png",
         "/cienciaceleste/icons/icon-152x152-maskable.png",
         "/cienciaceleste/icons/icon-152x152.png",
+        "/cienciaceleste/icons/icon-192x192-maskable.png",
         "/cienciaceleste/icons/icon-192x192.png",
         "/cienciaceleste/icons/icon-384x384-maskable.png",
         "/cienciaceleste/icons/icon-384x384.png",
@@ -834,6 +835,7 @@
     "/cienciaceleste/icons/icon-144x144.png": "1a63c4c6769873f3870238881e11ca341c690077",
     "/cienciaceleste/icons/icon-152x152-maskable.png": "7fc76143818c3556bc00d4de93274c838c630321",
     "/cienciaceleste/icons/icon-152x152.png": "48be84eeb9e3c57c66dc0db37a149ed58434d2be",
+    "/cienciaceleste/icons/icon-192x192-maskable.png": "0939db2ed300abcb12dac61f595f80cc804ca013",
     "/cienciaceleste/icons/icon-192x192.png": "c1b7341b0cf39d39fd648bcd946cf5fdc42a6801",
     "/cienciaceleste/icons/icon-384x384-maskable.png": "9a960be09952c250f5d542df8da22dbe56e0af81",
     "/cienciaceleste/icons/icon-384x384.png": "74b8bf9e6352636aeaa74c109890e0db314178a0",
