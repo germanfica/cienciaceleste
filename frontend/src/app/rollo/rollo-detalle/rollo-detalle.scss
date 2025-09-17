@@ -31,9 +31,11 @@ body {
 
 /* caja blanca adentro */
 .rollo-inner {
-  max-width: 900px;
+  width: 100%;        /* ocupa siempre todo el ancho disponible */
+  max-width: 900px;   /* no pasa de 900px en desktop */
   background: #fff;
   padding: 28px;
+  box-sizing: border-box; /* asegura que padding se incluya en el ancho */
 }
 
 /* tipografía */
