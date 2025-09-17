@@ -44,7 +44,12 @@
        el cajón blanco (.rollo-content) nunca debe expandirse más allá del ancho
        del fondolong.jpg -> siempre debe quedar contenido dentro del marco naranja
        con los bordes rojos y azules. */
-      max-width: calc(100% - 40px);
+      /* Ajuste de tamaño
+       - nunca menos de 280px (móvil chico)
+       - ideal: 90% del ancho disponible
+       - máximo: 920px (un poco menos que el marco de 1000px)
+      */
+      width: clamp(280px, 90%, 920px);
       /* siempre deja margen dentro del marco */
       box-sizing: border-box;
     }
