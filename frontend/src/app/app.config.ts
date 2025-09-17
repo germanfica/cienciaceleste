@@ -24,8 +24,8 @@ export const appConfig: ApplicationConfig = {
         platformLocation.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
     }, provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          })
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerImmediately'
+    })
   ]
 };
