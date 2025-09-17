@@ -23,10 +23,11 @@ body {
   background-image: url("/images/fondolong.jpg");
   background-repeat: repeat-y;
   background-position: center top;
-  background-size: auto; /* usa el ancho original de la franja */
+  background-size: 100% auto; /* ajusta ancho, altura natural */
   display: flex;
   justify-content: center;
 }
+
 
 /* caja blanca adentro */
 .rollo-inner {
