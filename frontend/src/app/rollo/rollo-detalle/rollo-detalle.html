@@ -15,91 +15,39 @@
   <!-- cuerpo -->
   <div class="rollo-body">
     <div class="rollo-inner">
+      <div class="rollo-content">
 
-      <!-- navegación -->
-      <app-navbar 
-        [nav$]="nav$"
-        listRoute="/divinos-rollos"
-        listLabel="LISTADO DIVINOS ROLLOS">
-      </app-navbar>
+        <!-- navegación -->
+        <app-navbar 
+          [nav$]="nav$"
+          listRoute="/divinos-rollos"
+          listLabel="LISTADO DIVINOS ROLLOS">
+        </app-navbar>
 
-      <!-- título -->
-      <h1 class="titulorollo">
-        <u>{{ d.titulo || " " }}</u>
-      </h1>
+        <!-- título -->
+        <h1 class="titulorollo">
+          <u>{{ d.titulo || " " }}</u>
+        </h1>
 
-      <!-- contenido dinámico -->
-      <div class="scroll-host"
-           scrollTracker
-           [scrollProgress]="'rollo/' + id"
-           [scrollProgressBehavior]="'auto'"
-           [scrollProgressSaveEveryMs]="200">
+        <!-- contenido dinámico -->
+        <div class="scroll-host"
+             scrollTracker
+             [scrollProgress]="'rollo/' + id"
+             [scrollProgressBehavior]="'auto'"
+             [scrollProgressSaveEveryMs]="200">
 
-        @for (b of d.bloques; track trackBlock($index, b)) {
+          @for (b of d.bloques; track trackBlock($index, b)) {
 
-          @if (b.t === "img") {
-            <div class="img-block">
-              <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
-            </div>
-          }
+            @if (b.t === "img") {
+              <div class="img-block">
+                <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
+              </div>
+            }
 
-          @else if (b.t !== "h1" && b.t !== "author") {
-            <div class="textorollo">
+            @else if (b.t !== "h1" && b.t !== "author") {
+              <div class="textorollo">
 
-              @if (b.t === "p") {
-                @for (s of b.inlines; track trackInline($index, s)) {
-                  @switch (s.t) {
-                    @case ("text")   { {{ s.text }} }
-                    @case ("strong") { <strong>{{ s.text }}</strong> }
-                    @case ("em")     { <em>{{ s.text }}</em> }
-                    @case ("code")   { <code>{{ s.text }}</code> }
-                    @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-                  }
-                }
-              }
-
-              @if (b.t === "ul") {
-                <ul>
-                  @for (item of b.items; track trackInlineArray($index, item)) {
-                    <li>
-                      @for (s of item; track trackInline($index, s)) {
-                        @switch (s.t) {
-                          @case ("text")   { {{ s.text }} }
-                          @case ("strong") { <strong>{{ s.text }}</strong> }
-                          @case ("em")     { <em>{{ s.text }}</em> }
-                          @case ("code")   { <code>{{ s.text }}</code> }
-                          @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-                        }
-                      }
-                    </li>
-                  }
-                </ul>
-              }
-
-              @if (b.t === "ol") {
-                <ol>
-                  @for (item of b.items; track trackInlineArray($index, item)) {
-                    <li>
-                      @for (s of item; track trackInline($index, s)) {
-                        @switch (s.t) {
-                          @case ("text")   { {{ s.text }} }
-                          @case ("strong") { <strong>{{ s.text }}</strong> }
-                          @case ("em")     { <em>{{ s.text }}</em> }
-                          @case ("code")   { <code>{{ s.text }}</code> }
-                          @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
-                        }
-                      }
-                    </li>
-                  }
-                </ol>
-              }
-
-              @if (b.t === "code") {
-                <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
-              }
-
-              @if (b.t === "blockquote") {
-                <blockquote>
+                @if (b.t === "p") {
                   @for (s of b.inlines; track trackInline($index, s)) {
                     @switch (s.t) {
                       @case ("text")   { {{ s.text }} }
@@ -109,18 +57,72 @@
                       @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
                     }
                   }
-                </blockquote>
-              }
+                }
 
-            </div>
+                @if (b.t === "ul") {
+                  <ul>
+                    @for (item of b.items; track trackInlineArray($index, item)) {
+                      <li>
+                        @for (s of item; track trackInline($index, s)) {
+                          @switch (s.t) {
+                            @case ("text")   { {{ s.text }} }
+                            @case ("strong") { <strong>{{ s.text }}</strong> }
+                            @case ("em")     { <em>{{ s.text }}</em> }
+                            @case ("code")   { <code>{{ s.text }}</code> }
+                            @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                          }
+                        }
+                      </li>
+                    }
+                  </ul>
+                }
+
+                @if (b.t === "ol") {
+                  <ol>
+                    @for (item of b.items; track trackInlineArray($index, item)) {
+                      <li>
+                        @for (s of item; track trackInline($index, s)) {
+                          @switch (s.t) {
+                            @case ("text")   { {{ s.text }} }
+                            @case ("strong") { <strong>{{ s.text }}</strong> }
+                            @case ("em")     { <em>{{ s.text }}</em> }
+                            @case ("code")   { <code>{{ s.text }}</code> }
+                            @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                          }
+                        }
+                      </li>
+                    }
+                  </ol>
+                }
+
+                @if (b.t === "code") {
+                  <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
+                }
+
+                @if (b.t === "blockquote") {
+                  <blockquote>
+                    @for (s of b.inlines; track trackInline($index, s)) {
+                      @switch (s.t) {
+                        @case ("text")   { {{ s.text }} }
+                        @case ("strong") { <strong>{{ s.text }}</strong> }
+                        @case ("em")     { <em>{{ s.text }}</em> }
+                        @case ("code")   { <code>{{ s.text }}</code> }
+                        @case ("link")   { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                      }
+                    }
+                  </blockquote>
+                }
+
+              </div>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <!-- autor -->
-      <div class="textoderecha">Escribe: {{ d.autor }}</div>
+        <!-- autor -->
+        <div class="textoderecha">Escribe: {{ d.autor }}</div>
 
-    </div>
+      </div> <!-- /.rollo-content -->
+    </div> <!-- /.rollo-inner -->
   </div>
 
   <!-- pie -->

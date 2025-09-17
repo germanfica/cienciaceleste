@@ -1,75 +1,145 @@
-/* fondo general celeste */
-body {
-  background: #00cfff;
-  margin: 0;
-  padding: 0;
-}
-
-.rollo-detalle {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-/* cabecera y pie */
-.rollo-header img,
-.rollo-footer img {
-  width: 100%;
-  height: auto;
+:host {
   display: block;
 }
 
-/* cuerpo con la franja que se repite */
+/* ===== Contenedor principal ===== */
+.rollo-detalle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== Cabecera y Pie ===== */
+.rollo-header img,
+.rollo-footer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/* ===== Marco (fondolong) ===== */
 .rollo-body {
-  background-image: url("/images/fondolong.jpg");
-  background-repeat: repeat-y;
-  background-position: center top;
-  background-size: 100% auto; /* ajusta ancho, altura natural */
+  width: 100%;
   display: flex;
   justify-content: center;
+
+  .rollo-inner {
+    width: 100%;
+    max-width: 1000px;
+    /* límite del marco */
+    background: url("/images/fondolong.jpg") repeat-y center top;
+    background-size: 100% auto;
+    box-sizing: border-box;
+
+    /* ===== Cajón blanco ===== */
+    .rollo-content {
+      background: #fff;
+      padding: 2rem;
+      margin: 0 auto;
+
+      /* IMPORTANTE:
+       el cajón blanco (.rollo-content) nunca debe expandirse más allá del ancho
+       del fondolong.jpg -> siempre debe quedar contenido dentro del marco naranja
+       con los bordes rojos y azules. */
+      max-width: calc(100% - 40px);
+      /* siempre deja margen dentro del marco */
+      box-sizing: border-box;
+    }
+  }
 }
 
-
-/* caja blanca adentro */
-.rollo-inner {
-  width: 100%;        /* ocupa siempre todo el ancho disponible */
-  max-width: 900px;   /* no pasa de 900px en desktop */
-  background: #fff;
-  padding: 28px;
-  box-sizing: border-box; /* asegura que padding se incluya en el ancho */
-}
-
-/* tipografía */
+/* ===== Tipografía ===== */
 .titulorollo {
   font-size: 38px;
   line-height: 1.2;
   text-align: justify;
+  margin: 1rem 0;
 }
 
 .textorollo {
   font-size: 22px;
   line-height: 1.7;
+  margin: 1rem 0;
+}
+
+.textolinkleft,
+.textolink {
+  font-size: 18px;
 }
 
 .textoderecha {
   text-align: right;
-  margin-top: 16px;
+  font-size: 16px;
+  margin-top: 2rem;
 }
 
-/* imágenes internas */
+.img-block {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
 .img-block img {
   max-width: 100%;
   height: auto;
 }
 
-/* responsive */
-@media (max-width: 1024px) {
-  .titulorollo { font-size: 28px; }
-  .textorollo  { font-size: 17px; }
-  .rollo-inner { padding: 20px; }
+/* ===== Responsive ===== */
+@media (max-width: 1030px) {
+  .titulorollo {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+
+  .textorollo {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .textolinkleft,
+  .textolink {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin: 6px 0;
+    font-size: 16px;
+  }
+
+  .textoderecha {
+    text-align: center;
+  }
 }
 
 @media (max-width: 768px) {
-  .titulorollo { font-size: 24px; }
-  .textorollo  { font-size: 16px; line-height: 1.55; }
-  .rollo-inner { padding: 16px; }
+  .titulorollo {
+    font-size: 24px;
+  }
+
+  .textorollo {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .rollo-inner .rollo-content {
+    padding: 1rem;
+    max-width: calc(100% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .titulorollo {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .textorollo {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .rollo-inner .rollo-content {
+    padding: 0.75rem;
+  }
 }
