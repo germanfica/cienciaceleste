@@ -8,7 +8,6 @@
       "resources": {
         "files": [
           "/favicon.ico",
-          "/index.csr.html",
           "/index.html",
           "/*.css",
           "/*.js"
@@ -25,5 +24,24 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "docs-api",
+      "urls": [
+        "/docs/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "1d",
+        "timeout": "10s"
+      }
+    }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/**/*.*",
+    "!/api/**"
   ]
 }
