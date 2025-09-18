@@ -64,6 +64,8 @@
   line-height: 1.2;
   text-align: justify;
   margin: 1rem 0;
+  padding-top: 28px;
+  padding-bottom: 28px;
 }
 
 .textorollo {
@@ -149,12 +151,4 @@
   .rollo-inner .rollo-content {
     padding: 0.75rem;
   }
-}
-
-.rollo-box {
-  height: 28px;
-  max-width: 1000px;
-  margin: 0 auto;
-  background: url("/images/fondolong.jpg") repeat-x center top;
-  background-size: 100% auto;
 }
