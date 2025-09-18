@@ -52,6 +52,8 @@
       width: clamp(280px, 90%, 920px);
       /* siempre deja margen dentro del marco */
       box-sizing: border-box;
+
+      padding-top: 84px;
     }
   }
 }
@@ -147,4 +149,12 @@
   .rollo-inner .rollo-content {
     padding: 0.75rem;
   }
+}
+
+.rollo-box {
+  height: 28px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: url("/images/fondolong.jpg") repeat-x center top;
+  background-size: 100% auto;
 }
