@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758168994739,
+  "timestamp": 1758169116877,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/cienciaceleste/favicon.ico",
         "/cienciaceleste/index.html",
-        "/cienciaceleste/main-SXPCBPU3.js",
+        "/cienciaceleste/main-X7S343B4.js",
         "/cienciaceleste/polyfills-5CFQRCPP.js",
         "/cienciaceleste/styles-F64X5D6L.css"
       ],
@@ -851,7 +851,7 @@
     "/cienciaceleste/images/toplong.jpg": "56fd0d444f85cea40cc8cfa1c3c52832cf8bdbe1",
     "/cienciaceleste/images/toplong2.jpg": "8a6a40632ce57e3fa766178d472615d5e44ac779",
     "/cienciaceleste/images/toplong3.jpg": "06fd506beea32ddd177e24f76b6e871f78416cb7",
-    "/cienciaceleste/index.html": "b0c576ca5861fc212881da0009a86c9765a4106d",
+    "/cienciaceleste/index.html": "690e5e5099cf84696027b9d8043a2fd2b5e4ce88",
     "/cienciaceleste/juicio final, a las naciones ricas.jpg": "11e47826e16f8f6b307b9c6844dfe289ef80b76e",
     "/cienciaceleste/juicio final, los mas sufridos.jpg": "1d880bb4d08e787641f1cb6f004d3dcfe6f7d6ed",
     "/cienciaceleste/juicio final, los que ganaron.jpg": "0d909870bed632a90e827d5cde57259bf7f268cf",
@@ -861,7 +861,7 @@
     "/cienciaceleste/los ladrones.jpg": "0358f49fec84db6a69f3efdd61f2d6a044f40001",
     "/cienciaceleste/los_que_fueron_obligados.jpg": "2db0e6c720cf754bae4b82070a624d6731057b06",
     "/cienciaceleste/los_que_fueron_obligados_c.jpg": "183141c8256e58d78a0b8818df0ed21837451cdf",
-    "/cienciaceleste/main-SXPCBPU3.js": "905bc01d937ccc9130d59c6776288954a6fcd153",
+    "/cienciaceleste/main-X7S343B4.js": "970d3fa8f86ab9a95aaee1029f9a339ed41d5eb8",
     "/cienciaceleste/mensaje.jpg": "12429534fde50c678e40a37b4590f28f7778ff4a",
     "/cienciaceleste/mensaje1-1.jpg": "acf83a18c892808cd1db213338b0dae323bd9a69",
     "/cienciaceleste/mensaje1.jpg": "9322fc8bab875efb585053e920f4c5cd0cf9b884",
