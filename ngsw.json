@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1757997583484,
+  "timestamp": 1758168070254,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -13,9 +13,9 @@
       "urls": [
         "/cienciaceleste/favicon.ico",
         "/cienciaceleste/index.html",
-        "/cienciaceleste/main-VIJP676Q.js",
+        "/cienciaceleste/main-C5TMQCGY.js",
         "/cienciaceleste/polyfills-5CFQRCPP.js",
-        "/cienciaceleste/styles-E32HY5BW.css"
+        "/cienciaceleste/styles-F64X5D6L.css"
       ],
       "patterns": []
     },
@@ -851,7 +851,7 @@
     "/cienciaceleste/images/toplong.jpg": "56fd0d444f85cea40cc8cfa1c3c52832cf8bdbe1",
     "/cienciaceleste/images/toplong2.jpg": "8a6a40632ce57e3fa766178d472615d5e44ac779",
     "/cienciaceleste/images/toplong3.jpg": "06fd506beea32ddd177e24f76b6e871f78416cb7",
-    "/cienciaceleste/index.html": "6c14ad8491bc135a775b9c3e17e09ed1355a4e3f",
+    "/cienciaceleste/index.html": "821d67fd1d999bf67f0938c883c570356025ab15",
     "/cienciaceleste/juicio final, a las naciones ricas.jpg": "11e47826e16f8f6b307b9c6844dfe289ef80b76e",
     "/cienciaceleste/juicio final, los mas sufridos.jpg": "1d880bb4d08e787641f1cb6f004d3dcfe6f7d6ed",
     "/cienciaceleste/juicio final, los que ganaron.jpg": "0d909870bed632a90e827d5cde57259bf7f268cf",
@@ -861,7 +861,7 @@
     "/cienciaceleste/los ladrones.jpg": "0358f49fec84db6a69f3efdd61f2d6a044f40001",
     "/cienciaceleste/los_que_fueron_obligados.jpg": "2db0e6c720cf754bae4b82070a624d6731057b06",
     "/cienciaceleste/los_que_fueron_obligados_c.jpg": "183141c8256e58d78a0b8818df0ed21837451cdf",
-    "/cienciaceleste/main-VIJP676Q.js": "4cfe70dba46116240f462800c63e6d3e6a835b24",
+    "/cienciaceleste/main-C5TMQCGY.js": "519e801f6499bcb9e5e0da25e3ce1d40599701bf",
     "/cienciaceleste/mensaje.jpg": "12429534fde50c678e40a37b4590f28f7778ff4a",
     "/cienciaceleste/mensaje1-1.jpg": "acf83a18c892808cd1db213338b0dae323bd9a69",
     "/cienciaceleste/mensaje1.jpg": "9322fc8bab875efb585053e920f4c5cd0cf9b884",
@@ -881,7 +881,7 @@
     "/cienciaceleste/r33-1.jpg": "3042a6e4130fbcefc60fcf4e881d993d15209d12",
     "/cienciaceleste/screenshots/screenshot-desktop.png": "b26b18d64c222d66854b779b94a6232a7d5587e8",
     "/cienciaceleste/screenshots/screenshot-mobile.png": "660cb48f03a2c9aa4b7a8546ac2522a2c921b7c5",
-    "/cienciaceleste/styles-E32HY5BW.css": "e6139dd67b87cfe1f9d0ee9a131271edc9c5f050",
+    "/cienciaceleste/styles-F64X5D6L.css": "cb39b52ebf2c1c876eaa248bcb7eb240b563f949",
     "/cienciaceleste/todo lo salido del reino.jpg": "365b05b408a36513e3d478d4c9b1c2da703ee957",
     "/cienciaceleste/todos aquellos padres y madres.jpg": "2b2bf78de144145a67ef0fb7dbcaebc8cb9bc5f3",
     "/cienciaceleste/todos aquellos que hicieron una sola carne.jpg": "901deef5ca45a00d9018eb27137da7ce65fc4522",
