@@ -16,7 +16,8 @@
   display: block;
   width: 100%;
   height: auto;
-  max-width: 62.5rem; /* 1000px */
+  max-width: 62.5rem;
+  /* 1000px */
   margin-inline: auto;
 }
 
@@ -28,7 +29,8 @@
 
   .rollo-inner {
     width: 100%;
-    max-width: 62.5rem; /* 1000px */
+    max-width: 62.5rem;
+    /* 1000px */
     /* límite del marco */
     //background: url("/images/fondolong.jpg") repeat-y center top;
     background-size: 100% auto;
@@ -49,7 +51,8 @@
        - ideal: 90% del ancho disponible
        - máximo: 920px (un poco menos que el marco de 1000px)
       */
-      width: clamp(17.5rem, 90%, 57.5rem); /* 280px → 17.5rem, 920px → 57.5rem */
+      width: clamp(17.5rem, 90%, 57.5rem);
+      /* 280px → 17.5rem, 920px → 57.5rem */
       /* siempre deja margen dentro del marco */
       box-sizing: border-box;
 
@@ -61,13 +64,15 @@
 }
 
 .rollo-inner .rollo-content {
-  padding: 2rem; /* 32px */
+  padding: 2rem;
+  /* 32px */
   // padding-top: 5.25rem; /* 84px */
 }
 
 /* ===== Tipografía ===== */
 .titulorollo {
-  font-size: 2.375rem; /* 38px */
+  font-size: 2.375rem;
+  /* 38px */
   //line-height: 1.2;
   text-align: justify;
   margin: 1rem 0;
@@ -76,19 +81,16 @@
 }
 
 .textorollo {
-  font-size: 1.375rem; /* 22px */
+  font-size: 1.375rem;
+  /* 22px */
   //line-height: 1.7;
   margin: 1rem 0;
 }
 
-.textolinkleft,
-.textolink {
-  font-size: 1.125rem; /* 18px */
-}
-
 .textoderecha {
   text-align: right;
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
+  /* 16px */
   margin-top: 2rem;
 }
 
@@ -105,48 +107,42 @@
 /* ===== Responsive ===== */
 @media (max-width: 1030px) {
   .titulorollo {
-    font-size: 1.875rem; /* 30px */
+    font-size: 1.875rem;
+    /* 30px */
     //line-height: 1.25;
   }
 
   .textorollo {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
+    /* 18px */
     //line-height: 1.6;
-  }
-
-  .textolinkleft,
-  .textolink {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    margin: 0.375rem 0; /* 6px */
-    font-size: 1rem; /* 16px */
-  }
-
-  .textoderecha {
-    text-align: center;
   }
 }
 
 @media (max-width: 768px) {
   .titulorollo {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
+    /* 24px */
   }
 
   .textorollo {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
+    /* 20px */
     //line-height: 1.55;
   }
 
   .rollo-inner .rollo-content {
-    padding: 1rem; /* 16px */
-    max-width: calc(100% - 1.25rem); /* 20px */
+    padding: 1rem;
+    /* 16px */
+    max-width: calc(100% - 1.25rem);
+    /* 20px */
   }
 }
 
 @media (max-width: 480px) {
   .titulorollo {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
+    /* 20px */
     //text-align: center;
     line-height: 1.25;
   }
@@ -160,6 +156,7 @@
   }
 
   .rollo-inner .rollo-content {
-    padding: 0.75rem; /* 12px */
+    padding: 0.75rem;
+    /* 12px */
   }
 }
