@@ -80,7 +80,8 @@
   //padding-bottom: 1.75rem;
 }
 
-.textorollo {
+.textorollo,
+.textoderecha {
   font-size: 1.375rem;
   /* 22px */
   //line-height: 1.7;
@@ -88,8 +89,6 @@
 }
 
 .textoderecha {
-  font-size: 1.375rem;
-  margin: 1rem 0;
   text-align: right;
 }
 
@@ -116,10 +115,6 @@
     /* 18px */
     //line-height: 1.6;
   }
-
-  .textoderecha {
-    font-size: 1.125rem;
-  }
 }
 
 @media (max-width: 768px) {
@@ -128,14 +123,11 @@
     /* 24px */
   }
 
-  .textorollo {
+  .textorollo,
+  .textoderecha {
     font-size: 1.25rem;
     /* 20px */
     //line-height: 1.55;
-  }
-
-  .textoderecha {
-    font-size: 1.25rem;
   }
 
   .rollo-inner .rollo-content {
@@ -154,17 +146,13 @@
     line-height: 1.25;
   }
 
-  .textorollo {
+  .textorollo,
+  .textoderecha {
     //font-size: 1.25rem; /* 20px */
     font-size: 1.30rem; // este es el tamaño ideal para leer en móvil
     //font-size: 0.9375rem; /* 15px */
     line-height: 1.25;
     // line-height: 1.5;
-  }
-
-  .textoderecha {
-    font-size: 1.30rem;
-    line-height: 1.25;
   }
 
   .rollo-inner .rollo-content {
