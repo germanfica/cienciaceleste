@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758386966370,
+  "timestamp": 1758397602911,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/cienciaceleste/favicon.ico",
         "/cienciaceleste/index.html",
-        "/cienciaceleste/main-2IQZ74OE.js",
+        "/cienciaceleste/main-74BG5VGT.js",
         "/cienciaceleste/polyfills-5CFQRCPP.js",
         "/cienciaceleste/styles-F64X5D6L.css"
       ],
@@ -404,6 +404,7 @@
         "/cienciaceleste/icons/icon-96x96.png",
         "/cienciaceleste/iluminado.jpg",
         "/cienciaceleste/images/bottomlong.jpg",
+        "/cienciaceleste/images/bottomlongonly.jpg",
         "/cienciaceleste/images/fondolong.jpg",
         "/cienciaceleste/images/toplong.jpg",
         "/cienciaceleste/images/toplong2.jpg",
@@ -847,11 +848,12 @@
     "/cienciaceleste/icons/icon-96x96.png": "27243555654be2c9b5025d36aa600541a8b3a4fc",
     "/cienciaceleste/iluminado.jpg": "b551cfc1ae004eb25eca07a75117f4ab982f935a",
     "/cienciaceleste/images/bottomlong.jpg": "be834207f0226ff4dd63fe2055c015e11362ab45",
+    "/cienciaceleste/images/bottomlongonly.jpg": "bdb77e009471bb77adb875a949496dab3b96570b",
     "/cienciaceleste/images/fondolong.jpg": "efd322ec8e3fa385ed79b545e4d0400c1eefd69d",
     "/cienciaceleste/images/toplong.jpg": "56fd0d444f85cea40cc8cfa1c3c52832cf8bdbe1",
     "/cienciaceleste/images/toplong2.jpg": "8a6a40632ce57e3fa766178d472615d5e44ac779",
     "/cienciaceleste/images/toplong3.jpg": "06fd506beea32ddd177e24f76b6e871f78416cb7",
-    "/cienciaceleste/index.html": "27d77993f7d78fb7b6c8647640dc0bf3073a8a6b",
+    "/cienciaceleste/index.html": "2619bb6f629ba36067da8363591630fb90d14ee9",
     "/cienciaceleste/juicio final, a las naciones ricas.jpg": "11e47826e16f8f6b307b9c6844dfe289ef80b76e",
     "/cienciaceleste/juicio final, los mas sufridos.jpg": "1d880bb4d08e787641f1cb6f004d3dcfe6f7d6ed",
     "/cienciaceleste/juicio final, los que ganaron.jpg": "0d909870bed632a90e827d5cde57259bf7f268cf",
@@ -861,7 +863,7 @@
     "/cienciaceleste/los ladrones.jpg": "0358f49fec84db6a69f3efdd61f2d6a044f40001",
     "/cienciaceleste/los_que_fueron_obligados.jpg": "2db0e6c720cf754bae4b82070a624d6731057b06",
     "/cienciaceleste/los_que_fueron_obligados_c.jpg": "183141c8256e58d78a0b8818df0ed21837451cdf",
-    "/cienciaceleste/main-2IQZ74OE.js": "65465ee41bd1d952f958c0b4a4929e63649f1c30",
+    "/cienciaceleste/main-74BG5VGT.js": "cf35ad9aace0dae81d411c73d80531b3511d9860",
     "/cienciaceleste/mensaje.jpg": "12429534fde50c678e40a37b4590f28f7778ff4a",
     "/cienciaceleste/mensaje1-1.jpg": "acf83a18c892808cd1db213338b0dae323bd9a69",
     "/cienciaceleste/mensaje1.jpg": "9322fc8bab875efb585053e920f4c5cd0cf9b884",
