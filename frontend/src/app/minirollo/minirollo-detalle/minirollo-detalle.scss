@@ -2,9 +2,102 @@
 .textolink a {
   text-decoration: underline;
 }
+
 .catalogo {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 39px;
-	color: #006;
-	text-align: justify;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 39px;
+  color: #006;
+  text-align: justify;
+}
+
+/* ===== Tipografía ===== */
+.titulorollo {
+  font-size: 2.375rem;
+  /* 38px */
+  //line-height: 1.2;
+  text-align: justify;
+  margin: 1rem 0;
+  //padding-top: 1.75rem;  /* 28px */
+  //padding-bottom: 1.75rem;
+}
+
+.textorollo,
+.textoderecha {
+  font-size: 1.375rem;
+  /* 22px */
+  //line-height: 1.7;
+  margin: 1rem 0;
+}
+
+.textoderecha {
+  text-align: right;
+}
+
+.img-block {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.img-block img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1030px) {
+  .titulorollo {
+    font-size: 1.875rem;
+    /* 30px */
+    //line-height: 1.25;
+  }
+
+  .textorollo {
+    font-size: 1.125rem;
+    /* 18px */
+    //line-height: 1.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .titulorollo {
+    font-size: 1.5rem;
+    /* 24px */
+  }
+
+  .textorollo,
+  .textoderecha {
+    font-size: 1.25rem;
+    /* 20px */
+    //line-height: 1.55;
+  }
+
+  .rollo-inner .rollo-content {
+    padding: 1rem;
+    /* 16px */
+    max-width: calc(100% - 1.25rem);
+    /* 20px */
+  }
+}
+
+@media (max-width: 480px) {
+  .titulorollo {
+    font-size: 1.25rem;
+    /* 20px */
+    //text-align: center;
+    line-height: 1.25;
+  }
+
+  .textorollo,
+  .textoderecha {
+    //font-size: 1.25rem; /* 20px */
+    font-size: 1.30rem; // este es el tamaño ideal para leer en móvil
+    //font-size: 0.9375rem; /* 15px */
+    line-height: 1.25;
+    // line-height: 1.5;
+  }
+
+  .rollo-inner .rollo-content {
+    padding: 0.75rem;
+    /* 12px */
+  }
 }
