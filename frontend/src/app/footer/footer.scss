@@ -1,5 +1,5 @@
 /* ===== Pie ===== */
-.rollo-footer {
+.rollo-bottom {
   img {
     display: block;
     width: 100%;
@@ -8,6 +8,11 @@
     /* 1000px */
     margin-inline: auto;
   }
+}
+
+.footer-container {
+  background-size: 100% auto;
+  box-sizing: border-box;
 }
 
 .footer-content {
@@ -66,11 +71,6 @@
 //     line-height: 1.25;
 //   }
 // }
-
-.footer-text-container {
-  background-size: 100% auto;
-  box-sizing: border-box;
-}
 
 .footer-text {
   // position: absolute;
