@@ -1,0 +1,114 @@
+:host {
+  display: block;
+}
+
+/* ===== Contenedor principal ===== */
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== Cabecera y Pie ===== */
+.home-header img,
+.home-footer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 62.5rem;
+  /* 1000px */
+  margin-inline: auto;
+}
+
+/* ===== Marco con fondolong ===== */
+.home-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .home-inner {
+    width: 100%;
+    max-width: 62.5rem;
+    /* 1000px */
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-size: 100% auto;
+    box-sizing: border-box;
+
+    /* ===== Cajón blanco dentro del marco ===== */
+    .home-content {
+      background: #fff;
+      width: 96.5%;
+      /* igual que <table width="97%"> */
+      margin: 0 auto;
+      padding: 0.625rem;
+      /* 10px */
+      box-sizing: border-box;
+    }
+  }
+}
+
+/* ===== Tipografía ===== */
+.texto {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.25rem;
+  /* ~20px */
+  color: #0000cc;
+  margin: 0.75rem 0;
+
+  a {
+    color: #0000cc;
+    text-decoration: underline;
+  }
+}
+
+.home-id {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: inherit;
+  color: #000;
+  /* negro sólido */
+  font-weight: normal;
+  margin-right: 0.5rem;
+}
+
+/* ===== Lista del home ===== */
+.home-lista {
+  display: flex;
+  flex-direction: column;
+  //gap: 0.75rem;
+  //margin: 1.5rem 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1030px) {
+  .texto {
+    font-size: 1.125rem;
+    /* 18px */
+  }
+}
+
+@media (max-width: 768px) {
+  .home-content {
+    padding: 1rem;
+    width: 96.5%;
+  }
+
+  .texto {
+    //font-size: 1rem; /* 16px */
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-content {
+    padding: 1rem;
+    width: 96.5%;
+  }
+
+  .texto {
+    //font-size: 0.9375rem; /* 15px */
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+}
