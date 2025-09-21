@@ -9,10 +9,11 @@ import { Navigation } from '../../navbar/navigation';
 import { Navbar } from "../../navbar/navbar";
 import { Detail } from '../../doc-viewer/detail';
 import { Footer } from "../../footer/footer";
+import { ScrollTracker } from '../../doc-viewer/scroll-tracker';
 
 @Component({
   selector: 'app-minirollo-detalle',
-  imports: [CommonModule, RouterModule, Navbar, Footer],
+  imports: [CommonModule, RouterModule, Navbar, ScrollTracker, Footer],
   providers: [Navigation, Detail],
   templateUrl: './minirollo-detalle.html',
   styleUrl: './minirollo-detalle.scss',

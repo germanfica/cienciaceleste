@@ -2,67 +2,67 @@
 @let d = (doc$ | async);
 
 @if (d) {
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td><img src="images/toplong3.jpg" width="1000" height="200" /></td>
-  </tr>
 
-  <tr>
-    <td background="images/fondolong.jpg">
-      <table width="900" border="0" align="center" cellpadding="20" bgcolor="#FFFFFF">
-        <!-- NAVEGACION -->
-        <tr>
-          <td colspan="2">
-            <app-navbar [nav$]="nav$" listRoute="/divinos-minirollos" listLabel="LISTADO MINIROLLOS"></app-navbar>
-          </td>
-        </tr>
-        <!-- FIN NAVEGACION -->
+<div class="minirollo-detalle">
 
-        <!-- TITULO -->
-        <tr>
-          <td colspan="2" class="titulorollo">
-            ESCRIBE: {{ d.autor || ' ' }} <br>
-            ESCRITURA TELEPÁTICA DICTADA POR EL DIVINO PADRE JEHOVÁ.- ARTICULO Nº {{ d.id }}.- {{ d.titulo || ' ' }}
-          </td>
-        </tr>
-        <!-- FIN TITULO -->
+  <!-- cabecera -->
+  <div class="minirollo-header">
+    <img src="images/toplong3.jpg" alt="Decoración superior" />
+  </div>
 
-        <!-- CONTENIDO -->
-        @for (b of d.bloques; track trackBlock($index, b)) {
+  <!-- cuerpo -->
+  <div class="minirollo-body">
+    <div class="minirollo-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <div class="minirollo-content">
 
-        @if (b.t === 'img') {
-        <tr>
-          <td colspan="10" align="center">
+        <!-- navegación -->
+        <app-navbar [nav$]="nav$" listRoute="/divinos-minirollos" listLabel="LISTADO MINIROLLOS">
+        </app-navbar>
+
+        <!-- título -->
+        <h1 class="titulorollo">
+          ESCRIBE: {{ d.autor || ' ' }} <br />
+          ESCRITURA TELEPÁTICA DICTADA POR EL DIVINO PADRE JEHOVÁ.- ARTÍCULO Nº {{ d.id }}.- {{ d.titulo || ' ' }}
+        </h1>
+
+        <!-- contenido dinámico -->
+        <div class="scroll-host" scrollTracker [scrollProgress]="'minirollo/' + d.id" [scrollProgressBehavior]="'auto'"
+          [scrollProgressSaveEveryMs]="200">
+
+          @for (b of d.bloques; track trackBlock($index, b)) {
+
+          @if (b.t === "img") {
+          <div class="img-block">
             <img [src]="b.src" [alt]="b.alt || ''" loading="lazy" width="800" />
-          </td>
-        </tr>
-        }
-        @else if (b.t !== 'h1' && b.t !== 'author') {
-        <tr>
-          <td colspan="2" class="textorollo">
-            @if (b.t === 'p') {
+          </div>
+          }
+
+          @else if (b.t !== "h1" && b.t !== "author") {
+          <div class="textorollo">
+
+            @if (b.t === "p") {
             @for (s of b.inlines; track trackInline($index, s)) {
             @switch (s.t) {
-            @case ('text') { {{ s.text }} }
-            @case ('strong') { <strong>{{ s.text }}</strong> }
-            @case ('em') { <em>{{ s.text }}</em> }
-            @case ('code') { <code>{{ s.text }}</code> }
-            @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+            @case ("text") { {{ s.text }} }
+            @case ("strong") { <strong>{{ s.text }}</strong> }
+            @case ("em") { <em>{{ s.text }}</em> }
+            @case ("code") { <code>{{ s.text }}</code> }
+            @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
             }
             }
             }
 
-            @if (b.t === 'ul') {
+            @if (b.t === "ul") {
             <ul>
               @for (item of b.items; track trackInlineArray($index, item)) {
               <li>
                 @for (s of item; track trackInline($index, s)) {
                 @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                @case ("text") { {{ s.text }} }
+                @case ("strong") { <strong>{{ s.text }}</strong> }
+                @case ("em") { <em>{{ s.text }}</em> }
+                @case ("code") { <code>{{ s.text }}</code> }
+                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
                 }
                 }
               </li>
@@ -70,17 +70,17 @@
             </ul>
             }
 
-            @if (b.t === 'ol') {
+            @if (b.t === "ol") {
             <ol>
               @for (item of b.items; track trackInlineArray($index, item)) {
               <li>
                 @for (s of item; track trackInline($index, s)) {
                 @switch (s.t) {
-                @case ('text') { {{ s.text }} }
-                @case ('strong') { <strong>{{ s.text }}</strong> }
-                @case ('em') { <em>{{ s.text }}</em> }
-                @case ('code') { <code>{{ s.text }}</code> }
-                @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+                @case ("text") { {{ s.text }} }
+                @case ("strong") { <strong>{{ s.text }}</strong> }
+                @case ("em") { <em>{{ s.text }}</em> }
+                @case ("code") { <code>{{ s.text }}</code> }
+                @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
                 }
                 }
               </li>
@@ -88,36 +88,40 @@
             </ol>
             }
 
-            @if (b.t === 'code') {
+            @if (b.t === "code") {
             <pre><code [attr.data-lang]="b.lang || null">{{ b.code }}</code></pre>
             }
 
-            @if (b.t === 'blockquote') {
+            @if (b.t === "blockquote") {
             <blockquote>
               @for (s of b.inlines; track trackInline($index, s)) {
               @switch (s.t) {
-              @case ('text') { {{ s.text }} }
-              @case ('strong') { <strong>{{ s.text }}</strong> }
-              @case ('em') { <em>{{ s.text }}</em> }
-              @case ('code') { <code>{{ s.text }}</code> }
-              @case ('link') { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
+              @case ("text") { {{ s.text }} }
+              @case ("strong") { <strong>{{ s.text }}</strong> }
+              @case ("em") { <em>{{ s.text }}</em> }
+              @case ("code") { <code>{{ s.text }}</code> }
+              @case ("link") { <a [href]="s.href" target="_blank" rel="noopener noreferrer">{{ s.text }}</a> }
               }
               }
             </blockquote>
             }
-          </td>
-        </tr>
-        }
-        }
 
-        <tr>
-          <td></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+          </div>
+          }
 
+          }
+        </div>
+
+        <!-- autor -->
+        <!-- <div class="textoderecha">Escribe: {{ d.autor }}</div> -->
+
+      </div> <!-- /.minirollo-content -->
+    </div> <!-- /.minirollo-inner -->
+  </div> <!-- /.minirollo-body -->
+
+  <!-- pie -->
   <app-footer></app-footer>
-</table>
+</div>
+
 }
 }
