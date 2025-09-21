@@ -52,13 +52,15 @@
 /* ===== Tipografía ===== */
 .texto {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.25rem;
+  //font-size: 1.25rem;
+  font-size: 1.9rem;
   /* ~20px */
   color: #0000cc;
+  //margin: 0.75rem 0;
   margin: 0.75rem 0;
 
   a {
-    color: #0000cc;
+    //color: #0000cc;
     text-decoration: underline;
   }
 }
@@ -69,7 +71,9 @@
   color: #000;
   /* negro sólido */
   font-weight: normal;
-  margin-right: 0.5rem;
+  //margin-right: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 3rem;
 }
 
 /* ===== Lista del home ===== */
@@ -83,12 +87,18 @@
 /* ===== Responsive ===== */
 @media (max-width: 1030px) {
   .texto {
-    font-size: 1.125rem;
+    //font-size: 1.125rem;
+    font-size: 1.5rem;
     /* 18px */
   }
 }
 
 @media (max-width: 768px) {
+  .home-id {
+    margin-left: 1rem;
+    margin-right: 2rem;
+  }
+
   .home-content {
     padding: 1rem;
     width: 96.5%;
@@ -96,11 +106,17 @@
 
   .texto {
     //font-size: 1rem; /* 16px */
-    font-size: 1.125rem;
+    //font-size: 1.125rem;
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
+  .home-id {
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+  }
+
   .home-content {
     padding: 1rem;
     width: 96.5%;
@@ -109,6 +125,7 @@
   .texto {
     //font-size: 0.9375rem; /* 15px */
     font-size: 1.125rem;
+    //font-size: 1.5rem;
     line-height: 1.3;
   }
 }
