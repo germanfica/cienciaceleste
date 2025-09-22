@@ -53,19 +53,26 @@
         <!-- paginador inferior -->
         <div class="textolink">
           @if (p.hasPrev) {
-            <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">< Anterior</a><span>&nbsp;</span>
-          }
-          @let nums2 = (pages$ | async);
-          @if (nums2) {
-            @for (n of nums2; track trackPage($index, n)) {
-              @if (n === p.page) { {{ n }} }
-              @else { <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a> }
+          <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">
+            < Anterior</a>
               <span>&nbsp;</span>
-            }
-          }
-          @if (p.hasNext) {
-            <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
-          }
+              }
+
+              @let nums2 = (pages$ | async);
+              @if (nums2) {
+              @for (n of nums2; track trackPage($index, n)) {
+              @if (n === p.page) {
+              <b>{{ n }}</b>
+              } @else {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a>
+              }
+              <span>&nbsp;</span>
+              }
+              }
+
+              @if (p.hasNext) {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              }
         </div>
 
       </div> <!-- /.minirollos-content -->
