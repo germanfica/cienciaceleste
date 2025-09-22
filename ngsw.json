@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758515371439,
+  "timestamp": 1758580243937,
   "index": "/cienciaceleste/index.html",
   "assetGroups": [
     {
@@ -453,22 +453,7 @@
       "patterns": []
     }
   ],
-  "dataGroups": [
-    {
-      "name": "docs-api",
-      "patterns": [
-        "\\/docs\\/.*"
-      ],
-      "strategy": "freshness",
-      "maxSize": 100,
-      "maxAge": 86400000,
-      "timeoutMs": 10000,
-      "cacheQueryOptions": {
-        "ignoreVary": true
-      },
-      "version": 1
-    }
-  ],
+  "dataGroups": [],
   "hashTable": {
     "/cienciaceleste/08.jpg": "f632fc2ac36928e4c53c6cd7b4c16ff92a451bfd",
     "/cienciaceleste/7.jpg": "a70ba079677930fae22050d50166e03079cb988f",
