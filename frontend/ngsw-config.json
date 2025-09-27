@@ -26,18 +26,6 @@
     }
   ],
   "dataGroups": [
-    {
-      "name": "docs-api",
-      "urls": [
-        "/docs/**"
-      ],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 100,
-        "maxAge": "1d",
-        "timeout": "10s"
-      }
-    }
   ],
   "navigationUrls": [
     "/**",
