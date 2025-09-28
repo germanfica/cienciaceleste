@@ -5,11 +5,12 @@ import { Observable } from "rxjs";
 import { Docs } from "../../doc-viewer/docs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
+import { Footer } from "../../footer/footer";
 
 @Component({
   selector: "app-rollos",
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Footer],
   providers: [Pagination],
   templateUrl: "./rollos.html",
   styleUrl: "./rollos.scss",

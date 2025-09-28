@@ -1,0 +1,134 @@
+:host {
+  display: block;
+}
+
+/* ===== Contenedor principal ===== */
+.minirollos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== Cabecera y Pie ===== */
+.minirollos-header img,
+.minirollos-footer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 62.5rem;
+  /* 1000px */
+  margin-inline: auto;
+}
+
+/* ===== Marco con fondolong ===== */
+.minirollos-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .minirollos-inner {
+    width: 100%;
+    max-width: 62.5rem;
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-size: 100% auto;
+    box-sizing: border-box;
+
+    /* ===== Cajón blanco ===== */
+    .minirollos-content {
+      background: #fff;
+      padding: 1.25rem;
+      width: clamp(17.5rem, 97%, 60.625rem);
+      margin: 0 auto;
+      box-sizing: border-box;
+
+      /* ===== Tipografía heredada ===== */
+      .texto {
+        font-size: 1.375rem;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0.5rem 0;
+      }
+
+      /* ===== Paginadores ===== */
+      .textolink {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.125rem;
+        //margin: 1rem 0;
+        text-align: right;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        white-space: normal;
+
+        a {
+          //text-decoration: underline;
+          color: #0000cc;
+        }
+
+        b {
+          color: #000;
+        }
+      }
+
+      .minirollos-lista {
+        margin: 1.5rem 0;
+
+        .minirollos-item {
+          display: flex;
+          gap: 1rem;
+          margin: 0.75rem 0;
+          //font-size: 1.375rem;
+        }
+
+        .minirollos-id {
+          min-width: 2rem;
+        }
+
+        .minirollos-titulo a {
+          //color: #000;
+        }
+      }
+    }
+
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1030px) {
+  .minirollos-content {
+    padding: 1rem;
+  }
+
+  .minirollos-lista {
+    .minirollos-item {
+      //flex-direction: column;
+      //gap: 0.25rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .minirollos-content {
+    padding: 0.875rem;
+  }
+
+  .minirollos-lista {
+    .minirollos-item {
+      font-size: 1.125rem;
+      /* más chico en tablets */
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .minirollos-content {
+    padding: 0.75rem;
+  }
+
+  .minirollos-lista {
+    .minirollos-item {
+      font-size: 1rem;
+      /* aún más chico en móviles */
+    }
+  }
+}

@@ -5,10 +5,11 @@ import { Observable } from 'rxjs';
 import { DocIndexPage } from '../../doc-viewer/doc-types';
 import { Docs } from '../../doc-viewer/docs';
 import { Pagination } from '../../doc-viewer/pagination';
+import { Footer } from "../../footer/footer";
 
 @Component({
   selector: 'app-divinas-leyes',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Footer],
   providers: [Pagination],
   templateUrl: './divinas-leyes.html',
   styleUrl: './divinas-leyes.scss',

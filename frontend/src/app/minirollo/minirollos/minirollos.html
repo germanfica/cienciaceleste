@@ -1,90 +1,90 @@
 @let p = (page$ | async);
 @if (p) {
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td><img src="images/toplong3.jpg" width="1000" height="200" /></td>
-	</tr>
 
-	<tr>
-		<td background="images/fondolong.jpg">
-			<table width="97%" border="0" align="center" cellpadding="10">
-				<tr>
-					<td class="white-bg-color">
-						<table width="100%" cellpadding="10">
-							<!-- PAGINADOR SUPERIOR -->
-							<tr>
-								<td class="textolink" colspan="2">
-									@if (p.hasPrev) {
-									<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">
-										< Anterior</a><span>&nbsp;</span>
-											}
+<div class="minirollos">
 
-											@let nums = (pages$ | async);
-											@if (nums) {
-											@for (n of nums; track trackPage($index, n)) {
-											@if (n === p.page) {
-											<b>{{ n }}</b>
-											} @else {
-											<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a>
-											}
-											<span>&nbsp;</span>
-											}
-											}
+  <!-- cabecera -->
+  <div class="minirollos-header">
+    <img src="images/toplong3.jpg" alt="Decoración superior" />
+  </div>
 
-											@if (p.hasNext) {
-											<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
-											}
-								</td>
-							</tr>
+  <!-- cuerpo -->
+  <div class="minirollos-body">
+    <div class="minirollos-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <div class="minirollos-content white-bg-color">
 
-							<!-- LISTA DE MINIROLLOS -->
-							@for (row of p.items; track trackItemId($index, row)) {
-							<tr class="texto">
-								<td valign="top">{{ row.id }}</td>
-								<td valign="top">
-									<a [routerLink]="['/divinos-minirollos', row.id]" target="_self">
-										{{ row.titulo }}
-									</a>
-								</td>
-							</tr>
-							<tr></tr>
-							}
+        <!-- paginador superior -->
+        <div class="textolink">
+          @if (p.hasPrev) {
+          <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">
+            < Anterior</a>
+              <span>&nbsp;</span>
+              }
 
-							<!-- PAGINADOR INFERIOR -->
-							<tr>
-								<td class="textolink" colspan="2">
-									@if (p.hasPrev) {
-									<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">
-										< Anterior</a><span>&nbsp;</span>
-											}
+              @let nums = (pages$ | async);
+              @if (nums) {
+              @for (n of nums; track trackPage($index, n)) {
+              @if (n === p.page) {
+              <b>{{ n }}</b>
+              } @else {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a>
+              }
+              <span>&nbsp;</span>
+              }
+              }
 
-											@let nums2 = (pages$ | async);
-											@if (nums2) {
-											@for (n of nums2; track trackPage($index, n)) {
-											@if (n === p.page) {
-											<b>{{ n }}</b>
-											} @else {
-											<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a>
-											}
-											<span>&nbsp;</span>
-											}
-											}
+              @if (p.hasNext) {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              }
+        </div>
 
-											@if (p.hasNext) {
-											<a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
-											}
-								</td>
-							</tr>
+        <!-- lista de minirollos -->
+        <div class="minirollos-lista">
+          @for (row of p.items; track trackItemId($index, row)) {
+          <div class="minirollos-item texto">
+            <div class="minirollos-id">{{ row.id }}</div>
+            <div class="minirollos-titulo">
+              <a [routerLink]="['/divinos-minirollos', row.id]" target="_self">{{ row.titulo }}</a>
+            </div>
+          </div>
+          }
+        </div>
 
-						</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+        <!-- paginador inferior -->
+        <div class="textolink">
+          @if (p.hasPrev) {
+          <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page - 1 }">
+            < Anterior</a>
+              <span>&nbsp;</span>
+              }
 
-	<tr>
-		<td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
-	</tr>
-</table>
+              @let nums2 = (pages$ | async);
+              @if (nums2) {
+              @for (n of nums2; track trackPage($index, n)) {
+              @if (n === p.page) {
+              <b>{{ n }}</b>
+              } @else {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: n }">{{ n }}</a>
+              }
+              <span>&nbsp;</span>
+              }
+              }
+
+              @if (p.hasNext) {
+              <a [routerLink]="['/divinos-minirollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              }
+        </div>
+
+      </div> <!-- /.minirollos-content -->
+    </div> <!-- /.minirollos-inner -->
+  </div> <!-- /.minirollos-body -->
+
+  <!-- pie -->
+  <!-- <div class="minirollos-footer">
+    <img src="images/bottomlong.jpg" alt="Decoración inferior" />
+  </div> -->
+  <app-footer></app-footer>
+
+</div>
+
 }

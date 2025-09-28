@@ -1,100 +1,100 @@
 @let p = (page$ | async);
 @if (p) {
-<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td><img src="images/toplong2.jpg" width="1000" height="200" /></td>
-  </tr>
 
-  <tr>
-    <td background="images/fondolong.jpg">
-      <table width="90%" border="0" align="center" cellpadding="10">
-        <tr>
-          <td class="white-bg-color">
-            <table width="100%" cellpadding="20">
-              <!-- PAGINADOR SUPERIOR -->
-              <tr>
-                <td class="textolink" colspan="2">
-                  @if (p.hasPrev) {
-                  <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
-                    < Anterior</a><span>&nbsp;</span>
-                      }
+<div class="divinas-leyes">
 
-                      @let nums = (pages$ | async);
-                      @if (nums) {
-                      @for (n of nums; track trackPage($index, n)) {
-                      @if (n === p.page) {
-                      <b>{{ n }}</b>
-                      } @else {
-                      <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
-                      }
-                      <span>&nbsp;</span>
-                      }
-                      }
+  <!-- cabecera -->
+  <div class="divinas-leyes-header">
+    <img src="images/toplong2.jpg" alt="Decoración superior" />
+  </div>
 
-                      @if (p.hasNext) {
-                      <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente
-                        ></a>
-                      }
-                </td>
-              </tr>
+  <!-- cuerpo -->
+  <div class="divinas-leyes-body">
+    <div class="divinas-leyes-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <div class="divinas-leyes-content white-bg-color">
 
-              @if (p.page === 1) {
-              <tr class='texto'>
-                <td colspan='2'>
-                  <p align='center'>LO QUE VENDRÁ</p>
-                  <p>LO QUE HA DE VENIR, SALE DE CADA UNO; PORQUE FUÉ ESCRITO, QUE CADA UNO SERÍA JUZGADO POR SUS
-                    OBRAS; EL DIVINO JUICIO DE DIOS, ES IDEA POR IDEA, A PARTIR DE LOS DOCE AÑOS; PORQUE LOS NIÑOS SON
-                    LOS ÚNICOS QUE NO TIENEN DIVINO JUICIO, EL DIVINO JUICIO DE DIOS, ES PARA LOS LLAMADOS ADULTOS DE
-                    LA PRUEBA DE LA VIDA, LO PENSADO EN UN SEGUNDO, TENDRÁ LA EQUIVALENCIA DE UNA EXISTENCIA; QUE
-                    SEGÚN COMO SE PENSÓ, PODRÁ SER EXISTENCIA DE LUZ GANADA, O EXISTENCIA DE LUZ PERDIDA; ESTO SE DEBE
-                    A QUE LO DE DIOS, NO TIENE LÍMITES; EL ETERNO POR UN MICROSCÓPICO ESFUERZO MENTAL DE SUS
-                    CRIATURAS, OFRECE EN PREMIOS, EXISTENCIAS COMPLETAS.</p>
-                </td>
-              </tr>
+        <!-- PAGINADOR SUPERIOR -->
+        <div class="textolink">
+          @if (p.hasPrev) {
+          <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
+            < Anterior</a>
+              <span>&nbsp;</span>
               }
-
-              <!-- LISTA DE ITEMS -->
-              @for (row of p.items; track trackItemId($index, row)) {
-              <tr class="texto">
-                <td valign="top">{{ row.id }}</td>
-                <td valign="top">{{ row.titulo }}</td>
-              </tr>
+              @let nums = (pages$ | async);
+              @if (nums) {
+              @for (n of nums; track trackPage($index, n)) {
+              @if (n === p.page) {
+              <b>{{ n }}</b>
+              } @else {
+              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
               }
+              <span>&nbsp;</span>
+              }
+              }
+              @if (p.hasNext) {
+              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              }
+        </div>
 
-              <!-- PAGINADOR INFERIOR (opcional, idéntico al superior) -->
-              <tr>
-                <td class="textolink" colspan="2">
-                  @if (p.hasPrev) {
-                  <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
-                    < Anterior</a><span>&nbsp;</span>
-                      }
-                      @let nums2 = (pages$ | async);
-                      @if (nums2) {
-                      @for (n of nums2; track trackPage($index, n)) {
-                      @if (n === p.page) {
-                      <b>{{ n }}</b>
-                      } @else {
-                      <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
-                      }
-                      <span>&nbsp;</span>
-                      }
-                      }
-                      @if (p.hasNext) {
-                      <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente
-                        ></a>
-                      }
-                </td>
-              </tr>
-
-            </table>
+        <!-- INTRO SOLO EN LA PRIMERA PÁGINA -->
+        @if (p.page === 1) {
+        <tr class='texto'>
+          <td colspan='2'>
+            <p align='center'>LO QUE VENDRÁ</p>
+            <p>LO QUE HA DE VENIR, SALE DE CADA UNO; PORQUE FUÉ ESCRITO, QUE CADA UNO SERÍA JUZGADO POR SUS
+              OBRAS; EL DIVINO JUICIO DE DIOS, ES IDEA POR IDEA, A PARTIR DE LOS DOCE AÑOS; PORQUE LOS NIÑOS SON
+              LOS ÚNICOS QUE NO TIENEN DIVINO JUICIO, EL DIVINO JUICIO DE DIOS, ES PARA LOS LLAMADOS ADULTOS DE
+              LA PRUEBA DE LA VIDA, LO PENSADO EN UN SEGUNDO, TENDRÁ LA EQUIVALENCIA DE UNA EXISTENCIA; QUE
+              SEGÚN COMO SE PENSÓ, PODRÁ SER EXISTENCIA DE LUZ GANADA, O EXISTENCIA DE LUZ PERDIDA; ESTO SE DEBE
+              A QUE LO DE DIOS, NO TIENE LÍMITES; EL ETERNO POR UN MICROSCÓPICO ESFUERZO MENTAL DE SUS
+              CRIATURAS, OFRECE EN PREMIOS, EXISTENCIAS COMPLETAS.</p>
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
+        }
 
-  <tr>
-    <td><img src="images/bottomlong.jpg" width="1000" height="100" /></td>
-  </tr>
-</table>
+        <!-- LISTA DE ITEMS -->
+        <div class="divinas-leyes-lista">
+          @for (row of p.items; track trackItemId($index, row)) {
+          <div class="divinas-leyes-item texto">
+            <div class="divinas-leyes-id">{{ row.id }}</div>
+            <div class="divinas-leyes-titulo">{{ row.titulo }}</div>
+          </div>
+          }
+        </div>
+
+        <!-- PAGINADOR INFERIOR -->
+        <div class="textolink">
+          @if (p.hasPrev) {
+          <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
+            < Anterior</a>
+              <span>&nbsp;</span>
+              }
+              @let nums2 = (pages$ | async);
+              @if (nums2) {
+              @for (n of nums2; track trackPage($index, n)) {
+              @if (n === p.page) {
+              <b>{{ n }}</b>
+              } @else {
+              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
+              }
+              <span>&nbsp;</span>
+              }
+              }
+              @if (p.hasNext) {
+              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              }
+        </div>
+
+      </div> <!-- /.divinas-leyes-content -->
+    </div> <!-- /.divinas-leyes-inner -->
+  </div> <!-- /.divinas-leyes-body -->
+
+  <!-- pie -->
+  <!-- <div class="divinas-leyes-footer">
+    <img src="images/bottomlong.jpg" alt="Decoración inferior" />
+  </div> -->
+  <app-footer></app-footer>
+
+</div>
+
 }

@@ -10,10 +10,11 @@ import { Navigation } from "../../navbar/navigation";
 import { Detail } from "../../doc-viewer/detail";
 import { ScrollProgress } from "../../doc-viewer/scroll-progress";
 import { ScrollTracker } from "../../doc-viewer/scroll-tracker";
+import { Footer } from "../../footer/footer";
 
 @Component({
   selector: 'app-rollo-detalle',
-  imports: [CommonModule, RouterModule, Navbar, ScrollTracker],
+  imports: [CommonModule, RouterModule, Navbar, ScrollTracker, Footer],
   providers: [Navigation, Detail],
   templateUrl: './rollo-detalle.html',
   styleUrl: './rollo-detalle.scss',
