@@ -1,6 +1,7 @@
 # Utils
 output.txt
 CombineTypescriptFilesToOutput.ps1
+CombineTypescriptFilesToOutput.js
 
 # Compiled output
 out/
