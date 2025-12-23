@@ -2,6 +2,7 @@
 output.txt
 CombineTypescriptFilesToOutput.ps1
 CombineTypescriptFilesToOutput.js
+CombineTypescriptFilesToOutput.cjs
 
 # Compiled output
 out/
