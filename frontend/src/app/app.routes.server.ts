@@ -78,7 +78,7 @@ export const serverRoutes: ServerRoute[] = [
     getPrerenderParams: async () => (await getMiniRolloIds()).map((id) => ({ id })),
   },
 
-  { path: 'doc-viewer/:id', renderMode: RenderMode.Client },
+  { path: 'doc-viewer/:kind/:id', renderMode: RenderMode.Client },
 
   // wildcard: infinito -> Client
   { path: '**', renderMode: RenderMode.Client },
