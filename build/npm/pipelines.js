@@ -12,6 +12,10 @@ const { cleanInit, cleanPost } = require("./clean");
 const mini = require("./divinos-minirollos");
 const leyes = require("./divinas-leyes");
 
+const { genDocIds } = require("./gen-doc-ids");
+const frontend = require("./frontend");
+const { deployGhpages } = require("./deploy-ghpages");
+
 // Pipelines para rollos
 const buildMdRollosCore = series(rollos.convert, rollos.dedup, rollos.checkSequence);
 const buildMdRollos = series(cleanInit, buildMdRollosCore, cleanPost);
@@ -77,6 +81,24 @@ const buildAllDocs = series(
   cleanPost
 );
 
+// const frontendStart = series(genDocIds, frontend.frontendStart);
+// const frontendWatch = series(genDocIds, frontend.frontendWatch);
+// const frontendTest = series(genDocIds, frontend.frontendTest);
+
+// const frontendBuild = series(genDocIds, frontend.frontendBuild);
+// const frontendBuildProd = series(genDocIds, frontend.frontendBuildProd);
+// const frontendBuildProdGhpages = series(genDocIds, frontend.frontendBuildProdGhpages);
+// const frontendDeployGhpages = series(genDocIds, deployGhpages);
+
+const frontendStart = series(frontend.frontendStart);
+const frontendWatch = series(frontend.frontendWatch);
+const frontendTest = series(frontend.frontendTest);
+
+const frontendBuild = series(frontend.frontendBuild);
+const frontendBuildProd = series(frontend.frontendBuildProd);
+const frontendBuildProdGhpages = series(frontend.frontendBuildProdGhpages);
+const frontendDeployGhpages = series(deployGhpages);
+
 module.exports = {
   buildMdRollos,
   buildAllRollos,
@@ -84,5 +106,13 @@ module.exports = {
   buildAllMini,
   buildMdLeyes,
   buildAllLeyes,
-  buildAllDocs
+  buildAllDocs,
+  genDocIds,
+  frontendStart,
+  frontendWatch,
+  frontendTest,
+  frontendBuild,
+  frontendBuildProd,
+  frontendBuildProdGhpages,
+  frontendDeployGhpages,
 };
