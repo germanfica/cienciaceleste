@@ -5,9 +5,10 @@ import { Observable } from "rxjs";
 import { DocJson } from "./md-types";
 import { DocIndexPage } from "./doc-types";
 import { APP_BASE_HREF } from "@angular/common";
+import { DocsApi } from "./docs.api";
 
 @Injectable({ providedIn: 'root' })
-export class Docs {
+export class Docs implements DocsApi {
   constructor(private http: HttpClient, @Inject(APP_BASE_HREF) private baseHref: string) { }
 
   private url(path: string): string {

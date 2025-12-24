@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { Observable, Subscription, tap } from "rxjs";
@@ -12,6 +11,7 @@ import { ScrollProgress } from "../../doc-viewer/scroll-progress";
 import { ScrollTracker } from "../../doc-viewer/scroll-tracker";
 import { Footer } from "../../footer/footer";
 import { Title } from '@angular/platform-browser';
+import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
 @Component({
   selector: 'app-rollo-detalle',
@@ -29,7 +29,7 @@ export class RolloDetalle implements OnInit, OnDestroy {
   private sub = new Subscription();
   private readonly isBrowser: boolean;
 
-  constructor(private docs: Docs, private detail: Detail, private scrollProgress: ScrollProgress, private title: Title, @Inject(PLATFORM_ID) platformId: object) {
+  constructor(@Inject(DOCS) private docs: DocsApi, private detail: Detail, private scrollProgress: ScrollProgress, private title: Title, @Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 

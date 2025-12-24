@@ -6,6 +6,7 @@ import { existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { DocJson } from './md-types';
 import { DocIndexPage } from './doc-types';
+import { DocsApi } from './docs.api';
 
 function findPublicDir(): string {
   let dir = process.cwd();
@@ -27,7 +28,7 @@ function findPublicDir(): string {
 }
 
 @Injectable()
-export class DocsServer {
+export class DocsServer implements DocsApi {
   private readonly publicDir = findPublicDir();
 
   constructor(private pending: PendingTasks) { }

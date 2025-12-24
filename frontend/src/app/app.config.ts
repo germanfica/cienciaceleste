@@ -5,6 +5,9 @@ import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { APP_BASE_HREF, isPlatformBrowser, PlatformLocation } from '@angular/common';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { DOCS } from './doc-viewer/docs.api';
+import { Docs } from './doc-viewer/docs';
+
 // import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
@@ -28,7 +31,8 @@ export const appConfig: ApplicationConfig = {
       },
       deps: [PLATFORM_ID, PlatformLocation],
     },
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    { provide: DOCS, useExisting: Docs },
     // }, provideServiceWorker('ngsw-worker.js', {
     //   //enabled: !isDevMode(),
     //   enabled: false,
