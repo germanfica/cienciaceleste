@@ -20,12 +20,18 @@ export class DocViewer implements OnInit {
   ngOnInit(): void {
     this.doc$ = this.route.paramMap.pipe(
       switchMap(p => {
+        const kind = p.get("kind");
         const id = p.get("id");
-        if (!id) {
+        if (!kind || !id) {
           this.router.navigateByUrl("/docs/404");
           return EMPTY; // no emite, no null
         }
-        return this.docs.getDoc(String(id));
+        switch (kind) {
+          case "divinos-rollos": return this.docs.getRolloDoc(id);
+          case "divinos-minirollos": return this.docs.getMiniRolloDoc(id);
+          case "divinas-leyes": return this.docs.getLeyDoc(id);
+          default: this.router.navigateByUrl("/docs/404"); return EMPTY;
+        }
       }),
       // si hay error (404 del JSON), redirigimos y no emitimos
       catchError(() => {

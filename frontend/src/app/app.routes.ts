@@ -14,6 +14,6 @@ export const routes: Routes = [
   { path: "divinos-minirollos", component: Minirollos, title: "Divinos Mini Rollos Telepáticos - Listado" },
   { path: "divinos-minirollos/:id", component: MinirolloDetalle, title: "Divinos Mini Rollos Telepáticos - Detalle" },
   { path: "divinas-leyes", component: DivinasLeyes, title: "Divinas Leyes - Listado" },
-  { path: "doc-viewer/:id", component: DocViewer, title: "Divinos Rollos Telepáticos - Detalle" },
+  { path: "doc-viewer/:kind/:id", component: DocViewer, title: "Doc Viewer - Detalle" },
   { path: "**", redirectTo: "" }
 ];
