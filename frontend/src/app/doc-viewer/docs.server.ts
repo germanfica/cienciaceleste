@@ -1,10 +1,11 @@
-import { Injectable } from "@angular/core";
-import { from, Observable } from "rxjs";
-import { readFile } from "fs/promises";
-import { existsSync } from "fs";
-import { dirname, join } from "path";
-import { DocJson } from "./md-types";
-import { DocIndexPage } from "./doc-types";
+import { Injectable, PendingTasks } from '@angular/core';
+import { from, Observable, defer } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { readFile } from 'fs/promises';
+import { existsSync } from 'fs';
+import { dirname, join } from 'path';
+import { DocJson } from './md-types';
+import { DocIndexPage } from './doc-types';
 
 function findPublicDir(): string {
   let dir = process.cwd();
@@ -29,11 +30,18 @@ function findPublicDir(): string {
 export class DocsServer {
   private readonly publicDir = findPublicDir();
 
+  constructor(private pending: PendingTasks) { }
+
   private readJson<T>(rel: string): Observable<T> {
     const file = join(this.publicDir, rel);
-    return from(
-      readFile(file, "utf-8").then((txt) => JSON.parse(txt) as T)
-    );
+
+    return defer(() => {
+      const done = this.pending.add(); // <- bloquea estabilidad SSR/SSG
+      return from(readFile(file, 'utf-8')).pipe(
+        map((txt) => JSON.parse(txt) as T),
+        finalize(() => done()) // <- libera la tarea pase lo que pase
+      );
+    });
   }
 
   getDoc(id: string | number): Observable<DocJson> {
