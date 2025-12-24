@@ -1,14 +1,13 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode, PLATFORM_ID } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { APP_BASE_HREF, isPlatformBrowser, PlatformLocation } from '@angular/common';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+// import { provideServiceWorker } from '@angular/service-worker';
 import { DOCS } from './doc-viewer/docs.api';
 import { Docs } from './doc-viewer/docs';
-
-// import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,17 +20,13 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(withFetch()), // HttpClient habilitado globalmente
+    provideClientHydration(withEventReplay()),
     {
       provide: APP_BASE_HREF,
-      useFactory: (platformId: object, platformLocation: PlatformLocation) => {
-        if (isPlatformBrowser(platformId)) {
-          return platformLocation.getBaseHrefFromDOM() || "/";
-        }
-        return (globalThis as any).__APP_BASE_HREF__ ?? "/cienciaceleste/";
-      },
-      deps: [PLATFORM_ID, PlatformLocation],
+      useFactory: (platformLocation: PlatformLocation) =>
+        platformLocation.getBaseHrefFromDOM(),
+      deps: [PlatformLocation]
     },
-    provideClientHydration(withEventReplay()),
     { provide: DOCS, useExisting: Docs },
     // }, provideServiceWorker('ngsw-worker.js', {
     //   //enabled: !isDevMode(),
