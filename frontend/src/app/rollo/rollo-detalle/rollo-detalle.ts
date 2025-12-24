@@ -3,7 +3,7 @@ import { RouterModule } from "@angular/router";
 import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule, isPlatformBrowser } from "@angular/common";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, tap } from "rxjs";
 import { DetailNav } from "../../doc-viewer/doc-types";
 import { Navbar } from "../../navbar/navbar";
 import { Navigation } from "../../navbar/navigation";
@@ -35,7 +35,9 @@ export class RolloDetalle implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.id$ = this.detail.buildId$();
-    this.doc$ = this.detail.buildDoc$(id => this.docs.getRolloDoc(id));
+    this.doc$ = this.detail.buildDoc$(id => this.docs.getRolloDoc(id)).pipe(
+      tap(doc => this.title.setTitle(`Divino Rollo Telepático ${doc.id} | ${doc.titulo}`))
+    );
     this.nav$ = this.detail.buildNav$(this.id$, p => this.docs.getRolloIndexPageRemote(p));
 
     // arrancar/reiniciar tracking cuando cambia el id
@@ -50,7 +52,6 @@ export class RolloDetalle implements OnInit, OnDestroy {
           restoreBehavior: 'auto',
           version: 'v1'
         });
-        this.doc$.subscribe(doc => this.title.setTitle(`Divino Rollo Telepático ${id} | ${doc.titulo}`));
       })
     );
   }
