@@ -15,6 +15,17 @@ export class Docs {
     return `${this.baseHref.replace(/\/$/, '')}${path}`;
   }
 
+  /**
+   * Legacy endpoint kept only for backward compatibility.
+   *
+   * NOTE: This expects documents at `/docs/{id}.json`. The project moved docs into
+   * category-specific folders (`/docs/rollo`, `/docs/divino-minirollo`, `/docs/divina-ley`),
+   * so this method will 404 unless you still ship JSON files at the legacy location.
+   *
+   * Use one of: `getRolloDoc`, `getMiniRolloDoc`, `getLeyDoc`.
+   *
+   * @deprecated Use getRolloDoc/getMiniRolloDoc/getLeyDoc instead.
+   */
   getDoc(id: string | number): Observable<DocJson> {
     return this.http.get<DocJson>(this.url(`/docs/${id}.json`));
   }
