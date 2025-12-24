@@ -1,0 +1,64 @@
+{
+  "page": 5,
+  "pageSize": 10,
+  "range": {
+    "start": 41,
+    "end": 50
+  },
+  "items": [
+    {
+      "id": 41,
+      "titulo": "DIVINO ORÍGEN DE LAS ESCRITURAS; PUNTO DE PARTIDA DE UN MANDATO CELESTIAL; LAS DIVINAS ESCRITURAS Y LAS ESPERANZAS HUMANAS; EL NÚMERO DIVINO DE CADA ESPÍRITU.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 42,
+      "titulo": "CONSTRUCCIÓN DE LAS NAVES PLATEADAS; UN ORÍGEN VIVIENTE QUE SE REMONTA A ETERNIDADES DE TIEMPO ATRÁS; DE ANTES DE LOS ACTUALES SOLES; PRINCIPIO DEL FÍN ALFA; COMIENZA EL PRINCIPIO OMEGA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 43,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES; DICTADA POR ESCRITURA TELEPÁTICA, POR EL DIVINO PADRE JEHOVA, DESDE TODAS PARTES.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 44,
+      "titulo": "CONSTRUCIÓN DE LOS PLATILLOS VOLADORES... CONTINUACIÓN.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 45,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 46,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 47,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 48,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 49,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 50,
+      "titulo": "CONSTRUCCIÓN DE LOS PLATILLOS VOLADORES... CONT.-",
+      "autor": "El Alfa y la Omega"
+    }
+  ],
+  "hasPrev": true,
+  "hasNext": true,
+  "totalIds": 263,
+  "totalPages": 27
+}

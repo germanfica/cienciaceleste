@@ -1,0 +1,64 @@
+{
+  "page": 2,
+  "pageSize": 10,
+  "range": {
+    "start": 11,
+    "end": 20
+  },
+  "items": [
+    {
+      "id": 11,
+      "titulo": "DE LA DIVINA VIRGINIDAD DE LA SANTíSIMA MADRE OMEGA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 12,
+      "titulo": "NADIE ES PROFETA EN SU TIERRA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 13,
+      "titulo": "Y DIJO ISAíAS: ¡HAY MULTITUD DE MUCHOS PUEBLOS; QUE HARÁN RUíDO COMO ESTRUENDO DEL MAR; Y MURMULLO DE NACIONES QUE RESONARÁN COMO EL BRAMIDO DE MUCHAS CORRIENTES!.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 14,
+      "titulo": "ENTONCES JESUS FUÉ LLEVADO POR EL ESPÍRITU AL DESIERTO; PARA SER TENTADO POR EL DEMONIO.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 15,
+      "titulo": "Y DESPUÉS DE HABER AYUNADO CUARENTA DíAS Y CUARENTA NOCHES, TUVO HAMBRE.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 16,
+      "titulo": "Y VINO A ÉL, EL TENTADOR Y LE DIJO: SI ERES HIJO DE DIOS, DÍ QUE ESTAS PIEDRAS SE CONVIERTAN EN PAN.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 17,
+      "titulo": "Él RESPONDIÓ Y DIJO; ESCRITO ESTA: NO SÓLO DE PAN VIVIRÁ EL HOMBRE, SINO DE TODA PALABRA QUE SALE DE LA BOCA DE DIOS.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 18,
+      "titulo": "ENTONCES EL DIABLO LE LLEVÓ A LA SANTA CIUDAD, Y LE PUSO SOBRE EL PINÁCULO DEL TEMPLO; Y LE DIJO: SI ERES HIJO DE DIOS; ÉCHATE ABAJO; PORQUE ESCRITO ESTA: A SUS ANGELES MANDARA CERCA DE TI Y EN SUS MANOS TE SOSTENDRÁN.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 19,
+      "titulo": "VOSOTROS SÓIS LA SAL DE LA TIERRA; PERO SI LA SAL SE DESVANECIERE, ¿CON QUÉ SERA SALADA? NO SIRVE MÁS PARA NADA, SINO PARA SER ECHADA FUERA Y HOLLADA POR LOS HOMBRES.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 20,
+      "titulo": "LA LUZ DEL MUNDO: VOSOTROS SÓIS LA LUZ DEL MUNDO; UNA CIUDAD ASENTADA SOBRE UN MONTE NO SE PUEDE ESCONDER.-",
+      "autor": "El Alfa y la Omega"
+    }
+  ],
+  "hasPrev": true,
+  "hasNext": true,
+  "totalIds": 263,
+  "totalPages": 27
+}

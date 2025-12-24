@@ -1,0 +1,59 @@
+{
+  "page": 3,
+  "pageSize": 10,
+  "range": {
+    "start": 21,
+    "end": 30
+  },
+  "items": [
+    {
+      "id": 21,
+      "titulo": "NO PENSÉIS QUE HE VENIDO PARA ABROGAR LA LEY O LOS PROFETAS; NO HE VENIDO PARA ABROGAR, SINO PARA CUMPLIR.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 22,
+      "titulo": "A LOS HIJOS QUE ESTUDIAN MIS ESCRITURAS; TODO CONCEPTO TIENE SU TIEMPO Y SU FÍN; UNA LUZ SUCEDE A LA OTRA; TAL COMO SE SUCEDEN LAS GENERACIONES.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 23,
+      "titulo": "DIVINO JUICIO; LA REVELACIÓN COMIENZA POR LOS MÁS REBELDES A LOS MANDATOS DEL PADRE; TODO GRANDE DE LA TIERRA LO PIDIÓ ASÍ.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 24,
+      "titulo": "COMO NACE UN PLANETA.-DICTADO POR ESCRITURA TELEPÁTICA POR EL DIVINO PADRE JEHOVA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 25,
+      "titulo": "DIVINO ORÍGEN DEL DIVINO PADRE JEHOVA; SU DIVINA Y ETERNA CREACIÓN; LA DIVINA BOLA DE FUEGO DEPURADOR; EL DIVINO PADRE Y LA SUCESIÓN ETERNA DE LOS NÚMEROS; EL NÚMERO 318 DE LA DIVINA JUSTICIA.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 26,
+      "titulo": "DIVINO ORÍGEN DEL HIJO PRIMOGÉNITO DICTADO POR EL DIVINO PADRE JEHOVA DESDE EL SOL ALFA DE LA GALAXIA TRINO; SU DIVINA MADRE SOLAR OMEGA; EL NÚMERO 318 Y LA TRINIDAD SOLAR.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 27,
+      "titulo": "DIVINO ORÍGEN DE LOS CIELOS; SUCECIÓN ETERNA DE CIELOS; LA GEOMETRÍA DEL UNIVERSO; COMO NACE Y SE DESARROLLA UN CIELO; EL MACROCOSMO Y EL MICROCOSMO; LA GALAXIA TRINO.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 28,
+      "titulo": "DIVINO ORÍGEN DEL MAGNETISMO; MAGNETISMO SOLAR; MAGNETISMO ESPIRITUAL; MAGNETISMO INTELIGENTE; MAGNETISMO VIVIENTE SALIDO DE LA DIVINA BOLA DE FUEGO DEL DIVINO PADRE JEHOVA; MAGNETISMO CELESTIAL.-",
+      "autor": "El Alfa y la Omega"
+    },
+    {
+      "id": 29,
+      "titulo": "DIVINO ORÍGEN DEL MAGNETISMO UNIVERSAL; TODA FUERZA SALE DEL PADRE; LA TRINIDAD SOLAR TRICEPTA EL MAGNETISMO VIVIENTE.- 318 LÍNEAS.-",
+      "autor": "El Alfa y la Omega"
+    }
+  ],
+  "hasPrev": true,
+  "hasNext": true,
+  "totalIds": 263,
+  "totalPages": 27
+}
