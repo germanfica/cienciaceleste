@@ -33,7 +33,7 @@
   "license": "MIT",
   "devDependencies": {
     "fancy-log": "^2.0.0",
-    "gh-pages": "^6.3.0",
+    "gh-pages": "germanfica/gh-pages#fix/gh-pages-6.3.0-batch-pr607",
     "gulp": "^5.0.1"
   }
 }
