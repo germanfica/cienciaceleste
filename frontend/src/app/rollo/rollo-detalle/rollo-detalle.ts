@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
-import { CommonModule } from "@angular/common";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { Observable, Subscription } from "rxjs";
 import { DetailNav } from "../../doc-viewer/doc-types";
 import { Navbar } from "../../navbar/navbar";
@@ -11,6 +11,7 @@ import { Detail } from "../../doc-viewer/detail";
 import { ScrollProgress } from "../../doc-viewer/scroll-progress";
 import { ScrollTracker } from "../../doc-viewer/scroll-tracker";
 import { Footer } from "../../footer/footer";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-rollo-detalle',
@@ -26,8 +27,11 @@ export class RolloDetalle implements OnInit, OnDestroy {
   id$!: Observable<number>;
 
   private sub = new Subscription();
+  private readonly isBrowser: boolean;
 
-  constructor(private docs: Docs, private detail: Detail, private scrollProgress: ScrollProgress) { }
+  constructor(private docs: Docs, private detail: Detail, private scrollProgress: ScrollProgress, private title: Title, @Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
     this.id$ = this.detail.buildId$();
@@ -37,6 +41,7 @@ export class RolloDetalle implements OnInit, OnDestroy {
     // arrancar/reiniciar tracking cuando cambia el id
     this.sub.add(
       this.id$.subscribe(id => {
+        if (!this.isBrowser) return;
         this.scrollProgress.stop();
         this.scrollProgress.startTracking({
           key: `rollo/${id}`,
@@ -45,6 +50,7 @@ export class RolloDetalle implements OnInit, OnDestroy {
           restoreBehavior: 'auto',
           version: 'v1'
         });
+        this.doc$.subscribe(doc => this.title.setTitle(`Divino Rollo Telepático ${id} | ${doc.titulo}`));
       })
     );
   }

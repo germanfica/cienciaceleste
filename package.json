@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "gulp frontend:start",
+    "serve:dist": "npx serve -s frontend/dist/cienciaceleste/browser",
     "frontend:start": "gulp frontend:start",
     "frontend:build": "gulp frontend:build",
     "frontend:build:prod": "gulp frontend:build:prod",
