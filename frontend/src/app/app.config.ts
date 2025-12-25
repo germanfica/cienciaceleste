@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, TitleStrategy, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
@@ -8,6 +8,7 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 // import { provideServiceWorker } from '@angular/service-worker';
 import { DOCS } from './doc-viewer/docs.api';
 import { Docs } from './doc-viewer/docs';
+import { AppTitleStrategy } from './app-title.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       deps: [PlatformLocation]
     },
     { provide: DOCS, useExisting: Docs },
+    { provide: TitleStrategy, useClass: AppTitleStrategy },
     // }, provideServiceWorker('ngsw-worker.js', {
     //   //enabled: !isDevMode(),
     //   enabled: false,
