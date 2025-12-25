@@ -81,6 +81,7 @@ async function stripAngularScriptsGhpages() {
 }
 
 // Pipeline para Gulp
-const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, stripAngularScriptsGhpages, publishGhpages);
+// const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, stripAngularScriptsGhpages, publishGhpages);
+const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, publishGhpages);
 
 module.exports = { deployGhpages, stripAngularScriptsGhpages };
