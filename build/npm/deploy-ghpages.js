@@ -5,6 +5,8 @@ const path = require("node:path");
 const fs = require("fs");
 const ghpages = require("gh-pages");
 
+const { stripAngularScripts } = require("./strip-angular-scripts");
+
 const FRONTEND_DIR = path.resolve(__dirname, "../../frontend");
 const DIST_DIR = path.join(FRONTEND_DIR, "dist/cienciaceleste/browser");
 
@@ -73,7 +75,12 @@ function fixManifestPath(cb) {
   cb();
 }
 
-// Pipeline para Gulp
-const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, publishGhpages);
+async function stripAngularScriptsGhpages() {
+  await stripAngularScripts(DIST_DIR);
+  console.log("✔ Stripped Angular scripts from HTML files");
+}
 
-module.exports = { deployGhpages };
+// Pipeline para Gulp
+const deployGhpages = series(buildProdGhpages, fixManifestPath, copy404, stripAngularScriptsGhpages, publishGhpages);
+
+module.exports = { deployGhpages, stripAngularScriptsGhpages };

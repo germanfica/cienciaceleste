@@ -19,6 +19,7 @@ const {
     frontendBuildProdGhpages,
     frontendDeployGhpages,
 } = require("./npm/pipelines");
+const { stripAngularScriptsGhpages } = require("./npm/deploy-ghpages");
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -50,6 +51,7 @@ task("frontend:build:prod", frontendBuildProd);
 task("frontend:build:prod:ghpages", frontendBuildProdGhpages);
 task("frontend:watch", frontendWatch);
 task("frontend:test", frontendTest);
+task("frontend:strip:angular-scripts", stripAngularScriptsGhpages);
 task("frontend:deploy:ghpages", frontendDeployGhpages);
 
 // Default: full rollos
