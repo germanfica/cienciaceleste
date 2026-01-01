@@ -1,3 +1,7 @@
+<!-- widget de traducción -->
+<app-google-translate-widget></app-google-translate-widget>
+<br>
+
 @if (nav$ | async; as nav) {
 <nav class="rollo-nav" aria-label="Navegación">
     <div class="rollo-nav__left">
@@ -6,10 +10,10 @@
 
     <div class="rollo-nav__right">
         @if (nav.hasPrev) {
-        <a [routerLink]="[listRoute, nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
+        <a [attr.href]="hardHref(nav.prevId)">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
         }
         @if (nav.hasNext) {
-        <a [routerLink]="[listRoute, nav.nextId]">SIGUIENTE</a>
+        <a [attr.href]="hardHref(nav.nextId)">SIGUIENTE</a>
         }
     </div>
 </nav>
