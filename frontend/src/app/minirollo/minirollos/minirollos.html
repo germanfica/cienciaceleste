@@ -1,5 +1,5 @@
 @let p = (page$ | async);
-@if (p) {
+
 
 <div class="minirollos">
 
@@ -14,6 +14,7 @@
       <div class="minirollos-content white-bg-color">
 
         <!-- paginador superior -->
+        @if (p) {
         <div class="textolink">
           @if (p.hasPrev) {
           <a [routerLink]="['/divinos-minirollos', p.page - 1]">
@@ -37,8 +38,10 @@
               <a [routerLink]="['/divinos-minirollos', p.page + 1]">Siguiente ></a>
               }
         </div>
+        }
 
         <!-- lista de minirollos -->
+        @if (p) {
         <div class="minirollos-lista">
           @for (row of p.items; track trackItemId($index, row)) {
           <div class="minirollos-item texto">
@@ -49,8 +52,10 @@
           </div>
           }
         </div>
+        }
 
         <!-- paginador inferior -->
+        @if (p) {
         <div class="textolink">
           @if (p.hasPrev) {
           <a [routerLink]="['/divinos-minirollos', p.page - 1]">
@@ -74,6 +79,7 @@
               <a [routerLink]="['/divinos-minirollos', p.page + 1]">Siguiente ></a>
               }
         </div>
+        }
 
       </div> <!-- /.minirollos-content -->
     </div> <!-- /.minirollos-inner -->
@@ -86,5 +92,3 @@
   <app-footer></app-footer>
 
 </div>
-
-}

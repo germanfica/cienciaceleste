@@ -1,5 +1,4 @@
 @let p = (page$ | async);
-@if (p) {
 
 <div class="divinas-leyes">
 
@@ -14,6 +13,7 @@
       <div class="divinas-leyes-content white-bg-color">
 
         <!-- PAGINADOR SUPERIOR -->
+        @if (p) {
         <div class="textolink">
           @if (p.hasPrev) {
           <a [routerLink]="['/divinas-leyes', p.page - 1]">
@@ -35,9 +35,11 @@
               <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
               }
         </div>
+        }
 
         <!-- INTRO SOLO EN LA PRIMERA PÁGINA -->
-        @if (p.page === 1) {
+
+        @if (p && p.page === 1) {
         <div class="texto intro">
           <p align="center">LO QUE VENDRÁ</p>
           <p>LO QUE HA DE VENIR, SALE DE CADA UNO; PORQUE FUÉ ESCRITO, QUE CADA UNO SERÍA JUZGADO POR SUS
@@ -51,6 +53,7 @@
         }
 
         <!-- LISTA DE ITEMS -->
+        @if (p) {
         <div class="divinas-leyes-lista">
           @for (row of p.items; track trackItemId($index, row)) {
           <div class="divinas-leyes-item texto">
@@ -59,8 +62,10 @@
           </div>
           }
         </div>
+        }
 
         <!-- PAGINADOR INFERIOR -->
+        @if (p) {
         <div class="textolink">
           @if (p.hasPrev) {
           <a [routerLink]="['/divinas-leyes', p.page - 1]">
@@ -82,6 +87,7 @@
               <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
               }
         </div>
+        }
 
       </div> <!-- /.divinas-leyes-content -->
     </div> <!-- /.divinas-leyes-inner -->
@@ -94,5 +100,3 @@
   <app-footer></app-footer>
 
 </div>
-
-}
