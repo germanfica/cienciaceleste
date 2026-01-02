@@ -19,10 +19,6 @@ export class Docs implements DocsApi {
     return this.http.get<T>(this.url(`/${rel}`));
   }
 
-  private getJson<T>(rel: string): Observable<T> {
-    return this.http.get<T>(this.url(`/${rel}`));
-  }
-
   /**
    * Legacy endpoint kept only for backward compatibility.
    *
