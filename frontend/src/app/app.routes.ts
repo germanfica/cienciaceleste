@@ -9,9 +9,9 @@ import { DivinasLeyes } from './ley/divinas-leyes/divinas-leyes';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
-  { path: "divinos-rollos", redirectTo: "divinos-rollos/1", pathMatch: "full" },
-  { path: "divinos-minirollos", redirectTo: "divinos-minirollos/1", pathMatch: "full" },
-  { path: "divinas-leyes", redirectTo: "divinas-leyes/1", pathMatch: "full" },
+  { path: "divinos-rollos", component: Rollos, title: "Divinos Rollos Telepáticos - Listado" },
+  { path: "divinos-minirollos", component: Minirollos, title: "Divinos Mini Rollos Telepáticos - Listado" },
+  { path: "divinas-leyes", component: DivinasLeyes, title: "Divinas Leyes - Listado" },
   { path: "divinos-rollos/:id", component: Rollos, title: "Divinos Rollos Telepáticos - Listado" },
   { path: "divino-rollo/:id", component: RolloDetalle, title: "Divino Rollo Telepático" },
   { path: "divinos-minirollos/:id", component: Minirollos, title: "Divinos Mini Rollos Telepáticos - Listado" },
