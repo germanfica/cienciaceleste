@@ -28,7 +28,7 @@ export class Minirollos {
   }
 
   gotoPage(n: number) {
-    this.router.navigate([], { relativeTo: this.route, queryParams: { page: n } });
+    this.router.navigate(["../", n], { relativeTo: this.route });
   }
 
   // trackBy helpers

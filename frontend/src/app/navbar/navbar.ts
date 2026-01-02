@@ -14,4 +14,5 @@ export class Navbar {
   @Input({ required: true }) nav$!: Observable<DetailNav>;
   @Input({ required: true }) listRoute: string = '';  // ej. '/divinos-rollos'
   @Input({ required: true }) listLabel: string = 'LISTADO'; // ej. 'LISTADO DIVINOS ROLLOS'
+  @Input({ required: true }) detailRoute: string = ''; // ej. '/divino-rollo'
 }

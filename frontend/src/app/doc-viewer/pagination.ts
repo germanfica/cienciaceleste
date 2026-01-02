@@ -43,15 +43,15 @@ export class Pagination {
   createPage$(
     fetchIndexPage: (page: number) => Observable<DocIndexPage>
   ): Observable<DocIndexPage> {
-    return this.route.queryParamMap.pipe(
-      map(q => {
-        const n = Number(q.get('page') || '1');
+    return this.route.paramMap.pipe(
+      map(pm => {
+        const n = Number(pm.get("id") || "1");
         return Number.isFinite(n) && n >= 1 ? n : 1;
       }),
       switchMap(n => fetchIndexPage(n)),
       catchError(() => {
         // si hay error, volvemos a la página 1
-        this.router.navigate([], { relativeTo: this.route, queryParams: { page: 1 } });
+        this.router.navigate(["../", 1], { relativeTo: this.route });
         return EMPTY;
       }),
       shareReplay({ bufferSize: 1, refCount: true })
