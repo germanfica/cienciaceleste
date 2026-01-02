@@ -1,5 +1,5 @@
 @let p = (page$ | async);
-
+@let nums = (pages$ | async);
 
 <div class="rollos">
 
@@ -22,7 +22,6 @@
               <span>&nbsp;</span>
               }
 
-              @let nums = (pages$ | async);
               @if (nums) {
               @for (n of nums; track trackPage($index, n)) {
               @if (n === p.page) {
@@ -71,9 +70,8 @@
               <span>&nbsp;</span>
               }
 
-              @let nums2 = (pages$ | async);
-              @if (nums2) {
-              @for (n of nums2; track trackPage($index, n)) {
+              @if (nums) {
+              @for (n of nums; track trackPage($index, n)) {
               @if (n === p.page) {
               <b>{{ n }}</b>
               } @else {
