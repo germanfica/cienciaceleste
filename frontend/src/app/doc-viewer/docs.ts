@@ -12,7 +12,8 @@ export class Docs implements DocsApi {
   constructor(private http: HttpClient, @Inject(APP_BASE_HREF) private baseHref: string) { }
 
   private url(path: string): string {
-    return `${this.baseHref.replace(/\/$/, "")}${path}`;
+    // asegura que concatene correctamente /cienciaceleste/
+    return `${this.baseHref.replace(/\/$/, '')}${path}`;
   }
 
   private getJson<T>(rel: string): Observable<T> {
