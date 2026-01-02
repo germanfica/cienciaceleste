@@ -2,11 +2,11 @@ import { Component, ChangeDetectionStrategy, OnInit, Inject } from "@angular/cor
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { Observable } from "rxjs";
-import { Docs } from "../../doc-viewer/docs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
 import { IndexPaginator } from "../../index-paginator/index-paginator";
+import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
 @Component({
   selector: "app-rollos",
@@ -26,7 +26,7 @@ export class Rollos implements OnInit {
   // (opcional) un título de encabezado si querés mantenerlo
   //titulo = "MENSAJE TELEPÁTICO DEL PADRE ETERNO AL MUNDO TERRESTRE; MENSAJE SEGUNDO; EL PRIMER MENSAJE FUE OCULTADO AL MUNDO POR LA ROCA RELIGIOSA.-";
 
-  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private pagination: Pagination) { } // @Inject(Pagination)
+  constructor(private route: ActivatedRoute, private router: Router, @Inject(DOCS) private docs: DocsApi, private pagination: Pagination) { } // @Inject(Pagination)
 
   ngOnInit(): void {
     // Leemos ?page=N (default 1) y pedimos el JSON remoto

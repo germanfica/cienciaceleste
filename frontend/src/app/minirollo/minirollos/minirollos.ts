@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DocIndexPage } from '../../doc-viewer/doc-types';
-import { Docs } from '../../doc-viewer/docs';
 import { Pagination } from '../../doc-viewer/pagination';
 import { Footer } from "../../footer/footer";
 import { IndexPaginator } from '../../index-paginator/index-paginator';
+import { DOCS, DocsApi } from '../../doc-viewer/docs.api';
 
 @Component({
   selector: 'app-minirollos',
@@ -21,7 +21,7 @@ export class Minirollos {
   page$!: Observable<DocIndexPage>;
   pages$!: Observable<number[]>;
 
-  constructor(private route: ActivatedRoute, private router: Router, private docs: Docs, private pagination: Pagination) { }
+  constructor(private route: ActivatedRoute, private router: Router, @Inject(DOCS) private docs: DocsApi, private pagination: Pagination) { }
 
   ngOnInit(): void {
     this.page$ = this.pagination.createPage$(n => this.docs.getMiniRolloIndexPageRemote(n));

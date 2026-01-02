@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
 import { Block, DocJson, Inline } from '../../doc-viewer/md-types';
-import { Docs } from "../../doc-viewer/docs";
 import { DetailNav } from "../../doc-viewer/doc-types";
 import { Navigation } from '../../navbar/navigation';
 import { Navbar } from "../../navbar/navbar";
 import { Detail } from '../../doc-viewer/detail';
 import { Footer } from "../../footer/footer";
 import { ScrollTracker } from '../../doc-viewer/scroll-tracker';
+import { DOCS, DocsApi } from '../../doc-viewer/docs.api';
 
 @Component({
   selector: 'app-minirollo-detalle',
@@ -24,7 +24,7 @@ export class MinirolloDetalle {
   nav$!: Observable<DetailNav>;
   id$!: Observable<number>;
 
-  constructor(private docs: Docs, private detail: Detail) { }
+  constructor(@Inject(DOCS) private docs: DocsApi, private detail: Detail) { }
 
   ngOnInit(): void {
     this.id$ = this.detail.buildId$();

@@ -25,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
  *   page$!: Observable<DocIndexPage>;
  *   pages$!: Observable<number[]>;
  *
- *   constructor(private docs: Docs, private pagination: Pagination) {
+ *   constructor(@Inject(DOCS) private docs: DocsApi, private pagination: Pagination) {
  *     this.page$ = this.pagination.createPage$(this.docs.getRolloIndexPageRemote);
  *     this.pages$ = this.pagination.createPages$(this.page$);
  *   }

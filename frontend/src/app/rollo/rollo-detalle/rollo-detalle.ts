@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Docs } from "../../doc-viewer/docs";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { CommonModule } from "@angular/common";
 import { Observable, Subscription } from "rxjs";
@@ -11,6 +10,7 @@ import { Detail } from "../../doc-viewer/detail";
 import { ScrollProgress } from "../../doc-viewer/scroll-progress";
 import { ScrollTracker } from "../../doc-viewer/scroll-tracker";
 import { Footer } from "../../footer/footer";
+import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
 @Component({
   selector: 'app-rollo-detalle',
@@ -27,7 +27,7 @@ export class RolloDetalle implements OnInit, OnDestroy {
 
   private sub = new Subscription();
 
-  constructor(private docs: Docs, private detail: Detail, private scrollProgress: ScrollProgress) { }
+  constructor(@Inject(DOCS) private docs: DocsApi, private detail: Detail, private scrollProgress: ScrollProgress) { }
 
   ngOnInit(): void {
     this.id$ = this.detail.buildId$();
