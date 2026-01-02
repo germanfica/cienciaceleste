@@ -16,7 +16,7 @@
         <!-- PAGINADOR SUPERIOR -->
         <div class="textolink">
           @if (p.hasPrev) {
-          <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
+          <a [routerLink]="['/divinas-leyes', p.page - 1]">
             < Anterior</a>
               <span>&nbsp;</span>
               }
@@ -26,13 +26,13 @@
               @if (n === p.page) {
               <b>{{ n }}</b>
               } @else {
-              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
+              <a [routerLink]="['/divinas-leyes', n]">{{ n }}</a>
               }
               <span>&nbsp;</span>
               }
               }
               @if (p.hasNext) {
-              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
               }
         </div>
 
@@ -63,7 +63,7 @@
         <!-- PAGINADOR INFERIOR -->
         <div class="textolink">
           @if (p.hasPrev) {
-          <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page - 1 }">
+          <a [routerLink]="['/divinas-leyes', p.page - 1]">
             < Anterior</a>
               <span>&nbsp;</span>
               }
@@ -73,13 +73,13 @@
               @if (n === p.page) {
               <b>{{ n }}</b>
               } @else {
-              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: n }">{{ n }}</a>
+              <a [routerLink]="['/divinas-leyes', n]">{{ n }}</a>
               }
               <span>&nbsp;</span>
               }
               }
               @if (p.hasNext) {
-              <a [routerLink]="['/divinas-leyes']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
               }
         </div>
 
