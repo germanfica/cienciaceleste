@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DocIndexPage } from '../doc-viewer/doc-types';
 
+type PaginatorVariant = "classic" | "plain";
+
 @Component({
   selector: 'app-index-paginator',
   standalone: true,
@@ -15,6 +17,8 @@ export class IndexPaginator {
   @Input({ required: true }) routeBase!: string;        // ej: '/divinos-rollos'
   @Input({ required: true }) page!: DocIndexPage;       // DocIndexPage actual
   @Input({ required: true }) pages: readonly number[] = []; // [1..totalPages]
+
+  @Input() variant: PaginatorVariant = "classic";
 
   trackPage = (_: number, n: number) => n;
 }
