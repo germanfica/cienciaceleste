@@ -16,7 +16,7 @@
         <!-- paginador superior -->
         <div class="textolink">
           @if (p.hasPrev) {
-          <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page - 1 }">
+          <a [routerLink]="['/divinos-rollos', p.page - 1]">
             < Anterior</a>
               <span>&nbsp;</span>
               }
@@ -27,14 +27,14 @@
               @if (n === p.page) {
               <b>{{ n }}</b>
               } @else {
-              <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+              <a [routerLink]="['/divinos-rollos', n]">{{ n }}</a>
               }
               <span>&nbsp;</span>
               }
               }
 
               @if (p.hasNext) {
-              <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              <a [routerLink]="['/divinos-rollos', p.page + 1]">Siguiente ></a>
               }
         </div>
 
@@ -50,7 +50,7 @@
           <div class="rollos-item">
             <div class="rollos-id">{{ row.id }}</div>
             <div class="rollos-titulo">
-              <a [routerLink]="['/divinos-rollos', row.id]" target="_self">
+              <a [routerLink]="['/divino-rollo', row.id]" target="_self">
                 <u>{{ row.titulo }}</u>
               </a>
             </div>
@@ -61,7 +61,7 @@
         <!-- paginador inferior -->
         <div class="textolink">
           @if (p.hasPrev) {
-          <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page - 1 }">
+          <a [routerLink]="['/divinos-rollos', p.page - 1]">
             < Anterior</a>
               <span>&nbsp;</span>
               }
@@ -72,14 +72,14 @@
               @if (n === p.page) {
               <b>{{ n }}</b>
               } @else {
-              <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: n }">{{ n }}</a>
+              <a [routerLink]="['/divinos-rollos', n]">{{ n }}</a>
               }
               <span>&nbsp;</span>
               }
               }
 
               @if (p.hasNext) {
-              <a [routerLink]="['/divinos-rollos']" [queryParams]="{ page: p.page + 1 }">Siguiente ></a>
+              <a [routerLink]="['/divinos-rollos', p.page + 1]">Siguiente ></a>
               }
         </div>
 

@@ -5,15 +5,15 @@
 @if (nav$ | async; as nav) {
 <nav class="rollo-nav" aria-label="Navegación">
     <div class="rollo-nav__left">
-        <a [routerLink]="[listRoute]" [queryParams]="{ page: nav.page }">{{ listLabel }}</a>
+        <a [routerLink]="[listRoute, nav.page]">{{ listLabel }}</a>
     </div>
 
     <div class="rollo-nav__right">
         @if (nav.hasPrev) {
-        <a [attr.href]="hardHref(nav.prevId)">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
+        <a [routerLink]="[detailRoute, nav.prevId]">ANTERIOR</a>&nbsp;&nbsp;&nbsp;
         }
         @if (nav.hasNext) {
-        <a [attr.href]="hardHref(nav.nextId)">SIGUIENTE</a>
+        <a [routerLink]="[detailRoute, nav.nextId]">SIGUIENTE</a>
         }
     </div>
 </nav>
