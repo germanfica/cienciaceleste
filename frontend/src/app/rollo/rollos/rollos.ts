@@ -6,11 +6,12 @@ import { Docs } from "../../doc-viewer/docs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
+import { IndexPaginator } from "../../index-paginator/index-paginator";
 
 @Component({
   selector: "app-rollos",
   standalone: true,
-  imports: [CommonModule, RouterModule, Footer],
+  imports: [CommonModule, RouterModule, Footer, IndexPaginator],
   providers: [Pagination],
   templateUrl: "./rollos.html",
   styleUrl: "./rollos.scss",
