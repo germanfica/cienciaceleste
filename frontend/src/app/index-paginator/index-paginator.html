@@ -1,0 +1,19 @@
+<nav class="paginator" aria-label="Paginación">
+  @if (page.hasPrev) {
+  <a [routerLink]="[routeBase, page.page - 1]" rel="prev"><span aria-hidden="true">&lt;</span> Anterior</a>
+  <span>&nbsp;</span>
+  }
+
+  @for (n of pages; track trackPage($index, n)) {
+  @if (n === page.page) {
+  <span class="paginator__page--current" aria-current="page">{{ n }}</span>
+  } @else {
+  <a [routerLink]="[routeBase, n]">{{ n }}</a>
+  }
+  <span>&nbsp;</span>
+  }
+
+  @if (page.hasNext) {
+  <a [routerLink]="[routeBase, page.page + 1]" rel="next">Siguiente <span aria-hidden="true">&gt;</span></a>
+  }
+</nav>
