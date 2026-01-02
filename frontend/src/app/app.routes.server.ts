@@ -48,34 +48,71 @@ async function idsFromJsonFiles(dirInsidePublic: string): Promise<string[]> {
 }
 
 // Cache para no escanear directorios varias veces
-let rolloIdsPromise: Promise<string[]> | null = null;
-let miniIdsPromise: Promise<string[]> | null = null;
+let rolloDocIdsPromise: Promise<string[]> | null = null;
+let miniDocIdsPromise: Promise<string[]> | null = null;
 
-function getRolloIds() {
-  return (rolloIdsPromise ??= idsFromJsonFiles(join('docs', 'rollo')));
+let rolloIndexPagesPromise: Promise<string[]> | null = null;
+let miniIndexPagesPromise: Promise<string[]> | null = null;
+let leyesIndexPagesPromise: Promise<string[]> | null = null;
+
+// Detalles (documentos)
+function getRolloDocIds() {
+  return (rolloDocIdsPromise ??= idsFromJsonFiles(join('docs', 'rollo')));
 }
 
-function getMiniRolloIds() {
-  return (miniIdsPromise ??= idsFromJsonFiles(join('docs', 'divino-minirollo')));
+function getMiniRolloDocIds() {
+  return (miniDocIdsPromise ??= idsFromJsonFiles(join('docs', 'divino-minirollo')));
+}
+
+// Listados (paginas de indice)
+function getRolloIndexPageIds() {
+  return (rolloIndexPagesPromise ??= idsFromJsonFiles(join('docs', 'rollo', 'index', 'pages')));
+}
+
+function getMiniRolloIndexPageIds() {
+  return (miniIndexPagesPromise ??= idsFromJsonFiles(join('docs', 'divino-minirollo', 'index', 'pages')));
+}
+
+function getLeyIndexPageIds() {
+  return (leyesIndexPagesPromise ??= idsFromJsonFiles(join('docs', 'divinas-leyes', 'index', 'pages')));
 }
 
 export const serverRoutes: ServerRoute[] = [
-  // estaticas
+  // home
   { path: '', renderMode: RenderMode.Prerender },
+
+  // rutas sin :id (redirects a /1). Las podes prerenderizar igual.
   { path: 'divinos-rollos', renderMode: RenderMode.Prerender },
   { path: 'divinos-minirollos', renderMode: RenderMode.Prerender },
   { path: 'divinas-leyes', renderMode: RenderMode.Prerender },
 
-  // dinamicas: prerender de todos los elementos
+  // LISTADOS (page = :id) -> salen de index/pages/*.json
   {
     path: 'divinos-rollos/:id',
     renderMode: RenderMode.Prerender,
-    getPrerenderParams: async () => (await getRolloIds()).map((id) => ({ id })),
+    getPrerenderParams: async () => (await getRolloIndexPageIds()).map((id) => ({ id })),
   },
   {
     path: 'divinos-minirollos/:id',
     renderMode: RenderMode.Prerender,
-    getPrerenderParams: async () => (await getMiniRolloIds()).map((id) => ({ id })),
+    getPrerenderParams: async () => (await getMiniRolloIndexPageIds()).map((id) => ({ id })),
+  },
+  {
+    path: 'divinas-leyes/:id',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => (await getLeyIndexPageIds()).map((id) => ({ id })),
+  },
+
+  // DETALLES -> salen de docs/<categoria>/*.json
+  {
+    path: 'divino-rollo/:id',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => (await getRolloDocIds()).map((id) => ({ id })),
+  },
+  {
+    path: 'divino-minirollo/:id',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => (await getMiniRolloDocIds()).map((id) => ({ id })),
   },
 
   { path: 'doc-viewer/:kind/:id', renderMode: RenderMode.Client },
