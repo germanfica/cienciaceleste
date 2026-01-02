@@ -5,6 +5,8 @@ import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 // import { provideServiceWorker } from '@angular/service-worker';
+import { DOCS } from './doc-viewer/docs.api';
+import { Docs } from './doc-viewer/docs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +24,8 @@ export const appConfig: ApplicationConfig = {
       useFactory: (platformLocation: PlatformLocation) =>
         platformLocation.getBaseHrefFromDOM(),
       deps: [PlatformLocation]
-    }
+    },
+    { provide: DOCS, useExisting: Docs },
     // }, provideServiceWorker('ngsw-worker.js', {
     //   //enabled: !isDevMode(),
     //   enabled: false,
