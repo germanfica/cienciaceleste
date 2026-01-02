@@ -14,29 +14,9 @@
       <div class="minirollos-content white-bg-color">
 
         <!-- paginador superior -->
-        @if (p) {
-        <div class="textolink">
-          @if (p.hasPrev) {
-          <a [routerLink]="['/divinos-minirollos', p.page - 1]">
-            < Anterior</a>
-              <span>&nbsp;</span>
-              }
-
-              @if (nums) {
-              @for (n of nums; track trackPage($index, n)) {
-              @if (n === p.page) {
-              <b>{{ n }}</b>
-              } @else {
-              <a [routerLink]="['/divinos-minirollos', n]">{{ n }}</a>
-              }
-              <span>&nbsp;</span>
-              }
-              }
-
-              @if (p.hasNext) {
-              <a [routerLink]="['/divinos-minirollos', p.page + 1]">Siguiente ></a>
-              }
-        </div>
+        @if (p && nums) {
+        <app-index-paginator routeBase="/divinos-minirollos" [page]="p" [pages]="nums"
+          variant="plain"></app-index-paginator>
         }
 
         <!-- lista de minirollos -->
@@ -54,29 +34,9 @@
         }
 
         <!-- paginador inferior -->
-        @if (p) {
-        <div class="textolink">
-          @if (p.hasPrev) {
-          <a [routerLink]="['/divinos-minirollos', p.page - 1]">
-            < Anterior</a>
-              <span>&nbsp;</span>
-              }
-
-              @if (nums) {
-              @for (n of nums; track trackPage($index, n)) {
-              @if (n === p.page) {
-              <b>{{ n }}</b>
-              } @else {
-              <a [routerLink]="['/divinos-minirollos', n]">{{ n }}</a>
-              }
-              <span>&nbsp;</span>
-              }
-              }
-
-              @if (p.hasNext) {
-              <a [routerLink]="['/divinos-minirollos', p.page + 1]">Siguiente ></a>
-              }
-        </div>
+        @if (p && nums) {
+        <app-index-paginator routeBase="/divinos-minirollos" [page]="p" [pages]="nums"
+          variant="plain"></app-index-paginator>
         }
 
       </div> <!-- /.minirollos-content -->

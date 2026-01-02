@@ -6,10 +6,11 @@ import { DocIndexPage } from '../../doc-viewer/doc-types';
 import { Pagination } from '../../doc-viewer/pagination';
 import { Footer } from "../../footer/footer";
 import { DOCS, DocsApi } from '../../doc-viewer/docs.api';
+import { IndexPaginator } from '../../index-paginator/index-paginator';
 
 @Component({
   selector: 'app-divinas-leyes',
-  imports: [CommonModule, RouterModule, Footer],
+  imports: [CommonModule, RouterModule, Footer, IndexPaginator],
   providers: [Pagination],
   templateUrl: './divinas-leyes.html',
   styleUrl: './divinas-leyes.scss',

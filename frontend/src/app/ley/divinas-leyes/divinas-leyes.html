@@ -14,27 +14,8 @@
       <div class="divinas-leyes-content white-bg-color">
 
         <!-- PAGINADOR SUPERIOR -->
-        @if (p) {
-        <div class="textolink">
-          @if (p.hasPrev) {
-          <a [routerLink]="['/divinas-leyes', p.page - 1]">
-            < Anterior</a>
-              <span>&nbsp;</span>
-              }
-              @if (nums) {
-              @for (n of nums; track trackPage($index, n)) {
-              @if (n === p.page) {
-              <b>{{ n }}</b>
-              } @else {
-              <a [routerLink]="['/divinas-leyes', n]">{{ n }}</a>
-              }
-              <span>&nbsp;</span>
-              }
-              }
-              @if (p.hasNext) {
-              <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
-              }
-        </div>
+        @if (p && nums) {
+        <app-index-paginator routeBase="/divinas-leyes" [page]="p" [pages]="nums"></app-index-paginator>
         }
 
         <!-- INTRO SOLO EN LA PRIMERA PÁGINA -->
@@ -65,27 +46,8 @@
         }
 
         <!-- PAGINADOR INFERIOR -->
-        @if (p) {
-        <div class="textolink">
-          @if (p.hasPrev) {
-          <a [routerLink]="['/divinas-leyes', p.page - 1]">
-            < Anterior</a>
-              <span>&nbsp;</span>
-              }
-              @if (nums) {
-              @for (n of nums; track trackPage($index, n)) {
-              @if (n === p.page) {
-              <b>{{ n }}</b>
-              } @else {
-              <a [routerLink]="['/divinas-leyes', n]">{{ n }}</a>
-              }
-              <span>&nbsp;</span>
-              }
-              }
-              @if (p.hasNext) {
-              <a [routerLink]="['/divinas-leyes', p.page + 1]">Siguiente ></a>
-              }
-        </div>
+        @if (p && nums) {
+        <app-index-paginator routeBase="/divinas-leyes" [page]="p" [pages]="nums"></app-index-paginator>
         }
 
       </div> <!-- /.divinas-leyes-content -->
