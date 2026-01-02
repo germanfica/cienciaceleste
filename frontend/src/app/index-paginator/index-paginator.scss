@@ -22,6 +22,19 @@
   }
 }
 
+.paginator--plain {
+  font-size: 1.125rem;
+  margin: 0;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .paginator__page--current {
   font-weight: bolder;
   // font-weight: 700;
@@ -32,10 +45,13 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 1030px) {
-
   .paginator {
     //font-size: 0.85rem;
     font-size: 1rem;
+  }
+
+  .paginator--plain {
+    font-size: 1.125rem;
   }
 }
 
@@ -43,5 +59,9 @@
   .paginator {
     font-size: 1rem;
     //font-size: 0.75rem; /* 12px */
+  }
+
+  .paginator--plain {
+    font-size: 1.125rem;
   }
 }

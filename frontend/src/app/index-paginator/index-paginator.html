@@ -1,4 +1,4 @@
-<nav class="paginator" aria-label="Paginación">
+<nav class="paginator" [ngClass]="'paginator--' + variant" aria-label="Paginación">
   @if (page.hasPrev) {
   <a [routerLink]="[routeBase, page.page - 1]" rel="prev"><span aria-hidden="true">&lt;</span> Anterior</a>
   <span>&nbsp;</span>
