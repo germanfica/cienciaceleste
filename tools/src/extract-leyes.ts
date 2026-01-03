@@ -176,6 +176,31 @@ async function main(): Promise<void> {
   // Writer CLARO y sin arrays: asigna ID global y escribe
   (globalThis as any).__LEY_WRITER__ = async (ley: LeyLite) => {
     globalId += 1;
+
+    // TODO: Si querés que el nombre del .md coincida con el número que figura en el HTML
+    // (el <td valign="top">3097</td>, que acá guardamos en ley.shownNumber),
+    // entonces NO uses el correlativo globalId para el filename.
+    //
+    // Hoy el filename sale de globalId, por eso en la página 31 te crea 3001.md aunque
+    // el primer registro tenga shownNumber=3097 (hay un salto de numeración en el sitio).
+    //
+    // El cambio es: usar `ley.shownNumber ?? globalId` como ID del archivo.
+    //
+    // Ojo: globalId puede seguir existiendo para progreso/orden, pero el ID del filename
+    // debería salir del "shownNumber" del HTML si querés esa correlación.
+    //
+    // Pero decidí no usar ley.shownNumber porque:
+    // - Hay saltos en la numeración oficial (no es correlativa)
+    // - Hay números repetidos en la oficial (varias leyes con mismo número)
+    // - Así evitamos conflictos de archivos y mantenemos un orden simple y claro
+    // - Es más simple para referenciar internamente (ID correlativo único)
+    // - Podemos mapear fácilmente entre ID global y shownNumber si es necesario
+    // - El usuario puede crear un índice aparte si quiere ver la relación
+    // - Mantiene la integridad de los datos originales sin ambigüedades
+    // Por lo que: usar shownNumber complica más de lo que ayuda en este caso.
+    //
+    // const idForFile = ley.shownNumber ?? globalId; // <-- ESTE es el cambio clave
+    // await writeLey(outDir, idForFile, ley);
     await writeLey(outDir, globalId, ley);
     if (showProgress && globalId % 100 === 0) {
       //console.log(`... ${globalId} leyes escritas`);
