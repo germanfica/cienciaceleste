@@ -1,6 +1,7 @@
 @if (nav$ | async; as nav) {
 <nav class="rollo-nav" aria-label="Navegación">
     <div class="rollo-nav__left">
+        <a [routerLink]="'/'">HOME</a>&nbsp;&nbsp;&nbsp;
         <a [routerLink]="[listRoute, nav.page]">{{ listLabel }}</a>
     </div>
 
