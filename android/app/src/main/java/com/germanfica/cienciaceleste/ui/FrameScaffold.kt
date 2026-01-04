@@ -1,11 +1,9 @@
 package com.germanfica.cienciaceleste.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +27,7 @@ fun FrameScaffold(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
+        // Header image
         AsyncImage(
             model = topImageUrl,
             contentDescription = null,
@@ -39,13 +37,15 @@ fun FrameScaffold(
             contentScale = ContentScale.FillWidth
         )
 
-        // "Marco" (si queres, aca despues lo reemplazas por un tiled shader con fondolong.jpg)
+        // Frame container
+        // Later, this should replaced with a tiled shader using fondolong.jpg
         Box(
             modifier = Modifier
                 .fillMaxWidth(),
             contentAlignment = Alignment.TopCenter
         ) {
-            // Fondo: por ahora lo estiramos (simple). Si queres repetido vertical, te paso la version con ImageShader.
+            // Background: currently stretched for simplicity
+            // Later, this should use an ImageShader
             AsyncImage(
                 model = RemoteConfig.FONDO_LONG,
                 contentDescription = null,
@@ -53,7 +53,7 @@ fun FrameScaffold(
                 contentScale = ContentScale.FillWidth
             )
 
-            // Caja blanca centrada (tipo clamp)
+            // Centered white content container (clamp-style layout)
             Column(
                 modifier = Modifier
                     .padding(vertical = 10.dp)
@@ -67,9 +67,10 @@ fun FrameScaffold(
             }
         }
 
+        // Footer section
         Footer()
 
-        // Bottom decor
+        // Bottom decorative image
         AsyncImage(
             model = RemoteConfig.BOTTOM_ONLY,
             contentDescription = null,
