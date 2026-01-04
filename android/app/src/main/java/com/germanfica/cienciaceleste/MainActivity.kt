@@ -13,35 +13,70 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.germanfica.cienciaceleste.ui.theme.CienciaCelesteTheme
 
+
+import androidx.activity.compose.setContent
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import androidx.navigation.navArgument
+import com.germanfica.cienciaceleste.data.Network
+import com.germanfica.cienciaceleste.data.Repository
+import com.germanfica.cienciaceleste.ui.*
+import com.germanfica.cienciaceleste.ui.theme.CienciaCelesteTheme
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val repo = Repository(Network.api)
+
         setContent {
             CienciaCelesteTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val nav = rememberNavController()
+
+                NavHost(navController = nav, startDestination = Route.Home.path) {
+                    composable(Route.Home.path) { HomeScreen(nav) }
+
+                    composable(
+                        Route.DivinasLeyes.path,
+                        arguments = listOf(navArgument("page") { type = NavType.IntType })
+                    ) { backStack ->
+                        val page = backStack.arguments?.getInt("page") ?: 1
+                        DivinasLeyesScreen(nav, repo, page)
+                    }
+
+                    composable(
+                        Route.Rollos.path,
+                        arguments = listOf(navArgument("page") { type = NavType.IntType })
+                    ) { backStack ->
+                        val page = backStack.arguments?.getInt("page") ?: 1
+                        RollosScreen(nav, repo, page)
+                    }
+
+                    composable(
+                        Route.Minirollos.path,
+                        arguments = listOf(navArgument("page") { type = NavType.IntType })
+                    ) { backStack ->
+                        val page = backStack.arguments?.getInt("page") ?: 1
+                        MinirollosScreen(nav, repo, page)
+                    }
+
+                    composable(
+                        Route.RolloDetalle.path,
+                        arguments = listOf(navArgument("id") { type = NavType.IntType })
+                    ) { backStack ->
+                        val id = backStack.arguments?.getInt("id") ?: 1
+                        RolloDetalleScreen(nav, repo, id)
+                    }
+
+                    composable(
+                        Route.MinirolloDetalle.path,
+                        arguments = listOf(navArgument("id") { type = NavType.IntType })
+                    ) { backStack ->
+                        val id = backStack.arguments?.getInt("id") ?: 1
+                        MinirolloDetalleScreen(nav, repo, id)
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CienciaCelesteTheme {
-        Greeting("Android")
     }
 }

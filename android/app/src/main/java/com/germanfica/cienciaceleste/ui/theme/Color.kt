@@ -2,10 +2,11 @@ package com.germanfica.cienciaceleste.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Celeste = Color(0xFF00CCFF)
+val Naranja = Color(0xFFFE9900)
+val Rojo = Color(0xFFFE0000)
+val Amarillo = Color(0xFFFFFE00)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val AzulTexto = Color(0xFF0000CC)
+val Negro = Color(0xFF000000)
+val Blanco = Color(0xFFFFFFFF)
