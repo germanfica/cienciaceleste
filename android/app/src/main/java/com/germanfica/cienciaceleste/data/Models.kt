@@ -17,12 +17,14 @@ data class IndexPage(
     val pages: List<Int> = emptyList()
 )
 
+@JsonClass(generateAdapter = true)
 data class Inline(
     val t: String,      // "text" | "strong" | "em" | "code" | "link"
     val text: String,
     val href: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class Block(
     val t: String,      // "h1" | "h2" | "p" | "ul" | "ol" | "img" | "code" | "blockquote"
     val id: String? = null,
@@ -35,6 +37,7 @@ data class Block(
     val code: String? = null
 )
 
+@JsonClass(generateAdapter = true)
 data class Doc(
     val id: Int,
     val titulo: String? = null,
