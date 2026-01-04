@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.germanfica.cienciaceleste.data.*
 import com.germanfica.cienciaceleste.ui.theme.AzulTexto
-import kotlinx.coroutines.launch
 
 @Composable
 fun DivinasLeyesScreen(nav: NavController, repo: Repository, page: Int) {
@@ -19,7 +18,7 @@ fun DivinasLeyesScreen(nav: NavController, repo: Repository, page: Int) {
         topImageUrl = RemoteConfig.TOPLONG2,
         page = page,
         load = { repo.getDivinasLeyes(page) },
-        onItemClick = null // en tu Angular no hay detalle aca
+        onItemClick = null
     ) { p -> Route.DivinasLeyes.of(p) }
 }
 
