@@ -1,9 +1,17 @@
 package com.germanfica.cienciaceleste.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.intl.LocaleList
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -52,19 +60,46 @@ private fun DocScreen(
 private fun DocRenderer(d: Doc) {
     // titulo (similar a tu h1)
     if (!d.titulo.isNullOrBlank()) {
-        Text(d.titulo!!, fontSize = 20.sp, color = AzulTexto)
+        Text(d.titulo!!, fontSize = 20.sp, color = AzulTexto, style = TextStyle(
+            //fontWeight = FontWeight.Bold,
+            lineHeight = 24.sp, // okay grandecito
+            //lineHeight = 26.sp, // okay grandecito
+            textDecoration = TextDecoration.Underline,
+            textAlign = TextAlign.Justify,
+            hyphens = Hyphens.Auto,
+            textDirection = TextDirection.ContentOrLtr,
+            localeList = LocaleList(Locale("es")),
+        ))
         Spacer(Modifier.height(12.dp))
     }
 
+    val paragraphStyle = TextStyle(
+        fontSize = 20.sp,
+        //fontSize = 22.sp,
+        //fontSize = 16.sp,
+        //lineHeight = 22.sp, // peque
+        lineHeight = 24.sp, // okay grandecito
+        //lineHeight = 18.sp,
+        textAlign = TextAlign.Justify,
+        hyphens = Hyphens.Auto,
+        textDirection = TextDirection.ContentOrLtr,
+        localeList = LocaleList(Locale("es")),
+        // lineBreak = LineBreak.Paragraph,
+    )
+
     d.bloques.forEach { b ->
         when (b.t) {
-            "h1", "h2", "h3" -> {
-                Text(b.text.orEmpty(), fontSize = 18.sp, color = AzulTexto)
-                Spacer(Modifier.height(10.dp))
-            }
+//            "h1", "h2", "h3" -> {
+//                Text(b.text.orEmpty(), fontSize = 18.sp, color = AzulTexto)
+//                Spacer(Modifier.height(10.dp))
+//            }
             "p" -> {
-                Text(inlinesToPlainText(b.inlines), fontSize = 16.sp)
-                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = inlinesToPlainText(b.inlines),
+                    modifier = Modifier.fillMaxWidth().background(androidx.compose.ui.graphics.Color(0x2200FF00)),
+                    style = paragraphStyle
+                )
+                //Spacer(Modifier.height(10.dp))
             }
             "img" -> {
                 val url = resolveImg(b.src)
