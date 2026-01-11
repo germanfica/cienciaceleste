@@ -128,7 +128,7 @@ private fun DocRenderer(d: Doc) {
 
     if (!d.autor.isNullOrBlank()) {
         Spacer(Modifier.height(16.dp))
-        Text("Escribe: ${d.autor}", fontSize = 16.sp)
+        Text("Escribe: ${d.autor}", fontSize = 20.sp, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End)
     }
 }
 
