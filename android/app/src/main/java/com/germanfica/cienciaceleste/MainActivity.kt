@@ -4,7 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
@@ -17,7 +21,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -66,15 +72,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) {
-                    Scaffold(
-                        topBar = {
-                            SimpleAppBar(
-                                title = titleForRoute(currentRoute),
-                                onMenuClick = { scope.launch { drawerState.open() } }
-                            )
-                        }
-                    ) { padding ->
-                        Box(Modifier.padding(padding)) {
+                    Scaffold { padding ->
+                        Box(modifier = Modifier.fillMaxSize()) {
                             NavHost(navController = nav, startDestination = Route.Home.path) {
                                 composable(Route.Home.path) { HomeScreen(nav) }
 
@@ -118,21 +117,41 @@ class MainActivity : ComponentActivity() {
                                     MinirolloDetalleScreen(nav, repo, id)
                                 }
                             }
+
+                            SimpleAppBar(
+                                onClick = {
+                                    scope.launch {
+                                        if (drawerState.isClosed) drawerState.open() else drawerState.close()
+                                    }
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .windowInsetsPadding(WindowInsets.statusBars)
+                                    //.padding(padding)
+                                    //.padding(16.dp)
+                                    .padding(
+                                        start = 16.dp,
+                                        end = 16.dp,
+                                        bottom = 16.dp
+                                    )
+                                //.windowInsetsPadding(WindowInsets.statusBars)
+                                //.padding(start = 16.dp, top = 12.dp)
+                            )
                         }
                     }
                 }
             }
         }
     }
-}
 
-private fun titleForRoute(route: String?): String {
-    return when {
-        route == null -> "Ciencia Celeste"
-        route == "home" -> "Ciencia Celeste"
-        route.startsWith("divinasLeyes") -> "Divinas leyes"
-        route.startsWith("rollos") || route.startsWith("rollo") -> "Divinos rollos telepaticos"
-        route.startsWith("minirollos") || route.startsWith("minirollo") -> "Divinos mini rollos"
-        else -> "Ciencia Celeste"
+    private fun titleForRoute(route: String?): String {
+        return when {
+            route == null -> "Ciencia Celeste"
+            route == "home" -> "Ciencia Celeste"
+            route.startsWith("divinasLeyes") -> "Divinas leyes"
+            route.startsWith("rollos") || route.startsWith("rollo") -> "Divinos rollos telepaticos"
+            route.startsWith("minirollos") || route.startsWith("minirollo") -> "Divinos mini rollos"
+            else -> "Ciencia Celeste"
+        }
     }
 }
