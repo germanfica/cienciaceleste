@@ -74,16 +74,6 @@ class MainActivity : ComponentActivity() {
                 val drawerVisible =
                     drawerState.currentValue == DrawerValue.Open || drawerState.targetValue == DrawerValue.Open
 
-                BackHandler(enabled = drawerVisible) {
-                    if (drawerSearchExpanded) {
-                        // 1er back: colapsa search (sin cerrar drawer)
-                        collapseSearchNonce += 1
-                    } else {
-                        // 2do back: cierra drawer
-                        scope.launch { drawerState.close() }
-                    }
-                }
-
                 ModalNavigationDrawer(
                     drawerState = drawerState,
                     drawerContent = {
@@ -167,6 +157,19 @@ class MainActivity : ComponentActivity() {
                                         bottom = 16.dp
                                     )
                             )
+
+                            // IMPORTANTE: al final del Box para que gane prioridad sobre el back del NavHost
+                            BackHandler(
+                                enabled = drawerVisible || drawerSearchExpanded
+                            ) {
+                                if (drawerSearchExpanded) {
+                                    // Back bloqueado: solo colapsa el search
+                                    collapseSearchNonce += 1
+                                } else {
+                                    // Back bloqueado: cierra el drawer
+                                    scope.launch { drawerState.close() }
+                                }
+                            }
                         }
                     }
                 }
