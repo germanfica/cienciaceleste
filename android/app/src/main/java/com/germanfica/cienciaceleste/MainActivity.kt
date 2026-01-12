@@ -2,6 +2,7 @@ package com.germanfica.cienciaceleste
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -10,17 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,7 +33,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.germanfica.cienciaceleste.data.Network
 import com.germanfica.cienciaceleste.data.Repository
-import com.germanfica.cienciaceleste.ui.*
+import com.germanfica.cienciaceleste.ui.AppDrawer
+import com.germanfica.cienciaceleste.ui.DivinasLeyesScreen
+import com.germanfica.cienciaceleste.ui.HomeScreen
+import com.germanfica.cienciaceleste.ui.MinirolloDetalleScreen
+import com.germanfica.cienciaceleste.ui.MinirollosScreen
+import com.germanfica.cienciaceleste.ui.RolloDetalleScreen
+import com.germanfica.cienciaceleste.ui.RollosScreen
+import com.germanfica.cienciaceleste.ui.Route
+import com.germanfica.cienciaceleste.ui.SimpleAppBar
 import com.germanfica.cienciaceleste.ui.theme.CienciaCelesteTheme
 import kotlinx.coroutines.launch
 
@@ -56,12 +60,29 @@ class MainActivity : ComponentActivity() {
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
 
+                // Estado hoisted del expand del buscador (para hit area + BackHandler)
                 var drawerSearchExpanded by rememberSaveable { mutableStateOf(false) }
-                val expandHitArea = (drawerState.targetValue == DrawerValue.Open) && drawerSearchExpanded
 
+                // Evento para pedirle al drawer que colapse el search y limpie foco
+                var collapseSearchNonce by rememberSaveable { mutableIntStateOf(0) }
+
+                val expandHitArea = (drawerState.targetValue == DrawerValue.Open) && drawerSearchExpanded
 
                 val backStackEntry by nav.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
+
+                val drawerVisible =
+                    drawerState.currentValue == DrawerValue.Open || drawerState.targetValue == DrawerValue.Open
+
+                BackHandler(enabled = drawerVisible) {
+                    if (drawerSearchExpanded) {
+                        // 1er back: colapsa search (sin cerrar drawer)
+                        collapseSearchNonce += 1
+                    } else {
+                        // 2do back: cierra drawer
+                        scope.launch { drawerState.close() }
+                    }
+                }
 
                 ModalNavigationDrawer(
                     drawerState = drawerState,
@@ -70,7 +91,6 @@ class MainActivity : ComponentActivity() {
                             currentRoute = currentRoute,
                             onNavigate = { route ->
                                 scope.launch { drawerState.close() }
-                                // tu navigateFromDrawer(...)
                                 nav.navigate(route) {
                                     popUpTo(nav.graph.findStartDestination().id) { saveState = true }
                                     launchSingleTop = true
@@ -79,11 +99,13 @@ class MainActivity : ComponentActivity() {
                             },
                             isDarkTheme = darkTheme,
                             onToggleTheme = { darkTheme = !darkTheme },
-                            onSearchExpandedChange = { drawerSearchExpanded = it }
+                            searchExpanded = drawerSearchExpanded,
+                            onSearchExpandedChange = { drawerSearchExpanded = it },
+                            collapseSearchNonce = collapseSearchNonce
                         )
                     }
                 ) {
-                    Scaffold { padding ->
+                    Scaffold { _ ->
                         Box(modifier = Modifier.fillMaxSize()) {
                             NavHost(navController = nav, startDestination = Route.Home.path) {
                                 composable(Route.Home.path) { HomeScreen(nav) }
@@ -139,31 +161,16 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .align(Alignment.TopStart)
                                     .windowInsetsPadding(WindowInsets.statusBars)
-                                    //.padding(padding)
-                                    //.padding(16.dp)
                                     .padding(
                                         start = 16.dp,
                                         end = 16.dp,
                                         bottom = 16.dp
                                     )
-                                //.windowInsetsPadding(WindowInsets.statusBars)
-                                //.padding(start = 16.dp, top = 12.dp)
                             )
                         }
                     }
                 }
             }
-        }
-    }
-
-    private fun titleForRoute(route: String?): String {
-        return when {
-            route == null -> "Ciencia Celeste"
-            route == "home" -> "Ciencia Celeste"
-            route.startsWith("divinasLeyes") -> "Divinas leyes"
-            route.startsWith("rollos") || route.startsWith("rollo") -> "Divinos rollos telepaticos"
-            route.startsWith("minirollos") || route.startsWith("minirollo") -> "Divinos mini rollos"
-            else -> "Ciencia Celeste"
         }
     }
 }

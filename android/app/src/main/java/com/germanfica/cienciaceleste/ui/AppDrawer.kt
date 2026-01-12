@@ -42,6 +42,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,12 +61,21 @@ fun AppDrawer(
     onNavigate: (String) -> Unit,
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit,
+    searchExpanded: Boolean,
     onSearchExpandedChange: (Boolean) -> Unit,
+    collapseSearchNonce: Int,
     modifier: Modifier = Modifier
 ) {
     var query by rememberSaveable { mutableStateOf("") }
-    var searchExpanded by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+
+    // Evento desde MainActivity: colapsar buscador (y limpiar foco)
+    LaunchedEffect(collapseSearchNonce) {
+        if (searchExpanded) {
+            focusManager.clearFocus(force = true)
+            onSearchExpandedChange(false)
+        }
+    }
 
     val gap by animateDpAsState(
         targetValue = if (searchExpanded) 0.dp else 10.dp,
@@ -94,8 +104,6 @@ fun AppDrawer(
             label = "DrawerWidth"
         )
 
-        // IMPORTANTE: NO aplicamos insets al contenedor (Surface), para que el fondo llegue
-        // hasta arriba (debajo de la status bar). Los insets van en el contenido interno.
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
@@ -108,8 +116,6 @@ fun AppDrawer(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    // Esto empuja el contenido para que no quede debajo de status/nav bars,
-                    // pero el fondo (Surface) sigue cubriendo todo el top.
                     .windowInsetsPadding(DrawerDefaults.windowInsets)
             ) {
                 Spacer(Modifier.height(14.dp))
@@ -127,9 +133,7 @@ fun AppDrawer(
                             .weight(1f)
                             .animateContentSize(animationSpec = tween(220))
                             .onFocusChanged { fs ->
-                                val expandedNow = fs.isFocused
-                                searchExpanded = expandedNow
-                                onSearchExpandedChange(expandedNow)
+                                onSearchExpandedChange(fs.isFocused)
                             },
                         singleLine = true,
                         shape = RoundedCornerShape(28.dp),
@@ -143,8 +147,8 @@ fun AppDrawer(
                                 if (expanded) {
                                     IconButton(
                                         onClick = {
-                                            focusManager.clearFocus()
-                                            searchExpanded = false
+                                            // Back icon (del buscador): colapsa, pero no cierra el drawer
+                                            focusManager.clearFocus(force = true)
                                             onSearchExpandedChange(false)
                                         }
                                     ) {
