@@ -3,6 +3,7 @@ package com.germanfica.cienciaceleste
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -44,21 +48,20 @@ class MainActivity : ComponentActivity() {
         val repo = Repository(Network.api)
 
         setContent {
-            CienciaCelesteTheme {
+            val systemDark = isSystemInDarkTheme()
+            var darkTheme by rememberSaveable { mutableStateOf(systemDark) }
+
+            CienciaCelesteTheme(darkTheme = darkTheme) {
                 val nav = rememberNavController()
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
 
+                var drawerSearchExpanded by rememberSaveable { mutableStateOf(false) }
+                val expandHitArea = (drawerState.targetValue == DrawerValue.Open) && drawerSearchExpanded
+
+
                 val backStackEntry by nav.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
-
-                fun navigateFromDrawer(route: String) {
-                    nav.navigate(route) {
-                        popUpTo(nav.graph.findStartDestination().id) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
 
                 ModalNavigationDrawer(
                     drawerState = drawerState,
@@ -67,8 +70,16 @@ class MainActivity : ComponentActivity() {
                             currentRoute = currentRoute,
                             onNavigate = { route ->
                                 scope.launch { drawerState.close() }
-                                navigateFromDrawer(route)
-                            }
+                                // tu navigateFromDrawer(...)
+                                nav.navigate(route) {
+                                    popUpTo(nav.graph.findStartDestination().id) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            isDarkTheme = darkTheme,
+                            onToggleTheme = { darkTheme = !darkTheme },
+                            onSearchExpandedChange = { drawerSearchExpanded = it }
                         )
                     }
                 ) {
@@ -124,6 +135,7 @@ class MainActivity : ComponentActivity() {
                                         if (drawerState.isClosed) drawerState.open() else drawerState.close()
                                     }
                                 },
+                                expandHitArea = expandHitArea,
                                 modifier = Modifier
                                     .align(Alignment.TopStart)
                                     .windowInsetsPadding(WindowInsets.statusBars)
