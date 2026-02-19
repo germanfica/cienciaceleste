@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object Network {
-    private val moshi = Moshi.Builder().build()
+    val moshi: Moshi = Moshi.Builder().build()
 
     val api: CienciaCelesteApi = Retrofit.Builder()
         // baseUrl obligatorio aunque uses @Url

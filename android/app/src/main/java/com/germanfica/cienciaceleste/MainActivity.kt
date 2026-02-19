@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val repo = Repository(Network.api)
+        val repo = Repository(Network.api, applicationContext, Network.moshi)
 
         setContent {
             val systemDark = isSystemInDarkTheme()
