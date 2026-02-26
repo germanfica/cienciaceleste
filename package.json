@@ -9,7 +9,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "postinstall": "gulp install:all",
+    "postinstall": "node build/npm/postinstall.js",
     "start": "gulp frontend:start",
     "frontend:start": "gulp frontend:start",
     "frontend:build": "gulp frontend:build",
