@@ -9,6 +9,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "postinstall": "gulp install:all",
     "start": "gulp frontend:start",
     "frontend:start": "gulp frontend:start",
     "frontend:build": "gulp frontend:build",
