@@ -11,6 +11,7 @@ const rollos = require("./rollos");
 const { cleanInit, cleanPost } = require("./clean");
 const mini = require("./divinos-minirollos");
 const leyes = require("./divinas-leyes");
+const { installTools, installFrontend } = require("./install");
 
 // Pipelines para rollos
 const buildMdRollosCore = series(rollos.convert, rollos.dedup, rollos.checkSequence);
@@ -77,7 +78,11 @@ const buildAllDocs = series(
   cleanPost
 );
 
+// install frontend + tools
+const installAll = series(installFrontend, installTools);
+
 module.exports = {
+  installAll,
   buildMdRollos,
   buildAllRollos,
   buildMdMiniRollos,

@@ -3,6 +3,7 @@ const { task } = require("gulp");
 const { clean } = require("./npm/rollos");
 const { cleanInit, cleanPost } = require("./npm/clean");
 const {
+    installAll,
     buildMdRollos,
     buildAllRollos,
     buildMdMiniRollos,
@@ -18,6 +19,9 @@ const { deployGhpages } = require("./npm/deploy-ghpages");
 task("clean:init", cleanInit);
 task("clean:post", cleanPost);
 task("clean", clean);
+
+// Install
+task("install:all", installAll);
 
 // Rollos
 task("build:md:rollos", buildMdRollos);
