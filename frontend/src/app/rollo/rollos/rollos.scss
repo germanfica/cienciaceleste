@@ -38,7 +38,7 @@
 
     /* ===== Cajón blanco dentro del marco ===== */
     .rollos-content {
-      background: #fff;
+      background: #121212;
       //width:  clamp(17.5rem, 97%, 56.25rem);            /* igual que el <table width="97%"> */
       width: 96.5%;
       margin: 0 auto;
@@ -58,11 +58,11 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.25rem;
   /* ~20px */
-  color: #0000cc;
+  color: #9D9FF9;
   margin: 0.5rem 0;
 
   a {
-    color: #0000cc;
+    color: #9D9FF9;
     text-decoration: underline;
   }
 }
@@ -75,7 +75,7 @@
   font-weight: bold;
   margin: 1rem 0;
   text-align: center;
-  color: #006;
+  color: #FFE9FD;
 }
 
 /* Paginadores */
@@ -116,7 +116,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: inherit;
     /* mismo tamaño que el título */
-    color: #000;
+    color: #FEFEFE;
     /* negro sólido */
     font-weight: normal;
     /* sin negrita */

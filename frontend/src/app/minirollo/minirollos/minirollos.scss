@@ -37,7 +37,7 @@
 
     /* ===== Cajón blanco ===== */
     .minirollos-content {
-      background: #fff;
+      background: #12121c;
       padding: 1.25rem;
       width: clamp(17.5rem, 97%, 60.625rem);
       margin: 0 auto;
@@ -48,6 +48,7 @@
         font-size: 1.375rem;
         font-family: Arial, Helvetica, sans-serif;
         margin: 0.5rem 0;
+        color: #b6b6ff;
       }
 
       /* ===== Paginadores ===== */
@@ -82,10 +83,12 @@
 
         .minirollos-id {
           min-width: 2rem;
+          color: #e8e8ed;
         }
 
         .minirollos-titulo a {
           //color: #000;
+          color: #b6b6ff;
         }
       }
     }

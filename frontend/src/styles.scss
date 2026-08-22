@@ -3,46 +3,46 @@
 .titulomenu {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #FFF;
+	color: #F5F5F5;
 	font-weight: bold;
 	text-align: left;
 }
 .menu {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #006;
+	color: #FFE9FD;
 	text-align: left;
 }
 .texto {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
-	color: #006;
+	color: #FFE9FD;
 	text-align: justify;
 }
 .textorollo {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 47px;
-	color: #006;
+	color: #FFE9FD;
 	text-align: justify;
 }
 
 .titulotexto {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
-	color: #006;
+	color: #FFE9FD;
 	font-weight: bold;
 	text-align: center;
 }
 .textofotos {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10px;
-	color: #000;
+	color: #E8E8E8;
 	text-align: center;
 }
 .textocentrado {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
-	color: #006;
+	color: #FFE9FD;
 	text-align: center;
 }
 .textolink {
@@ -53,7 +53,7 @@
 .textoderecha {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 35px;
-	color: #006;
+	color: #FFE9FD;
 	text-align: right;
 }
 .textolinkleft {
@@ -64,21 +64,21 @@
 .textoderechablanco {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	color: #FFF;
+	color: #F5F5F5;
 	text-align: right;
 	font-weight: bolder;
 }
 .titulotextoderecha {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
-	color: #006;
+	color: #FFE9FD;
 	font-weight: bold;
 	text-align: left;
 }
 .titulorollo {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 38px;
-	color: #006;
+	color: #FFE9FD;
 	font-weight: bold;
 	text-align: justify;
 }
@@ -86,13 +86,13 @@
 .texto {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 30px;
-	color: #000;
+	color: #E8E8E8;
 }
 
 
 /* Custom */
 
-body { background-color: #0CF; margin: 0; }
+body { background-color: #101820; margin: 0; }
 
 a:link { text-decoration: none; }
 
@@ -119,7 +119,7 @@ a:active { text-decoration: none; }
 	border: 0;
 }
 
-.white-bg-color { background-color: #FFFFFF; }
+.white-bg-color { background-color: #181818; }
 
 img {
   //max-width: none;   // evita que Angular te fuerce el escalado

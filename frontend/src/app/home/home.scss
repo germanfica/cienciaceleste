@@ -38,7 +38,7 @@
 
     /* ===== Cajón blanco dentro del marco ===== */
     .home-content {
-      background: #fff;
+      background: #12121c;
       width: 96.5%;
       /* igual que <table width="97%"> */
       margin: 0 auto;
@@ -55,12 +55,13 @@
   //font-size: 1.25rem;
   font-size: 1.9rem;
   /* ~20px */
-  color: #0000cc;
+  color: #b6b6ff;
   //margin: 0.75rem 0;
   margin: 0.75rem 0;
 
   a {
     //color: #0000cc;
+    color: #b6b6ff;;
     text-decoration: underline;
   }
 }
@@ -68,7 +69,7 @@
 .home-id {
   font-family: Arial, Helvetica, sans-serif;
   font-size: inherit;
-  color: #000;
+  color: #e8e8ed;
   /* negro sólido */
   font-weight: normal;
   //margin-right: 0.5rem;
