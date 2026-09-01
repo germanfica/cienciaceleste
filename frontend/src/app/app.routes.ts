@@ -6,6 +6,7 @@ import { DocViewer } from './doc-viewer/doc-viewer';
 import { Minirollos } from './minirollo/minirollos/minirollos';
 import { MinirolloDetalle } from './minirollo/minirollo-detalle/minirollo-detalle';
 import { DivinasLeyes } from './ley/divinas-leyes/divinas-leyes';
+import { Editor } from './editor/editor';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: "divino-minirollo/:id", component: MinirolloDetalle, title: "Divino Mini Rollo Telepático" },
   { path: "divinas-leyes/:id", component: DivinasLeyes, title: "Divinas Leyes - Listado" },
   { path: "doc-viewer/:kind/:id", component: DocViewer, title: "Doc Viewer - Detalle" },
+  { path: "editor", component: Editor, title: "Editor" },
   { path: "**", redirectTo: "" }
 ];

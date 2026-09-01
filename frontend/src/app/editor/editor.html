@@ -1,0 +1,117 @@
+<div class="rollos">
+
+  <!-- cabecera -->
+  <div class="rollos-header">
+    <img src="images/editortoplong.jpg" alt="Decoración superior" />
+  </div>
+
+  <!-- cuerpo -->
+  <div class="rollos-body">
+    <div class="rollos-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <div class="rollos-content">
+        <section class="workspace" aria-label="Editor de archivos">
+
+          <section class="panel panel--editor">
+            <h2 class="panel__title">Editar texto</h2>
+
+            <form class="edit-form" (submit)="$event.preventDefault()">
+              <label class="drop-zone">
+                <input type="file" multiple accept=".txt,.html,text/plain,text/html" />
+
+                <span class="drop-zone__icon" aria-hidden="true">▤</span>
+                <strong>Arrastra archivos .txt o .html aquí</strong>
+                <span>También puedes hacer click para elegirlos</span>
+              </label>
+
+              <label class="field">
+                <span>Título</span>
+
+                <input type="text" value="MENSAJE TELEPÁTICO DEL PADRE ETERNO AL MUNDO TERRESTRE; MENSAJE SEGUNDO; EL PRIMER MENSAJE FUÉ OCULTADO AL MUNDO POR LA ROCA RELIGIOSA.-" aria-label="Título del rollo" />
+              </label>
+
+              <label class="field field--grow">
+                <span>Contenido</span>
+
+                <textarea rows="8" aria-label="Contenido del rollo">Sí hijos; se nace buscando la verdad; se inicia para el mundo del conocimiento, la revelación esperada por siglos y siglos; vuestro Creador se vale de doctrinas vivientes para hacer avanzar a los mundos; en el pasado os envió la ley Mosáica; le sucedió la doctrina Cristiana; la tercera la que se inicia, es la doctrina del Cordero de dios;</textarea>
+              </label>
+
+              <div class="audio-field">
+                <span>Audiolibro (opcional)</span>
+
+                <label class="button button--outline file-picker file-picker--audio">
+                  <input type="file" accept="audio/*" />
+                  <span>Agregar audio</span>
+                </label>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel panel--preview">
+            <h2 class="panel__title">Vista previa</h2>
+
+            <article class="preview">
+              <nav class="preview__nav" aria-label="Navegación de vista previa">
+                <a href="#" (click)="$event.preventDefault()">
+                  Home
+                </a>
+
+                <a href="#" (click)="$event.preventDefault()">
+                  Listado divinos rollos
+                </a>
+              </nav>
+
+              <h3>
+                <u>
+                  Mensaje telepático del Padre Eterno al mundo terrestre;
+                  mensaje segundo; el primer mensaje fue ocultado al mundo
+                  por la roca religiosa.-
+                </u>
+              </h3>
+
+              <p>
+                Sí hijos; se nace buscando la verdad; se inicia para el mundo del conocimiento, la revelación esperada
+                por siglos y siglos; vuestro Creador se vale de doctrinas vivientes para hacer avanzar a los mundos; en
+                el pasado os envió la ley Mosáica; le sucedió la doctrina Cristiana; la tercera la que se inicia, es la
+                doctrina del Cordero de dios;
+              </p>
+
+              <a class="preview__listen" href="#" (click)="$event.preventDefault(); audioPreview.focus()">
+                Escuchar
+              </a>
+
+              <audio #audioPreview controls preload="none" tabindex="0" aria-label="Audiolibro del rollo"></audio>
+            </article>
+          </section>
+
+        </section>
+
+        <footer class="actions">
+          <p>Sin base de datos · archivos locales</p>
+
+          <div class="actions__buttons">
+            <button class="button button--cancel" type="button">
+              Cancelar
+            </button>
+
+            <button class="button button--save" type="button">
+              Guardar
+            </button>
+
+            <button class="button button--export" type="button">
+              Exportar sitio
+            </button>
+          </div>
+        </footer>
+
+      </div> <!-- /.rollos-content -->
+    </div> <!-- /.rollos-inner -->
+  </div> <!-- /.rollos-body -->
+
+  <!-- pie -->
+  <!-- <div class="rollos-footer">
+    <img src="images/bottomlong.jpg" alt="Decoración inferior" />
+  </div> -->
+  <app-footer></app-footer>
+
+
+</div>
