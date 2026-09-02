@@ -1,1 +1,65 @@
-<p>admin-rollos works!</p>
+@let p = (page$ | async);
+@let nums = (pages$ | async);
+
+<div class="rollos">
+  <div class="rollos-header">
+    <img src="images/toplong.jpg" alt="Decoración superior" />
+  </div>
+
+  <div class="rollos-body">
+    <div class="rollos-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <main class="rollos-content">
+        <div class="admin-toolbar">
+          <a class="admin-button admin-button--new" routerLink="/admin/divino-rollo/nuevo">
+            Nuevo divino rollo
+          </a>
+        </div>
+
+        @if (p) {
+          <div class="rollos-table-wrapper">
+            <table class="rollos-table">
+              <thead>
+                <tr>
+                  <th scope="col">Título</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of p.items; track trackItemId($index, row)) {
+                  <tr>
+                    <td class="rollos-table__title">
+                      <a [routerLink]="['/divino-rollo', row.id]">{{ row.id }}. {{ row.titulo }}</a>
+                    </td>
+                    <td class="rollos-table__status">Publicado</td>
+                    <td class="rollos-table__actions">
+                      <div class="rollos-table__actions-inner">
+                        <a class="admin-button" [routerLink]="['/divino-rollo', row.id]">Ver</a>
+                        <a class="admin-button" [routerLink]="['/admin/divino-rollo', row.id]">Editar</a>
+                        <button class="admin-button admin-button--danger" type="button" (click)="deleteRollo(row.id)">
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="rollos-table__empty" colspan="3">
+                      No se encontraron divinos rollos.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (p && nums) {
+          <app-index-paginator routeBase="/admin/divinos-rollos" [page]="p" [pages]="nums"></app-index-paginator>
+        }
+      </main>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
