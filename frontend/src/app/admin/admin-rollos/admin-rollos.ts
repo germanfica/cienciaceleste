@@ -1,7 +1,17 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { Observable } from "rxjs";
+import {
+  BehaviorSubject,
+  defer,
+  distinctUntilChanged,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap
+} from "rxjs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
@@ -24,7 +34,13 @@ interface HighlightSegment {
 export class AdminRollos implements OnInit {
   page$!: Observable<DocIndexPage>;
   pages$!: Observable<number[]>;
+  searchResults$!: Observable<DocIndexPage["items"] | null>;
   searchTerm = "";
+
+  private readonly searchTerms$ = new BehaviorSubject<string>("");
+  private readonly allItems$ = defer(() => this.loadAllItems()).pipe(
+    shareReplay({ bufferSize: 1, refCount: false })
+  );
 
   constructor(
     @Inject(DOCS) private docs: DocsApi,
@@ -34,22 +50,31 @@ export class AdminRollos implements OnInit {
   ngOnInit(): void {
     this.page$ = this.pagination.createPage$(page => this.docs.getRolloIndexPageRemote(page));
     this.pages$ = this.pagination.createPages$(this.page$);
+    this.searchResults$ = this.searchTerms$.pipe(
+      map(term => this.foldText(term).trim()),
+      distinctUntilChanged(),
+      switchMap(term =>
+        term
+          ? this.allItems$.pipe(map(items => this.filterItems(items, term)))
+          : of(null)
+      )
+    );
   }
 
   onSearchInput(event: Event): void {
     this.searchTerm = (event.target as HTMLInputElement).value;
+    this.searchTerms$.next(this.searchTerm);
   }
 
-  filterItems(items: DocIndexPage["items"]): DocIndexPage["items"] {
-    const term = this.foldText(this.searchTerm).trim();
+  hasSearchTerm(): boolean {
+    return this.searchTerm.trim().length > 0;
+  }
 
-    if (!term) {
-      return items;
-    }
-
-    return items.filter(item =>
-      this.foldText(`${item.id} ${item.titulo}`).includes(term)
-    );
+  visibleItems(
+    pageItems: DocIndexPage["items"],
+    searchResults: DocIndexPage["items"] | null
+  ): DocIndexPage["items"] {
+    return this.hasSearchTerm() ? searchResults ?? [] : pageItems;
   }
 
   highlightText(value: string): HighlightSegment[] {
@@ -131,6 +156,37 @@ export class AdminRollos implements OnInit {
   }
 
   trackItemId = (_: number, item: { id: number }): number => item.id;
+
+  private loadAllItems(): Observable<DocIndexPage["items"]> {
+    return this.docs.getRolloIndexPageRemote(1).pipe(
+      switchMap(firstPage => {
+        const remainingRequests = Array.from(
+          { length: Math.max(0, firstPage.totalPages - 1) },
+          (_, index) => this.docs.getRolloIndexPageRemote(index + 2)
+        );
+
+        if (remainingRequests.length === 0) {
+          return of(firstPage.items);
+        }
+
+        return forkJoin(remainingRequests).pipe(
+          map(pages => [
+            ...firstPage.items,
+            ...pages.flatMap(page => page.items)
+          ])
+        );
+      })
+    );
+  }
+
+  private filterItems(
+    items: DocIndexPage["items"],
+    term: string
+  ): DocIndexPage["items"] {
+    return items.filter(item =>
+      this.foldText(`${item.id} ${item.titulo}`).includes(term)
+    );
+  }
 
   private foldText(value: string): string {
     return value

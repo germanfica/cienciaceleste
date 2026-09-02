@@ -1,5 +1,6 @@
 @let p = (page$ | async);
 @let nums = (pages$ | async);
+@let searchResults = (searchResults$ | async);
 
 <div class="rollos">
   <div class="rollos-header">
@@ -39,42 +40,50 @@
                 </tr>
               </thead>
               <tbody>
-                @for (row of filterItems(p.items); track trackItemId($index, row)) {
-                  <tr>
-                    <td class="rollos-table__title">
-                      <a [routerLink]="['/divino-rollo', row.id]">
-                        @for (segment of highlightText(row.id + '. ' + row.titulo); track $index) {
-                          <span
-                            class="rollos-table__segment"
-                            [class.rollos-table__highlight]="segment.highlighted"
-                          >{{ segment.text }}</span>
-                        }
-                      </a>
-                    </td>
-                    <td class="rollos-table__status">Publicado</td>
-                    <td class="rollos-table__actions">
-                      <div class="rollos-table__actions-inner">
-                        <a class="admin-button" [routerLink]="['/divino-rollo', row.id]">Ver</a>
-                        <a class="admin-button" [routerLink]="['/admin/divino-rollo', row.id]">Editar</a>
-                        <button class="admin-button admin-button--danger" type="button" (click)="deleteRollo(row.id)">
-                          Eliminar
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                } @empty {
+                @if (hasSearchTerm() && searchResults === null) {
                   <tr>
                     <td class="rollos-table__empty" colspan="3">
-                      No se encontraron divinos rollos.
+                      Buscando en todos los divinos rollos...
                     </td>
                   </tr>
+                } @else {
+                  @for (row of visibleItems(p.items, searchResults); track trackItemId($index, row)) {
+                    <tr>
+                      <td class="rollos-table__title">
+                        <a [routerLink]="['/divino-rollo', row.id]">
+                          @for (segment of highlightText(row.id + '. ' + row.titulo); track $index) {
+                            <span
+                              class="rollos-table__segment"
+                              [class.rollos-table__highlight]="segment.highlighted"
+                            >{{ segment.text }}</span>
+                          }
+                        </a>
+                      </td>
+                      <td class="rollos-table__status">Publicado</td>
+                      <td class="rollos-table__actions">
+                        <div class="rollos-table__actions-inner">
+                          <a class="admin-button" [routerLink]="['/divino-rollo', row.id]">Ver</a>
+                          <a class="admin-button" [routerLink]="['/admin/divino-rollo', row.id]">Editar</a>
+                          <button class="admin-button admin-button--danger" type="button" (click)="deleteRollo(row.id)">
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td class="rollos-table__empty" colspan="3">
+                        No se encontraron divinos rollos.
+                      </td>
+                    </tr>
+                  }
                 }
               </tbody>
             </table>
           </div>
         }
 
-        @if (p && nums && !searchTerm) {
+        @if (p && nums && !hasSearchTerm()) {
           <app-index-paginator routeBase="/admin/divinos-rollos" [page]="p" [pages]="nums"></app-index-paginator>
         }
       </main>
