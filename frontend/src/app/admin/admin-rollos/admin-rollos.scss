@@ -1,4 +1,13 @@
 :host {
+  --blue: #050867;
+  --cyan: #03c5e9;
+  // #FE9900 - naranja oficial
+  --orange: #ff9700;
+  --orange-light: #ffad13;
+  --red: #ff0909;
+  --white: #fff;
+  --line: #ff6a00;
+
   display: block;
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -91,7 +100,9 @@
 
 .rollos-table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  //overflow-x: auto;
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
 }
 
 .rollos-table {
@@ -103,14 +114,23 @@
 
 .rollos-table th,
 .rollos-table td {
-  border: 2px solid #000099;
+  //border: 2px solid #000099;
+  border: 2px solid var(--line);
+  
   padding: 0.55rem 0.65rem;
 }
 
 .rollos-table th {
-  background: linear-gradient(#ffad13, #ff7b00);
-  font-weight: bold;
+  margin: 0;
+  padding: 8px 12px;
+  // acaaaaaaaaaaaaaaaaaa colorrrsdloasdkl
+  color: var(--white);
+  //color: #0000cc;
+  background: linear-gradient(#ffa211, #fb8b00);
+  line-height: 1.15;
   text-align: center;
+  border: 2px solid var(--line);
+  //border-radius: 10px 10px 0 0;
 }
 
 .rollos-table__title {
@@ -171,7 +191,9 @@
 
   .rollos-table tr {
     margin-bottom: 0.75rem;
+    overflow: hidden;
     border: 2px solid #000099;
+    border-radius: 10px 10px 0 0;
   }
 
   .rollos-table td {
