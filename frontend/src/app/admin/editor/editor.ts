@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
-import { Footer } from "../footer/footer";
+import { Footer } from "../../footer/footer";
 
 @Component({
   selector: 'app-editor',
