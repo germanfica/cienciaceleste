@@ -13,14 +13,14 @@
 
           <section class="panel panel--editor">
             <h2 class="panel__title">
-              Editar divino rollo
-              @if (rolloId(); as id) {
+              Editar {{ documentName() }}
+              @if (documentId(); as id) {
                 #{{ id }}
               }
             </h2>
 
             @if (cargando()) {
-              <p class="editor-status" aria-live="polite">Cargando divino rollo...</p>
+              <p class="editor-status" aria-live="polite">Cargando {{ documentName() }}...</p>
             } @else if (error()) {
               <p class="editor-status editor-status--error" role="alert">{{ error() }}</p>
             } @else {
@@ -41,7 +41,7 @@
                     [ngModel]="titulo()"
                     (ngModelChange)="titulo.set($event)"
                     name="titulo"
-                    aria-label="Título del rollo"
+                    [attr.aria-label]="'Título del ' + documentName()"
                   />
                 </label>
 
@@ -53,7 +53,7 @@
                     [ngModel]="contenido()"
                     (ngModelChange)="contenido.set($event)"
                     name="contenido"
-                    aria-label="Contenido del rollo"
+                    [attr.aria-label]="'Contenido del ' + documentName()"
                   ></textarea>
                 </label>
 
@@ -78,8 +78,8 @@
                   Home
                 </a>
 
-                <a routerLink="/divinos-rollos">
-                  Listado divinos rollos
+                <a [routerLink]="publicListPath()">
+                  Listado de {{ documentName() === "divino minirollo" ? "divinos minirollos" : "divinos rollos" }}
                 </a>
               </nav>
 
@@ -93,7 +93,13 @@
                 Escuchar
               </a>
 
-              <audio #audioPreview controls preload="none" tabindex="0" aria-label="Audiolibro del rollo"></audio>
+              <audio
+                #audioPreview
+                controls
+                preload="none"
+                tabindex="0"
+                [attr.aria-label]="'Audiolibro del ' + documentName()"
+              ></audio>
             </article>
           </section>
 
@@ -103,7 +109,7 @@
           <p>Sin base de datos · archivos locales</p>
 
           <div class="actions__buttons">
-            <button class="button button--cancel" type="button" routerLink="/admin/divinos-rollos">
+            <button class="button button--cancel" type="button" [routerLink]="adminListPath()">
               Cancelar
             </button>
 

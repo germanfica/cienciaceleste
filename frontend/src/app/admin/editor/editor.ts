@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   Inject,
   OnDestroy,
   OnInit,
@@ -9,7 +10,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { Subscription, map, switchMap, throwError } from "rxjs";
+import { combineLatest, Subscription, map, switchMap, throwError } from "rxjs";
 import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
@@ -23,11 +24,22 @@ import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Editor implements OnInit, OnDestroy {
-  readonly rolloId = signal<number | null>(null);
+  readonly documentId = signal<number | null>(null);
+  readonly documentType = signal<"rollo" | "minirollo">("rollo");
   readonly titulo = signal("");
   readonly contenido = signal("");
   readonly cargando = signal(true);
   readonly error = signal("");
+
+  readonly documentName = computed(() =>
+    this.documentType() === "minirollo" ? "divino minirollo" : "divino rollo"
+  );
+  readonly publicListPath = computed(() =>
+    this.documentType() === "minirollo" ? "/divinos-minirollos" : "/divinos-rollos"
+  );
+  readonly adminListPath = computed(() =>
+    this.documentType() === "minirollo" ? "/admin/divinos-minirollos" : "/admin/divinos-rollos"
+  );
 
   private readonly sub = new Subscription();
 
@@ -38,19 +50,26 @@ export class Editor implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub.add(
-      this.route.paramMap
+      combineLatest([this.route.paramMap, this.route.data])
         .pipe(
-          map(params => Number(params.get("id"))),
-          switchMap(id => {
+          map(([params, data]) => ({
+            id: Number(params.get("id")),
+            documentType: data["documentType"] === "minirollo" ? "minirollo" as const : "rollo" as const
+          })),
+          switchMap(({ id, documentType }) => {
+            this.documentType.set(documentType);
+
             if (!Number.isInteger(id) || id <= 0) {
-              return throwError(() => new Error("El ID del divino rollo no es válido."));
+              return throwError(() => new Error(`El ID del ${this.documentName()} no es válido.`));
             }
 
-            this.rolloId.set(id);
+            this.documentId.set(id);
             this.cargando.set(true);
             this.error.set("");
 
-            return this.docs.getRolloDoc(id);
+            return documentType === "minirollo"
+              ? this.docs.getMiniRolloDoc(id)
+              : this.docs.getRolloDoc(id);
           })
         )
         .subscribe({
@@ -60,7 +79,7 @@ export class Editor implements OnInit, OnDestroy {
           },
           error: () => {
             this.cargando.set(false);
-            this.error.set("No se pudo cargar el divino rollo solicitado.");
+            this.error.set(`No se pudo cargar el ${this.documentName()} solicitado.`);
           }
         })
     );
