@@ -1,0 +1,241 @@
+:host {
+  --blue: #050867;
+  --cyan: #03c5e9;
+  // #FE9900 - naranja oficial
+  --orange: #ff9700;
+  --orange-light: #ffad13;
+  --red: #ff0909;
+  --white: #fff;
+  --line: #ff6a00;
+
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.divinas-leyes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.divinas-leyes-header img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 62.5rem;
+  margin-inline: auto;
+}
+
+.divinas-leyes-body {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.divinas-leyes-inner {
+  width: 100%;
+  max-width: 62.5rem;
+  padding-bottom: 0.75rem;
+  background-repeat: repeat-y;
+  background-position: center top;
+  background-size: 100% auto;
+}
+
+.divinas-leyes-content {
+  width: 96.5%;
+  min-height: 25rem;
+  margin: 0 auto;
+  padding: 0.625rem;
+  background: #fff;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: #ffad13;
+}
+
+.admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.25rem 0.8rem;
+  border: 2px outset #d4d4d4;
+  border-radius: 0;
+  background: #efefef;
+  color: #000;
+  font: inherit;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-button:active {
+  border-style: inset;
+}
+
+.admin-button:focus-visible {
+  outline: 2px solid #0000cc;
+  outline-offset: 2px;
+}
+
+.admin-button--new {
+  min-width: 11.5rem;
+}
+
+.admin-button--danger {
+  color: #900;
+}
+
+.divinas-leyes-table-wrapper {
+  width: 100%;
+  //overflow-x: auto;
+  overflow-x: auto;
+}
+
+.divinas-leyes-table {
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px 10px 0 0;
+  color: #000;
+  font-size: 1rem;
+}
+
+.divinas-leyes-table th,
+.divinas-leyes-table td {
+  //border: 2px solid #000099;
+  border: 0;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+
+  padding: 0.55rem 0.65rem;
+}
+
+.divinas-leyes-table th:last-child,
+.divinas-leyes-table td:last-child {
+  border-right: 0;
+}
+
+.divinas-leyes-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.divinas-leyes-table th {
+  margin: 0;
+  padding: 8px 12px;
+  // acaaaaaaaaaaaaaaaaaa colorrrsdloasdkl
+  color: var(--white);
+  //color: #0000cc;
+  background: linear-gradient(#ffa211, #fb8b00);
+  //font-size: 1.25rem;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  //border-radius: 10px 10px 0 0;
+}
+
+.divinas-leyes-table__title {
+  width: 54%;
+}
+
+.divinas-leyes-table__title a {
+  color: #0000cc;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.divinas-leyes-table__status {
+  width: 14%;
+  text-align: center;
+}
+
+.divinas-leyes-table__actions {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.divinas-leyes-table__actions-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.divinas-leyes-table__empty {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .divinas-leyes-table {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .admin-button--new {
+    width: 100%;
+  }
+
+  .divinas-leyes-table,
+  .divinas-leyes-table tbody,
+  .divinas-leyes-table tr,
+  .divinas-leyes-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .divinas-leyes-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+  }
+
+  .divinas-leyes-table tr {
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    border: 2px solid #000099;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .divinas-leyes-table td {
+    border: 0;
+    border-bottom: 1px solid #000099;
+  }
+
+  .divinas-leyes-table__status::before {
+    content: "Estado: ";
+    font-weight: bold;
+  }
+
+  .divinas-leyes-table__actions {
+    border-bottom: 0;
+  }
+
+  .divinas-leyes-table__actions-inner {
+    flex-wrap: wrap;
+  }
+
+  .divinas-leyes-table__actions .admin-button {
+    flex: 1;
+  }
+}

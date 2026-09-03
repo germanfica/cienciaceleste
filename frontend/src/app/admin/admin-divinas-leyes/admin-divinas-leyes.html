@@ -1,1 +1,64 @@
-<p>admin-divinas-leyes works!</p>
+@let p = (page$ | async);
+@let nums = (pages$ | async);
+
+<div class="divinas-leyes">
+  <div class="divinas-leyes-header">
+    <img src="images/toplong2.jpg" alt="Decoración superior" />
+  </div>
+
+  <div class="divinas-leyes-body">
+    <div class="divinas-leyes-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <main class="divinas-leyes-content">
+        <div class="admin-toolbar">
+          <a class="admin-button admin-button--new" routerLink="/admin/divina-ley/nuevo">
+            Nueva divina ley
+          </a>
+        </div>
+
+        @if (p) {
+          <div class="divinas-leyes-table-wrapper">
+            <table class="divinas-leyes-table">
+              <thead>
+                <tr>
+                  <th scope="col">Título</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of p.items; track trackItemId($index, row)) {
+                  <tr>
+                    <td class="divinas-leyes-table__title">
+                      {{ row.id }}. {{ row.titulo }}
+                    </td>
+                    <td class="divinas-leyes-table__status">Publicado</td>
+                    <td class="divinas-leyes-table__actions">
+                      <div class="divinas-leyes-table__actions-inner">
+                        <a class="admin-button" [routerLink]="['/admin/divina-ley', row.id]">Editar</a>
+                        <button class="admin-button admin-button--danger" type="button" (click)="deleteDivinaLey(row.id)">
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="divinas-leyes-table__empty" colspan="3">
+                      No se encontraron divinas leyes.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (p && nums) {
+          <app-index-paginator routeBase="/admin/divinas-leyes" [page]="p" [pages]="nums"></app-index-paginator>
+        }
+      </main>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
