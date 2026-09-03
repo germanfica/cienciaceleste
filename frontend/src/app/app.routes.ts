@@ -10,6 +10,7 @@ import { Editor } from './admin/editor/editor';
 import { AdminRollos } from './admin/admin-rollos/admin-rollos';
 import { AdminMinirollos } from './admin/admin-minirollos/admin-minirollos';
 import { AdminDivinasLeyes } from './admin/admin-divinas-leyes/admin-divinas-leyes';
+import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
@@ -32,5 +33,6 @@ export const routes: Routes = [
   { path: "admin/divinas-leyes", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
   { path: "admin/divinas-leyes/:id", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
   { path: "admin/divina-ley/:id", component: Editor, title: "Editor", data: { documentType: "ley" } },
+  { path: "admin", component: AdminDashboard, title: "Editor" },
   { path: "**", redirectTo: "" }
 ];
