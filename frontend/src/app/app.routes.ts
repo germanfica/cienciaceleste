@@ -23,5 +23,6 @@ export const routes: Routes = [
   { path: "editor", component: Editor, title: "Editor" },
   { path: "admin/divinos-rollos", component: AdminRollos, title: "Admin Divinos Rollos" },
   { path: "admin/divinos-rollos/:id", component: AdminRollos, title: "Admin Divinos Rollos" },
+  { path: "admin/divino-rollo/:id", component: Editor, title: "Editor" },
   { path: "**", redirectTo: "" }
 ];
