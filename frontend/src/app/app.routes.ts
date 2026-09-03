@@ -8,6 +8,7 @@ import { MinirolloDetalle } from './minirollo/minirollo-detalle/minirollo-detall
 import { DivinasLeyes } from './ley/divinas-leyes/divinas-leyes';
 import { Editor } from './admin/editor/editor';
 import { AdminRollos } from './admin/admin-rollos/admin-rollos';
+import { AdminMinirollos } from './admin/admin-minirollos/admin-minirollos';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
@@ -24,5 +25,7 @@ export const routes: Routes = [
   { path: "admin/divinos-rollos", component: AdminRollos, title: "Admin Divinos Rollos" },
   { path: "admin/divinos-rollos/:id", component: AdminRollos, title: "Admin Divinos Rollos" },
   { path: "admin/divino-rollo/:id", component: Editor, title: "Editor" },
+  { path: "admin/divinos-minirollos", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
+  { path: "admin/divinos-minirollos/:id", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
   { path: "**", redirectTo: "" }
 ];

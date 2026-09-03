@@ -1,1 +1,65 @@
-<p>admin-minirollos works!</p>
+@let p = (page$ | async);
+@let nums = (pages$ | async);
+
+<div class="minirollos">
+  <div class="miniminirollos-header">
+    <img src="images/toplong3.jpg" alt="Decoración superior" />
+  </div>
+
+  <div class="minirollos-body">
+    <div class="minirollos-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <main class="minirollos-content">
+        <div class="admin-toolbar">
+          <a class="admin-button admin-button--new" routerLink="/admin/divino-minirollo/nuevo">
+            Nuevo divino minirollo
+          </a>
+        </div>
+
+        @if (p) {
+          <div class="minirollos-table-wrapper">
+            <table class="minirollos-table">
+              <thead>
+                <tr>
+                  <th scope="col">Título</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of p.items; track trackItemId($index, row)) {
+                  <tr>
+                    <td class="minirollos-table__title">
+                      <a [routerLink]="['/divino-minirollo', row.id]">{{ row.id }}. {{ row.titulo }}</a>
+                    </td>
+                    <td class="minirollos-table__status">Publicado</td>
+                    <td class="minirollos-table__actions">
+                      <div class="minirollos-table__actions-inner">
+                        <a class="admin-button" [routerLink]="['/divino-minirollo', row.id]">Ver</a>
+                        <a class="admin-button" [routerLink]="['/admin/divino-minirollo', row.id]">Editar</a>
+                        <button class="admin-button admin-button--danger" type="button" (click)="deleteMinirollo(row.id)">
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td class="minirollos-table__empty" colspan="3">
+                      No se encontraron divinos minirollos.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (p && nums) {
+          <app-index-paginator routeBase="/admin/divinos-minirollos" [page]="p" [pages]="nums"></app-index-paginator>
+        }
+      </main>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
