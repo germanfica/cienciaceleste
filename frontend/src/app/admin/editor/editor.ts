@@ -15,6 +15,8 @@ import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
+type DocumentType = "rollo" | "minirollo" | "ley";
+
 @Component({
   selector: "app-editor",
   standalone: true,
@@ -25,21 +27,66 @@ import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 })
 export class Editor implements OnInit, OnDestroy {
   readonly documentId = signal<number | null>(null);
-  readonly documentType = signal<"rollo" | "minirollo">("rollo");
+  readonly documentType = signal<DocumentType>("rollo");
   readonly titulo = signal("");
   readonly contenido = signal("");
   readonly cargando = signal(true);
   readonly error = signal("");
 
-  readonly documentName = computed(() =>
-    this.documentType() === "minirollo" ? "divino minirollo" : "divino rollo"
+  readonly documentName = computed(() => {
+    switch (this.documentType()) {
+      case "minirollo":
+        return "divino minirollo";
+
+      case "ley":
+        return "divina ley";
+
+      default:
+        return "divino rollo";
+    }
+  });
+  readonly documentNameWithArticle = computed(() =>
+    this.documentType() === "ley" ? "la divina ley" : `el ${this.documentName()}`
   );
-  readonly publicListPath = computed(() =>
-    this.documentType() === "minirollo" ? "/divinos-minirollos" : "/divinos-rollos"
+  readonly documentGenitiveName = computed(() =>
+    this.documentType() === "ley" ? "de la divina ley" : `del ${this.documentName()}`
   );
-  readonly adminListPath = computed(() =>
-    this.documentType() === "minirollo" ? "/admin/divinos-minirollos" : "/admin/divinos-rollos"
-  );
+  readonly documentListName = computed(() => {
+    switch (this.documentType()) {
+      case "minirollo":
+        return "divinos minirollos";
+
+      case "ley":
+        return "divinas leyes";
+
+      default:
+        return "divinos rollos";
+    }
+  });
+  readonly publicListPath = computed(() => {
+    switch (this.documentType()) {
+      case "minirollo":
+        return "/divinos-minirollos";
+
+      case "ley":
+        return "/divinas-leyes";
+
+      default:
+        return "/divinos-rollos";
+    }
+  });
+  readonly adminListPath = computed(() => {
+    switch (this.documentType()) {
+      case "minirollo":
+        return "/admin/divinos-minirollos";
+
+      case "ley":
+        return "/admin/divinas-leyes";
+
+      default:
+        return "/admin/divinos-rollos";
+    }
+  });
 
   private readonly sub = new Subscription();
 
@@ -54,22 +101,29 @@ export class Editor implements OnInit, OnDestroy {
         .pipe(
           map(([params, data]) => ({
             id: Number(params.get("id")),
-            documentType: data["documentType"] === "minirollo" ? "minirollo" as const : "rollo" as const
+            documentType: this.parseDocumentType(data["documentType"])
           })),
           switchMap(({ id, documentType }) => {
             this.documentType.set(documentType);
 
             if (!Number.isInteger(id) || id <= 0) {
-              return throwError(() => new Error(`El ID del ${this.documentName()} no es válido.`));
+              return throwError(() => new Error(`El ID ${this.documentGenitiveName()} no es válido.`));
             }
 
             this.documentId.set(id);
             this.cargando.set(true);
             this.error.set("");
 
-            return documentType === "minirollo"
-              ? this.docs.getMiniRolloDoc(id)
-              : this.docs.getRolloDoc(id);
+            switch (documentType) {
+              case "minirollo":
+                return this.docs.getMiniRolloDoc(id);
+
+              case "ley":
+                return this.docs.getLeyDoc(id);
+
+              default:
+                return this.docs.getRolloDoc(id);
+            }
           })
         )
         .subscribe({
@@ -79,7 +133,8 @@ export class Editor implements OnInit, OnDestroy {
           },
           error: () => {
             this.cargando.set(false);
-            this.error.set(`No se pudo cargar el ${this.documentName()} solicitado.`);
+            const adjective = this.documentType() === "ley" ? "solicitada" : "solicitado";
+            this.error.set(`No se pudo cargar ${this.documentNameWithArticle()} ${adjective}.`);
           }
         })
     );
@@ -89,7 +144,21 @@ export class Editor implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  private parseDocumentType(value: unknown): DocumentType {
+    if (value === "minirollo" || value === "ley") {
+      return value;
+    }
+
+    return "rollo";
+  }
+
   private cargarDocumento(doc: DocJson): void {
+    if (this.documentType() === "ley") {
+      this.titulo.set("");
+      this.contenido.set(doc.titulo ?? "");
+      return;
+    }
+
     this.titulo.set(doc.titulo ?? "");
     this.contenido.set(
       doc.bloques

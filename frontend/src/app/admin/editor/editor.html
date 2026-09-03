@@ -33,17 +33,19 @@
                   <span>También puedes hacer click para elegirlos</span>
                 </label>
 
-                <label class="field">
-                  <span>Título</span>
+                @if (documentType() !== "ley") {
+                  <label class="field">
+                    <span>Título</span>
 
-                  <input
-                    type="text"
-                    [ngModel]="titulo()"
-                    (ngModelChange)="titulo.set($event)"
-                    name="titulo"
-                    [attr.aria-label]="'Título del ' + documentName()"
-                  />
-                </label>
+                    <input
+                      type="text"
+                      [ngModel]="titulo()"
+                      (ngModelChange)="titulo.set($event)"
+                      name="titulo"
+                      [attr.aria-label]="'Título ' + documentGenitiveName()"
+                    />
+                  </label>
+                }
 
                 <label class="field field--grow">
                   <span>Contenido</span>
@@ -53,7 +55,7 @@
                     [ngModel]="contenido()"
                     (ngModelChange)="contenido.set($event)"
                     name="contenido"
-                    [attr.aria-label]="'Contenido del ' + documentName()"
+                    [attr.aria-label]="'Contenido ' + documentGenitiveName()"
                   ></textarea>
                 </label>
 
@@ -79,13 +81,15 @@
                 </a>
 
                 <a [routerLink]="publicListPath()">
-                  Listado de {{ documentName() === "divino minirollo" ? "divinos minirollos" : "divinos rollos" }}
+                  Listado de {{ documentListName() }}
                 </a>
               </nav>
 
-              <h3>
-                <u>{{ titulo() || " " }}</u>
-              </h3>
+              @if (documentType() !== "ley") {
+                <h3>
+                  <u>{{ titulo() || " " }}</u>
+                </h3>
+              }
 
               <p>{{ contenido() }}</p>
 
@@ -98,7 +102,7 @@
                 controls
                 preload="none"
                 tabindex="0"
-                [attr.aria-label]="'Audiolibro del ' + documentName()"
+                [attr.aria-label]="'Audiolibro ' + documentGenitiveName()"
               ></audio>
             </article>
           </section>
