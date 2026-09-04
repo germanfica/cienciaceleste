@@ -350,9 +350,15 @@ a {
 
 .actions__buttons {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
   justify-content: flex-end;
   gap: 16px;
+}
+
+app-editor-export-json {
+  display: inline-flex;
+  flex: 0 0 auto;
 }
 
 /* =========================================================

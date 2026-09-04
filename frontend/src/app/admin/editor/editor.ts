@@ -14,13 +14,14 @@ import { combineLatest, EMPTY, Subscription, map, switchMap, throwError } from "
 import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
+import { EditorExportJson } from "../editor-export-json/editor-export-json";
 
 type DocumentType = "rollo" | "minirollo" | "ley";
 
 @Component({
   selector: "app-editor",
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Footer],
+  imports: [CommonModule, FormsModule, RouterModule, Footer, EditorExportJson],
   templateUrl: "./editor.html",
   styleUrl: "./editor.scss",
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -31,6 +32,9 @@ export class Editor implements OnInit, OnDestroy {
   readonly documentType = signal<DocumentType>("rollo");
   readonly titulo = signal("");
   readonly contenido = signal("");
+  readonly pagina = signal<number | null>(null);
+  readonly shownNumber = signal<number | null>(null);
+  readonly indexInPage = signal<number | null>(null);
   readonly cargando = signal(true);
   readonly error = signal("");
 

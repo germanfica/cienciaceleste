@@ -125,9 +125,14 @@
               Guardar
             </button>
 
-            <button class="button button--export" type="button">
+            <!-- <button class="button button--export" type="button">
               Exportar sitio
-            </button>
+            </button> -->
+
+            <app-editor-export-json [documentType]="documentType()" [isNewDocument]="isNewDocument()"
+              [id]="documentId()" [pagina]="pagina()" [titulo]="titulo()" [contenido]="contenido()"
+              [shownNumber]="shownNumber()" [indexInPage]="indexInPage()"
+              [disabled]="cargando() || !!error()"></app-editor-export-json>
           </div>
         </footer>
 

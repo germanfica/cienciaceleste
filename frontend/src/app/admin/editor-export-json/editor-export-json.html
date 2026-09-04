@@ -1,1 +1,16 @@
-<p>editor-export-json works!</p>
+<div class="export-json">
+  <button
+    class="export-json__button"
+    type="button"
+    [disabled]="disabled || exporting()"
+    (click)="exportarJson()"
+  >
+    {{ exporting() ? "Exportando..." : "Exportar JSON" }}
+  </button>
+
+  @if (exportError()) {
+    <p class="export-json__error" role="alert">
+      {{ exportError() }}
+    </p>
+  }
+</div>
