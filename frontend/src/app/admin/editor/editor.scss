@@ -247,9 +247,21 @@ a {
 }
 
 .field > span,
-.audio-field > span {
+.audio-field > span,
+.document-author > span {
   font-size: 1.08rem;
   font-weight: 700;
+}
+
+.document-author {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+
+  p {
+    margin: 0;
+  }
 }
 
 /* =========================================================
@@ -325,6 +337,11 @@ a {
   display: block;
   margin-bottom: 12px;
   text-transform: uppercase;
+}
+
+.preview__author {
+  text-align: right;
+  font-weight: 700;
 }
 
 /* =========================================================

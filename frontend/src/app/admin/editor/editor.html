@@ -49,6 +49,7 @@
                       [attr.aria-label]="'Título ' + documentGenitiveName()"
                     />
                   </label>
+
                 }
 
                 <label class="field field--grow">
@@ -62,6 +63,13 @@
                     [attr.aria-label]="'Contenido ' + documentGenitiveName()"
                   ></textarea>
                 </label>
+
+                @if (documentType() !== "ley") {
+                  <div class="document-author">
+                    <span>Autor</span>
+                    <p>{{ autor }}</p>
+                  </div>
+                }
 
                 <div class="audio-field">
                   <span>Audiolibro (opcional)</span>
@@ -96,6 +104,10 @@
               }
 
               <p>{{ contenido() }}</p>
+
+              @if (documentType() !== "ley") {
+                <p class="preview__author">Escribe: {{ autor }}</p>
+              }
 
               <a class="preview__listen" href="#" (click)="$event.preventDefault(); audioPreview.focus()">
                 Escuchar

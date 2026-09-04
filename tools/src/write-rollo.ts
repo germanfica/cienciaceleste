@@ -11,6 +11,8 @@ export type WriteRolloRequest = {
   autor?: string | null;
 };
 
+const DEFAULT_AUTHOR = "El Alfa y la Omega";
+
 type JsonObject = Record<string, unknown>;
 
 function isObject(value: unknown): value is JsonObject {
@@ -105,13 +107,12 @@ export function renderRolloHtml(request: WriteRolloRequest): string {
     .map(contentRow)
     .join("\n");
 
-  const authorRow = request.autor
-    ? [
-        "      <tr>",
-        `        <td class="textoderecha">${renderText(request.autor)}</td>`,
-        "      </tr>",
-      ].join("\n")
-    : "";
+  const autor = request.autor?.trim() || DEFAULT_AUTHOR;
+  const authorRow = [
+    "      <tr>",
+    `        <td colspan="2" class="textoderecha">Escribe: ${renderText(autor)}</td>`,
+    "      </tr>",
+  ].join("\n");
 
   return [
     "<!doctype html>",
@@ -161,7 +162,10 @@ function existingAuthor(html: string): string | null {
         .replace(/<br\s*\/?>/gi, "\n")
         .replace(/<[^>]*>/g, " "),
     ).replace(/\s+/g, " ").trim();
-    return text || null;
+    const author = /^ESCRIBE\s*[:.\-–—]?\s*(.+?)\s*$/i.exec(text)?.[1]
+      ?.replace(/\s*[.\-–—]+$/, "")
+      .trim();
+    return author || text || null;
   }
 
   return null;

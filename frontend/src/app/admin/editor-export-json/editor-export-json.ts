@@ -11,13 +11,15 @@ import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
 export type EditorDocumentType = "rollo" | "minirollo" | "ley";
 
+const DEFAULT_AUTHOR = "El Alfa y la Omega";
+
 export type WriteRolloRequest = {
   operation: "create" | "replace";
   id: number;
   pagina: number;
   titulo: string;
   contenido: string;
-  autor?: string | null;
+  autor: string;
 };
 
 export type WriteMinirolloRequest = {
@@ -26,7 +28,7 @@ export type WriteMinirolloRequest = {
   pagina: number;
   titulo: string;
   contenido: string;
-  autor?: string | null;
+  autor: string;
 };
 
 export type WriteLeyRequest =
@@ -81,7 +83,7 @@ export class EditorExportJson {
   @Input() pagina: number | null = null;
   @Input() titulo = "";
   @Input({ required: true }) contenido = "";
-  @Input() autor: string | null | undefined = undefined;
+  @Input() autor = DEFAULT_AUTHOR;
   @Input() shownNumber: number | null = null;
   @Input() indexInPage: number | null = null;
   @Input() disabled = false;
@@ -187,12 +189,9 @@ export class EditorExportJson {
       id,
       pagina,
       titulo: this.requiredText(this.titulo, "El título"),
-      contenido
+      contenido,
+      autor: this.requiredText(this.autor, "El autor")
     };
-
-    if (this.autor !== undefined) {
-      request.autor = this.optionalText(this.autor, "El autor");
-    }
 
     return request;
   }
@@ -289,11 +288,4 @@ export class EditorExportJson {
     return text;
   }
 
-  private optionalText(value: string | null, label: string): string | null {
-    if (value === null || value === "") {
-      return null;
-    }
-
-    return this.requiredText(value, label);
-  }
 }

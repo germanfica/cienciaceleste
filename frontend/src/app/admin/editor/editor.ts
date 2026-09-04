@@ -18,6 +18,8 @@ import { EditorExportJson } from "../editor-export-json/editor-export-json";
 
 type DocumentType = "rollo" | "minirollo" | "ley";
 
+const DEFAULT_AUTHOR = "El Alfa y la Omega";
+
 @Component({
   selector: "app-editor",
   standalone: true,
@@ -32,6 +34,7 @@ export class Editor implements OnInit, OnDestroy {
   readonly documentType = signal<DocumentType>("rollo");
   readonly titulo = signal("");
   readonly contenido = signal("");
+  readonly autor = DEFAULT_AUTHOR;
   readonly pagina = signal<number | null>(null);
   readonly shownNumber = signal<number | null>(null);
   readonly indexInPage = signal<number | null>(null);
@@ -174,6 +177,7 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   private cargarDocumento(doc: DocJson): void {
+    //this.autor.set(doc.autor?.trim() || DEFAULT_AUTHOR);
     if (this.documentType() === "ley") {
       this.titulo.set("");
       this.contenido.set(doc.titulo ?? "");
