@@ -1,1 +1,59 @@
-<p>admin-menu works!</p>
+<nav class="admin-menu" aria-label="Menú de administración">
+  <section class="admin-menu__section admin-menu__section--desktop" aria-labelledby="admin-menu-desktop"
+    routerLinkActive="admin-menu__section--active" [routerLinkActiveOptions]="{ exact: true }">
+    <h2 id="admin-menu-desktop">Escritorio</h2>
+    <ul>
+      <li routerLinkActive="admin-menu__item--active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/admin" routerLinkActive="admin-menu__link--active" [routerLinkActiveOptions]="{ exact: true }"
+          ariaCurrentWhenActive="page">
+          Inicio
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="admin-menu__section" aria-labelledby="admin-menu-leyes"
+    routerLinkActive="admin-menu__section--active">
+    <h2 id="admin-menu-leyes">Divinas leyes</h2>
+    <ul>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divinas-leyes" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Administrar</a>
+      </li>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divina-ley/nuevo" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Nueva divina ley</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="admin-menu__section" aria-labelledby="admin-menu-rollos"
+    routerLinkActive="admin-menu__section--active">
+    <h2 id="admin-menu-rollos">Divinos rollos</h2>
+    <ul>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divinos-rollos" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Administrar</a>
+      </li>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divino-rollo/nuevo" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Nuevo divino rollo</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="admin-menu__section" aria-labelledby="admin-menu-minirollos"
+    routerLinkActive="admin-menu__section--active">
+    <h2 id="admin-menu-minirollos">Divinos minirollos</h2>
+    <ul>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divinos-minirollos" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Administrar</a>
+      </li>
+      <li routerLinkActive="admin-menu__item--active">
+        <a routerLink="/admin/divino-minirollo/nuevo" routerLinkActive="admin-menu__link--active"
+          ariaCurrentWhenActive="page">Nuevo divino minirollo</a>
+      </li>
+    </ul>
+  </section>
+</nav>

@@ -10,32 +10,8 @@
           <h1 class="dashboard-panel__title" id="dashboard-title">Panel de administración</h1>
 
           <div class="dashboard-sections">
-            <article class="dashboard-card">
-              <h2>Divinas leyes</h2>
-
-              <nav class="dashboard-card__actions" aria-label="Acciones de divinas leyes">
-                <a routerLink="/admin/divinas-leyes">Administrar</a>
-                <a routerLink="/admin/divina-ley/nuevo">Nueva divina ley</a>
-              </nav>
-            </article>
-
-            <article class="dashboard-card">
-              <h2>Divinos rollos</h2>
-
-              <nav class="dashboard-card__actions" aria-label="Acciones de divinos rollos">
-                <a routerLink="/admin/divinos-rollos">Administrar</a>
-                <a routerLink="/admin/divino-rollo/nuevo">Nuevo divino rollo</a>
-              </nav>
-            </article>
-
-            <article class="dashboard-card">
-              <h2>Divinos minirollos</h2>
-
-              <nav class="dashboard-card__actions" aria-label="Acciones de divinos minirollos">
-                <a routerLink="/admin/divinos-minirollos">Administrar</a>
-                <a routerLink="/admin/divino-minirollo/nuevo">Nuevo divino minirollo</a>
-              </nav>
-            </article>
+            <app-admin-menu></app-admin-menu>
+            <div class="dashboard-sections__content"></div>
           </div>
 
           <nav class="dashboard-navigation" aria-label="Navegación de administración">

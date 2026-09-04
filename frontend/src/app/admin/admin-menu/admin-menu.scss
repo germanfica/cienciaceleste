@@ -1,0 +1,78 @@
+:host {
+  --link-blue: #0000cc;
+  --orange: #ff9700;
+  --orange-light: #ffad13;
+  --line: #ff6a00;
+
+  display: block;
+  flex: 0 0 15rem;
+  align-self: stretch;
+  border-right: 2px solid var(--line);
+  background: #fff7e8;
+  color: #000;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.admin-menu {
+  width: 100%;
+}
+
+.admin-menu__section h2 {
+  display: block;
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  background: var(--orange-light);
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.admin-menu__section {
+  border-top: 2px solid var(--line);
+}
+
+.admin-menu__section ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.75rem 0.85rem 0.85rem 1.6rem;
+}
+
+.admin-menu__section li::marker {
+  color: var(--orange);
+}
+
+.admin-menu a {
+  color: var(--link-blue);
+  text-decoration: underline;
+}
+
+.admin-menu a:hover {
+  background: #ffe2ae;
+}
+
+.admin-menu a:focus-visible {
+  outline: 2px solid var(--link-blue);
+  outline-offset: 2px;
+}
+
+.admin-menu .admin-menu__link--active {
+  font-weight: bold;
+}
+
+@media (max-width: 680px) {
+  :host {
+    flex-basis: auto;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 2px solid var(--line);
+  }
+}
