@@ -10,7 +10,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { combineLatest, Subscription, map, switchMap, throwError } from "rxjs";
+import { combineLatest, EMPTY, Subscription, map, switchMap, throwError } from "rxjs";
 import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
@@ -27,6 +27,7 @@ type DocumentType = "rollo" | "minirollo" | "ley";
 })
 export class Editor implements OnInit, OnDestroy {
   readonly documentId = signal<number | null>(null);
+  readonly isNewDocument = signal(false);
   readonly documentType = signal<DocumentType>("rollo");
   readonly titulo = signal("");
   readonly contenido = signal("");
@@ -47,6 +48,9 @@ export class Editor implements OnInit, OnDestroy {
   });
   readonly documentNameWithArticle = computed(() =>
     this.documentType() === "ley" ? "la divina ley" : `el ${this.documentName()}`
+  );
+  readonly newDocumentHeading = computed(() =>
+    this.documentType() === "ley" ? "Nueva divina ley" : `Nuevo ${this.documentName()}`
   );
   readonly documentGenitiveName = computed(() =>
     this.documentType() === "ley" ? "de la divina ley" : `del ${this.documentName()}`
@@ -100,17 +104,30 @@ export class Editor implements OnInit, OnDestroy {
       combineLatest([this.route.paramMap, this.route.data])
         .pipe(
           map(([params, data]) => ({
-            id: Number(params.get("id")),
+            routeId: params.get("id"),
             documentType: this.parseDocumentType(data["documentType"])
           })),
-          switchMap(({ id, documentType }) => {
+          switchMap(({ routeId, documentType }) => {
             this.documentType.set(documentType);
+
+            if (routeId === "nuevo") {
+              this.documentId.set(null);
+              this.isNewDocument.set(true);
+              this.titulo.set("");
+              this.contenido.set("");
+              this.cargando.set(false);
+              this.error.set("");
+              return EMPTY;
+            }
+
+            const id = Number(routeId);
 
             if (!Number.isInteger(id) || id <= 0) {
               return throwError(() => new Error(`El ID ${this.documentGenitiveName()} no es válido.`));
             }
 
             this.documentId.set(id);
+            this.isNewDocument.set(false);
             this.cargando.set(true);
             this.error.set("");
 

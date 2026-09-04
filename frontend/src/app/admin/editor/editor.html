@@ -13,9 +13,13 @@
 
           <section class="panel panel--editor">
             <h2 class="panel__title">
-              Editar {{ documentName() }}
-              @if (documentId(); as id) {
-                #{{ id }}
+              @if (isNewDocument()) {
+                {{ newDocumentHeading() }}
+              } @else {
+                Editar {{ documentName() }}
+                @if (documentId(); as id) {
+                  #{{ id }}
+                }
               }
             </h2>
 
