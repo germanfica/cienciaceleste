@@ -6,6 +6,13 @@ const { cleanInit, cleanPost } = require("./clean");
 const clean = cleanInit;
 const buildTS = npmRun("build");
 
+// JSON -> HTML. DOC_INPUT points to the request file and is inherited by Node.
+// Example: DOC_INPUT=/tmp/rollo.json gulp <registered-task-name>
+const writeHtml = series(
+  buildTS,
+  nodeOut("write-rollo.js", ["--docs ../docs/"])
+);
+
 const convert = series(
   buildTS,
   nodeOut("extract-rollo.js", [
@@ -62,6 +69,7 @@ module.exports = {
   clean,
   cleanPost,
   buildTS,
+  writeHtml,
   convert,
   dedup,
   checkSequence,

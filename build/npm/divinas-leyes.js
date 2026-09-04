@@ -9,6 +9,13 @@ const { cleanInit, cleanPost } = require("./clean");
 const clean = cleanInit;
 const buildTS = npmRun("build");
 
+// JSON -> HTML. DOC_INPUT points to the request file and is inherited by Node.
+// Example: DOC_INPUT=/tmp/ley.json gulp <registered-task-name>
+const writeHtml = series(
+  buildTS,
+  nodeOut("write-ley.js", ["--docs ../docs/"])
+);
+
 // Namespace y patrón específicos de "divinas-leyes"
 const NS = "divinas-leyes";
 // Ejemplos: .../divinasleyes.php-pagina=12.htm
@@ -101,6 +108,7 @@ module.exports = {
   clean,
   cleanPost,
   buildTS,
+  writeHtml,
   convert,
   dedup,
   checkSequence,
