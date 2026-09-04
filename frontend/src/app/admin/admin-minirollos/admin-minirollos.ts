@@ -7,10 +7,11 @@ import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
 import { IndexPaginator } from "../../index-paginator/index-paginator";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
+import { AdminTopbar } from "../admin-topbar/admin-topbar";
 
 @Component({
   selector: 'app-admin-minirollos',
-  imports: [CommonModule, RouterModule, Footer, IndexPaginator],
+  imports: [CommonModule, RouterModule, Footer, IndexPaginator, AdminTopbar],
   providers: [Pagination],
   templateUrl: './admin-minirollos.html',
   styleUrl: './admin-minirollos.scss',

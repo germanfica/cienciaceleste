@@ -1,1 +1,82 @@
-<p>admin-topbar works!</p>
+<nav class="admin-topbar" aria-label="Menú de administración" (keydown.escape)="closeMenu()">
+  <a class="admin-topbar__home" routerLink="/admin" routerLinkActive="admin-topbar__home--active"
+    [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="closeMenu()">
+    Inicio
+  </a>
+
+  <div class="admin-topbar__dropdown" [class.admin-topbar__dropdown--active]="activeSection() === 'leyes'"
+    [class.admin-topbar__dropdown--open]="openSection() === 'leyes'" (mouseenter)="openMenu('leyes')"
+    (mouseleave)="closeMenu()" (focusin)="openMenu('leyes')" (focusout)="closeMenuFromFocus($event)">
+    <button type="button" aria-controls="admin-topbar-leyes"
+      [attr.aria-expanded]="isMobile() || openSection() === 'leyes'" (click)="toggleSection($event, 'leyes')">
+      Divinas leyes
+      <span aria-hidden="true"></span>
+    </button>
+
+    <h2 class="admin-topbar__section-title">Divinas leyes</h2>
+
+    <ul id="admin-topbar-leyes" [hidden]="!isMobile() && openSection() !== 'leyes'">
+      <li>
+        <a routerLink="/admin/divinas-leyes" routerLinkActive="admin-topbar__link--active" (click)="closeMenu()">
+          Administrar
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/divina-ley/nuevo" routerLinkActive="admin-topbar__link--active" (click)="closeMenu()">
+          Nueva divina ley
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="admin-topbar__dropdown" [class.admin-topbar__dropdown--active]="activeSection() === 'rollos'"
+    [class.admin-topbar__dropdown--open]="openSection() === 'rollos'" (mouseenter)="openMenu('rollos')"
+    (mouseleave)="closeMenu()" (focusin)="openMenu('rollos')" (focusout)="closeMenuFromFocus($event)">
+    <button type="button" aria-controls="admin-topbar-rollos"
+      [attr.aria-expanded]="isMobile() || openSection() === 'rollos'" (click)="toggleSection($event, 'rollos')">
+      Divinos rollos
+      <span aria-hidden="true"></span>
+    </button>
+
+    <h2 class="admin-topbar__section-title">Divinos rollos</h2>
+
+    <ul id="admin-topbar-rollos" [hidden]="!isMobile() && openSection() !== 'rollos'">
+      <li>
+        <a routerLink="/admin/divinos-rollos" routerLinkActive="admin-topbar__link--active" (click)="closeMenu()">
+          Administrar
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/divino-rollo/nuevo" routerLinkActive="admin-topbar__link--active" (click)="closeMenu()">
+          Nuevo divino rollo
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="admin-topbar__dropdown" [class.admin-topbar__dropdown--active]="activeSection() === 'minirollos'"
+    [class.admin-topbar__dropdown--open]="openSection() === 'minirollos'" (mouseenter)="openMenu('minirollos')"
+    (mouseleave)="closeMenu()" (focusin)="openMenu('minirollos')" (focusout)="closeMenuFromFocus($event)">
+    <button type="button" aria-controls="admin-topbar-minirollos"
+      [attr.aria-expanded]="isMobile() || openSection() === 'minirollos'" (click)="toggleSection($event, 'minirollos')">
+      Divinos minirollos
+      <span aria-hidden="true"></span>
+    </button>
+
+    <h2 class="admin-topbar__section-title">Divinos minirollos</h2>
+
+    <ul id="admin-topbar-minirollos" [hidden]="!isMobile() && openSection() !== 'minirollos'">
+      <li>
+        <a routerLink="/admin/divinos-minirollos" routerLinkActive="admin-topbar__link--active" (click)="closeMenu()">
+          Administrar
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/divino-minirollo/nuevo" routerLinkActive="admin-topbar__link--active"
+          (click)="closeMenu()">
+          Nuevo divino minirollo
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -7,10 +7,11 @@ import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
 import { IndexPaginator } from "../../index-paginator/index-paginator";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
+import { AdminTopbar } from "../admin-topbar/admin-topbar";
 
 @Component({
   selector: 'app-admin-divinas-leyes',
-  imports: [CommonModule, RouterModule, Footer, IndexPaginator],
+  imports: [CommonModule, RouterModule, Footer, IndexPaginator, AdminTopbar],
   providers: [Pagination],
   templateUrl: './admin-divinas-leyes.html',
   styleUrl: './admin-divinas-leyes.scss',
