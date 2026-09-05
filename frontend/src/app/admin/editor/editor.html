@@ -97,7 +97,12 @@
                 </a>
               </nav>
 
-              @if (documentType() !== "ley") {
+              @if (documentType() === "minirollo") {
+                <h3 class="preview__minirollo-heading">
+                  <span>Escribe: {{ autor }}</span>
+                  <span>{{ titulo() || " " }}</span>
+                </h3>
+              } @else if (documentType() === "rollo") {
                 <h3>
                   <u>{{ titulo() || " " }}</u>
                 </h3>
@@ -105,7 +110,7 @@
 
               <p>{{ contenido() }}</p>
 
-              @if (documentType() !== "ley") {
+              @if (documentType() === "rollo") {
                 <p class="preview__author">Escribe: {{ autor }}</p>
               }
 

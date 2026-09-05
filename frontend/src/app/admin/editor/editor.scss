@@ -339,6 +339,23 @@ a {
   text-transform: uppercase;
 }
 
+.preview h3.preview__minirollo-heading {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+
+  span {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+}
+
+.preview h3.preview__minirollo-heading + p {
+  margin-top: 20px;
+}
+
 .preview__author {
   text-align: right;
   font-weight: 700;
