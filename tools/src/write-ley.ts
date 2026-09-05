@@ -17,6 +17,8 @@ export type WriteLeyRequest =
       contenido: string;
     };
 
+const LEYES_PER_PAGE = 100;
+
 type JsonObject = Record<string, unknown>;
 
 type TableCell = {
@@ -40,7 +42,7 @@ function isObject(value: unknown): value is JsonObject {
 }
 
 function positiveInteger(value: unknown, field: string): number {
-  if (!Number.isInteger(value) || Number(value) <= 0) {
+  if (!Number.isSafeInteger(value) || Number(value) <= 0) {
     throw new Error(`${field} debe ser un entero mayor que cero.`);
   }
   return Number(value);
@@ -190,7 +192,7 @@ function scanRows(html: string, pagina: number): {
 } {
   const textRows: SourceRow[] = [];
   const leyes: LeyRow[] = [];
-  const expression = /<tr\b([^>]*)>[\s\S]*?<\/tr\s*>/gi;
+  const expression = /<tr\b([^>]*)>/gi;
   let match: RegExpExecArray | null;
   let skippedIntro = false;
 
@@ -198,7 +200,17 @@ function scanRows(html: string, pagina: number): {
     const attributes = match[1] ?? "";
     if (!hasClass(attributes, "texto")) continue;
 
-    const rowHtml = match[0];
+    // Scan opening tags separately so outer layout rows do not consume laws.
+    const closing = /<\/tr\s*>/gi;
+    closing.lastIndex = expression.lastIndex;
+    const end = closing.exec(html);
+    if (!end) throw new Error(`Fila sin cierre en la página ${pagina}.`);
+    const rowEnd = closing.lastIndex;
+    const rowHtml = html.slice(match.index, rowEnd);
+    if (/<tr\b/i.test(html.slice(expression.lastIndex, end.index))) {
+      throw new Error(`Fila de ley con filas anidadas en la página ${pagina}.`);
+    }
+    expression.lastIndex = rowEnd;
     const row: SourceRow = {
       start: match.index,
       end: expression.lastIndex,
@@ -281,16 +293,6 @@ function updateLeyRow(
   return html.slice(0, row.start) + rendered + html.slice(row.end);
 }
 
-async function exists(file: string): Promise<boolean> {
-  try {
-    await fs.access(file);
-    return true;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return false;
-    throw error;
-  }
-}
-
 async function removeIfPresent(file: string): Promise<void> {
   try {
     await fs.unlink(file);
@@ -332,47 +334,90 @@ async function writeAtomic(target: string, html: string): Promise<void> {
   }
 }
 
+type LeyPage = {
+  pagina: number;
+  target: string;
+  html: string;
+  leyes: LeyRow[];
+};
+
+async function readLeyPages(directory: string): Promise<Map<number, LeyPage>> {
+  const pages = new Map<number, LeyPage>();
+  for (const name of (await fs.readdir(directory)).sort()) {
+    const match = /^divinasleyes\.php-pagina=(\d+)\.htm$/.exec(name);
+    if (!match) continue;
+    const pagina = positiveInteger(Number(match[1]), "pagina del archivo");
+    if (pages.has(pagina)) {
+      throw new Error(`Hay varios archivos para la página ${pagina}.`);
+    }
+    const target = path.join(directory, name);
+    const html = await fs.readFile(target, "utf8");
+    pages.set(pagina, { pagina, target, html, leyes: scanRows(html, pagina).leyes });
+  }
+  return pages;
+}
+
+function assertNumberAvailable(
+  pages: Map<number, LeyPage>,
+  shownNumber: number,
+  excluded?: { pagina: number; indexInPage: number },
+): void {
+  for (const page of pages.values()) {
+    for (const [index, ley] of page.leyes.entries()) {
+      if (excluded?.pagina === page.pagina && excluded.indexInPage === index + 1) continue;
+      if (ley.shownNumber === shownNumber) {
+        throw new Error(
+          `Ya existe una ley con shownNumber ${shownNumber} en la página ${page.pagina} ` +
+          `(posición ${index + 1}). No se guardó ningún cambio.`,
+        );
+      }
+    }
+  }
+}
+
 export async function writeLeyHtml(rawRequest: unknown, docsDir: string): Promise<string> {
   const request = parseRequest(rawRequest);
-  const target = path.resolve(docsDir, `divinasleyes.php-pagina=${request.pagina}.htm`);
+  const directory = path.resolve(docsDir);
 
-  await withFileLock(target, async () => {
-    const targetExists = await exists(target);
+  // All pages share the same lock: validation and writes must be serialized.
+  return withFileLock(path.join(directory, "divinasleyes"), async () => {
+    const pages = await readLeyPages(directory);
 
     if (request.operation === "update") {
-      if (!targetExists) {
-        throw new Error(`No existe la página de leyes que se quiere modificar: ${target}`);
+      const page = pages.get(request.pagina);
+      if (!page) {
+        throw new Error(`No existe la página de leyes que se quiere modificar: ${request.pagina}`);
       }
-      const current = await fs.readFile(target, "utf8");
+      if (request.shownNumber !== undefined) {
+        assertNumberAvailable(pages, request.shownNumber, request);
+      }
       const updated = updateLeyRow(
-        current,
+        page.html,
         request.pagina,
         request.indexInPage,
         request.contenido,
         request.shownNumber,
       );
-      await writeAtomic(target, updated);
-      return;
+      await writeAtomic(page.target, updated);
+      return page.target;
     }
 
-    if (!targetExists) {
-      await writeAtomic(
-        target,
-        renderLeyPage(request.pagina, request.shownNumber, request.contenido),
-      );
-      return;
-    }
+    assertNumberAvailable(pages, request.shownNumber);
 
-    const current = await fs.readFile(target, "utf8");
-    const updated = appendLeyRow(
-      current,
-      request.pagina,
-      renderLeyRow(request.shownNumber, request.contenido),
-    );
+    // pagina is the starting page; full pages are never appended to.
+    let pagina = request.pagina;
+    while ((pages.get(pagina)?.leyes.length ?? 0) >= LEYES_PER_PAGE) {
+      pagina += 1;
+      positiveInteger(pagina, "pagina de destino");
+    }
+    const page = pages.get(pagina);
+    const target = page?.target ?? path.join(directory, `divinasleyes.php-pagina=${pagina}.htm`);
+    const updated = page
+      ? appendLeyRow(page.html, pagina, renderLeyRow(request.shownNumber, request.contenido))
+      : renderLeyPage(pagina, request.shownNumber, request.contenido);
     await writeAtomic(target, updated);
+    return target;
   });
-
-  return target;
 }
 
 function optionValue(argv: readonly string[], name: string): string | undefined {
