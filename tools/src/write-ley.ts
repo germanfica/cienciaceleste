@@ -2,13 +2,19 @@ import fs, { type FileHandle } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+/**
+ * create: legacy shownNumber is the INTERNAL sequential ID exported by the editor.
+ * New callers may use id instead. officialNumber optionally sets the HTML number.
+ * update: pagina/indexInPage refer to the frontend index (100 items per page).
+ * Its optional shownNumber retains the old meaning: replacement HTML number.
+ */
 export type WriteLeyRequest =
-  | {
+  | ({
       operation: "create";
       pagina: number;
-      shownNumber: number;
+      officialNumber?: number;
       contenido: string;
-    }
+    } & ({ id: number; shownNumber?: number } | { id?: number; shownNumber: number }))
   | {
       operation: "update";
       pagina: number;
@@ -66,11 +72,19 @@ function parseRequest(value: unknown): WriteLeyRequest {
   const contenido = requiredText(value["contenido"], "contenido");
 
   if (value["operation"] === "create") {
+    const id = positiveInteger(value["id"] ?? value["shownNumber"], "id interno");
+    if (value["shownNumber"] !== undefined &&
+        positiveInteger(value["shownNumber"], "shownNumber (ID interno)") !== id) {
+      throw new Error("id y shownNumber deben indicar el mismo ID interno.");
+    }
     return {
       operation: "create",
       pagina,
-      shownNumber: positiveInteger(value["shownNumber"], "shownNumber"),
+      id,
       contenido,
+      ...(value["officialNumber"] === undefined ? {} : {
+        officialNumber: positiveInteger(value["officialNumber"], "officialNumber"),
+      }),
     };
   }
 
@@ -354,17 +368,15 @@ async function readLeyPages(directory: string): Promise<Map<number, LeyPage>> {
     const html = await fs.readFile(target, "utf8");
     pages.set(pagina, { pagina, target, html, leyes: scanRows(html, pagina).leyes });
   }
-  return pages;
+  return new Map([...pages.entries()].sort(([a], [b]) => a - b));
 }
 
 function assertNumberAvailable(
   pages: Map<number, LeyPage>,
   shownNumber: number,
-  excluded?: { pagina: number; indexInPage: number },
 ): void {
   for (const page of pages.values()) {
     for (const [index, ley] of page.leyes.entries()) {
-      if (excluded?.pagina === page.pagina && excluded.indexInPage === index + 1) continue;
       if (ley.shownNumber === shownNumber) {
         throw new Error(
           `Ya existe una ley con shownNumber ${shownNumber} en la página ${page.pagina} ` +
@@ -375,47 +387,103 @@ function assertNumberAvailable(
   }
 }
 
+type LeyLocation = {
+  id: number;
+  page: LeyPage;
+  indexInPage: number;
+  row: LeyRow;
+};
+
+function correlateLeyes(pages: Map<number, LeyPage>): LeyLocation[] {
+  const locations: LeyLocation[] = [];
+  // Same order as a full extract-leyes run: numeric source page, then row.
+  for (const page of pages.values()) {
+    for (const [index, row] of page.leyes.entries()) {
+      locations.push({ id: locations.length + 1, page, indexInPage: index + 1, row });
+    }
+  }
+  return locations;
+}
+
 export async function writeLeyHtml(rawRequest: unknown, docsDir: string): Promise<string> {
   const request = parseRequest(rawRequest);
   const directory = path.resolve(docsDir);
 
-  // All pages share the same lock: validation and writes must be serialized.
   return withFileLock(path.join(directory, "divinasleyes"), async () => {
     const pages = await readLeyPages(directory);
+    const locations = correlateLeyes(pages);
 
     if (request.operation === "update") {
-      const page = pages.get(request.pagina);
-      if (!page) {
-        throw new Error(`No existe la página de leyes que se quiere modificar: ${request.pagina}`);
+      if (request.indexInPage > LEYES_PER_PAGE) {
+        throw new Error(`indexInPage no puede superar ${LEYES_PER_PAGE}.`);
       }
-      if (request.shownNumber !== undefined) {
-        assertNumberAvailable(pages, request.shownNumber, request);
+      const id = positiveInteger(
+        (request.pagina - 1) * LEYES_PER_PAGE + request.indexInPage,
+        "id interno",
+      );
+      const location = locations[id - 1];
+      if (!location) throw new Error(`No existe la ley con ID interno ${id}.`);
+      const { page, row, indexInPage } = location;
+      // Historical repeated numbers are allowed; preserve them on content edits.
+      if (request.shownNumber !== undefined && request.shownNumber !== row.shownNumber) {
+        assertNumberAvailable(pages, request.shownNumber);
       }
       const updated = updateLeyRow(
-        page.html,
-        request.pagina,
-        request.indexInPage,
-        request.contenido,
-        request.shownNumber,
+        page.html, page.pagina, indexInPage, request.contenido, request.shownNumber,
       );
       await writeAtomic(page.target, updated);
+      console.log(
+        `Ley ID ${id}: número HTML ${request.shownNumber ?? row.shownNumber}, ` +
+        `página HTML ${page.pagina}, posición ${indexInPage}.`,
+      );
       return page.target;
     }
 
-    assertNumberAvailable(pages, request.shownNumber);
+    const id = positiveInteger(request.id ?? request.shownNumber, "id interno");
+    const existing = locations[id - 1];
+    if (existing) {
+      throw new Error(
+        `Ya existe la ley con ID interno ${id}: número HTML ${existing.row.shownNumber}, ` +
+        `página HTML ${existing.page.pagina}, posición ${existing.indexInPage}. ` +
+        "No se guardó ningún cambio.",
+      );
+    }
+    const nextId = locations.length + 1;
+    if (id !== nextId) {
+      throw new Error(`El siguiente ID interno es ${nextId}; se recibió ${id}. Actualizá el índice del editor.`);
+    }
+    const indexPage = Math.ceil(id / LEYES_PER_PAGE);
+    if (request.pagina !== indexPage) {
+      throw new Error(`El ID interno ${id} corresponde a la página ${indexPage} del índice.`);
+    }
 
-    // pagina is the starting page; full pages are never appended to.
-    let pagina = request.pagina;
+    const last = locations.at(-1);
+    let officialNumber = request.officialNumber;
+    if (officialNumber === undefined) {
+      const used = new Set(locations.map(location => location.row.shownNumber));
+      officialNumber = positiveInteger((last?.row.shownNumber ?? 0) + 1, "número HTML siguiente");
+      while (used.has(officialNumber)) {
+        officialNumber = positiveInteger(officialNumber + 1, "número HTML siguiente");
+      }
+    } else {
+      assertNumberAvailable(pages, officialNumber);
+    }
+
+    // Append only at the end; filling earlier pages would change existing IDs.
+    let pagina = last?.page.pagina ?? 1;
     while ((pages.get(pagina)?.leyes.length ?? 0) >= LEYES_PER_PAGE) {
-      pagina += 1;
-      positiveInteger(pagina, "pagina de destino");
+      pagina = positiveInteger(pagina + 1, "pagina de destino");
     }
     const page = pages.get(pagina);
     const target = page?.target ?? path.join(directory, `divinasleyes.php-pagina=${pagina}.htm`);
     const updated = page
-      ? appendLeyRow(page.html, pagina, renderLeyRow(request.shownNumber, request.contenido))
-      : renderLeyPage(pagina, request.shownNumber, request.contenido);
+      ? appendLeyRow(page.html, pagina, renderLeyRow(officialNumber, request.contenido))
+      : renderLeyPage(pagina, officialNumber, request.contenido);
     await writeAtomic(target, updated);
+    console.log(
+      `Ley ID ${id}: número HTML ${officialNumber}, página HTML ${pagina}, ` +
+      `posición ${(page?.leyes.length ?? 0) + 1}.`,
+    );
     return target;
   });
 }
