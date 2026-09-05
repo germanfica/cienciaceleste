@@ -126,29 +126,47 @@ function renderLeyRow(shownNumber: number, contenido: string): string {
   ].join("\n");
 }
 
-function renderLeyPage(pagina: number, shownNumber: number, contenido: string): string {
-  const row = renderLeyRow(shownNumber, contenido)
-    .split("\n")
-    .map(line => `      ${line}`)
-    .join("\n");
+function renderPagination(pagina: number, existingPages: Iterable<number>): string {
+  const pageNumbers = [...new Set([...existingPages, pagina])].sort((a, b) => a - b);
+  const currentIndex = pageNumbers.indexOf(pagina);
+  const previous = pageNumbers[currentIndex - 1];
+  const next = pageNumbers[currentIndex + 1];
+  const links: string[] = [];
+  const link = (page: number, label: string): string =>
+    `<a href="divinasleyes.php-pagina=${page}.htm">${label}</a>`;
 
-  return [
-    "<!doctype html>",
-    '<html lang="es">',
-    "  <head>",
-    '    <meta charset="utf-8">',
-    `    <title>Divinas leyes - página ${pagina}</title>`,
-    "  </head>",
-    "  <body>",
-    "    <table>",
-    "      <tbody>",
-    row,
-    "      </tbody>",
-    "    </table>",
-    "  </body>",
-    "</html>",
-    "",
-  ].join("\n");
+  if (previous !== undefined) links.push(link(previous, "&lt; Anterior"));
+  for (const page of pageNumbers) {
+    links.push(page === pagina ? `<b>${page}</b>` : link(page, String(page)));
+  }
+  if (next !== undefined) links.push(link(next, "Siguiente &gt;"));
+  return links.join(" ");
+}
+
+async function renderLeyPage(
+  pagina: number,
+  shownNumber: number,
+  contenido: string,
+  existingPages: Iterable<number>,
+): Promise<string> {
+  // Both tools/src/write-ley.ts and tools/out/write-ley.js share this parent.
+  const templateUrl = new URL("../templates/divinas-leyes.htm", import.meta.url);
+  const template = await fs.readFile(templateUrl, "utf8");
+  for (const marker of ["{{PAGINATION}}", "{{LEY_ROWS}}"]) {
+    if (template.split(marker).length !== 2) {
+      throw new Error(`El template divinas-leyes.htm debe contener exactamente un ${marker}.`);
+    }
+  }
+  if (template.indexOf("{{PAGINATION}}") > template.indexOf("{{LEY_ROWS}}")) {
+    throw new Error("El template debe ubicar la paginación antes de las leyes.");
+  }
+
+  const pagination = renderPagination(pagina, existingPages);
+  const row = renderLeyRow(shownNumber, contenido);
+  // One pass keeps literal markers and replacement tokens in content intact.
+  return template.replace(/\{\{(?:PAGINATION|LEY_ROWS)\}\}/g, marker =>
+    marker === "{{PAGINATION}}" ? pagination : row,
+  );
 }
 
 function attributeValue(attributes: string, name: string): string | null {
@@ -478,7 +496,7 @@ export async function writeLeyHtml(rawRequest: unknown, docsDir: string): Promis
     const target = page?.target ?? path.join(directory, `divinasleyes.php-pagina=${pagina}.htm`);
     const updated = page
       ? appendLeyRow(page.html, pagina, renderLeyRow(officialNumber, request.contenido))
-      : renderLeyPage(pagina, officialNumber, request.contenido);
+      : await renderLeyPage(pagina, officialNumber, request.contenido, pages.keys());
     await writeAtomic(target, updated);
     console.log(
       `Ley ID ${id}: número HTML ${officialNumber}, página HTML ${pagina}, ` +
