@@ -11,6 +11,8 @@ export type WriteMinirolloRequest = {
   autor?: string | null;
 };
 
+const DEFAULT_AUTHOR = "El Alfa y la Omega";
+
 type JsonObject = Record<string, unknown>;
 
 function isObject(value: unknown): value is JsonObject {
@@ -82,9 +84,11 @@ function paragraphs(value: string): string[] {
 }
 
 export function renderMinirolloHtml(request: WriteMinirolloRequest): string {
-  const title = request.autor
-    ? `ESCRIBE: ${renderText(request.autor)}<br>\n${renderText(request.titulo)}`
-    : renderText(request.titulo);
+  const autor = request.autor?.trim() || DEFAULT_AUTHOR;
+  //const title = request.autor
+  //  ? `ESCRIBE: ${renderText(request.autor)}<br>\n${renderText(request.titulo)}`
+  //  : renderText(request.titulo);
+  const title = `ESCRIBE: ${renderText(autor)}<br>\n${renderText(request.titulo)}`;
 
   const contentRows = paragraphs(request.contenido)
     .map(paragraph => [
