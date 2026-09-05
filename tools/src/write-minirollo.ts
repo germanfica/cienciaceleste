@@ -84,7 +84,8 @@ function paragraphs(value: string): string[] {
 }
 
 export function renderMinirolloHtml(request: WriteMinirolloRequest): string {
-  const autor = request.autor?.trim() || DEFAULT_AUTHOR;
+  //const autor = request.autor?.trim() || DEFAULT_AUTHOR;
+  const autor = (request.autor?.trim() || DEFAULT_AUTHOR).toLocaleUpperCase("es");
   //const title = request.autor
   //  ? `ESCRIBE: ${renderText(request.autor)}<br>\n${renderText(request.titulo)}`
   //  : renderText(request.titulo);
