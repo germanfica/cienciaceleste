@@ -25,6 +25,14 @@ export type WriteLeyRequest =
 
 const LEYES_PER_PAGE = 100;
 
+type GeneratedPageFormat = "legacy" | "minimal";
+
+const WRITE_LEY_CONFIG: Readonly<{
+  generatedPageFormat: GeneratedPageFormat;
+}> = {
+  generatedPageFormat: "legacy",
+};
+
 type JsonObject = Record<string, unknown>;
 
 type TableCell = {
@@ -143,7 +151,7 @@ function renderPagination(pagina: number, existingPages: Iterable<number>): stri
   return links.join(" ");
 }
 
-async function renderLeyPage(
+async function renderLegacyLeyPage(
   pagina: number,
   shownNumber: number,
   contenido: string,
@@ -167,6 +175,49 @@ async function renderLeyPage(
   return template.replace(/\{\{(?:PAGINATION|LEY_ROWS)\}\}/g, marker =>
     marker === "{{PAGINATION}}" ? pagination : row,
   );
+}
+
+function renderMinimalLeyPage(
+  pagina: number,
+  shownNumber: number,
+  contenido: string,
+): string {
+  const row = renderLeyRow(shownNumber, contenido)
+    .split("\n")
+    .map(line => `      ${line}`)
+    .join("\n");
+
+  return [
+    "<!doctype html>",
+    '<html lang="es">',
+    "  <head>",
+    '    <meta charset="utf-8">',
+    `    <title>Divinas leyes - página ${pagina}</title>`,
+    "  </head>",
+    "  <body>",
+    "    <table>",
+    "      <tbody>",
+    row,
+    "      </tbody>",
+    "    </table>",
+    "  </body>",
+    "</html>",
+    "",
+  ].join("\n");
+}
+
+async function renderLeyPage(
+  pagina: number,
+  shownNumber: number,
+  contenido: string,
+  existingPages: Iterable<number>,
+): Promise<string> {
+  switch (WRITE_LEY_CONFIG.generatedPageFormat) {
+    case "legacy":
+      return renderLegacyLeyPage(pagina, shownNumber, contenido, existingPages);
+    case "minimal":
+      return renderMinimalLeyPage(pagina, shownNumber, contenido);
+  }
 }
 
 function attributeValue(attributes: string, name: string): string | null {
