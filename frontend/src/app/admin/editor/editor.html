@@ -73,7 +73,8 @@
                             <figcaption><button class="text-action" type="button" (click)="removeImage(part)">Quitar del contenido</button></figcaption>
                           </figure>
                         } @else {
-                          <textarea rows="5" [value]="part.text" (input)="updatePart(part, $event)" (compositionend)="updatePart(part, $event)"
+                          <textarea rows="5" [value]="part.text" (keydown.enter)="preventVisualLineBreak($event)"
+                            (input)="updatePart(part, $event)" (compositionend)="updatePart(part, $event)"
                             (keyup)="rememberCaret($event, part.start)" (click)="rememberCaret($event, part.start)" (blur)="rememberCaret($event, part.start)"
                             [attr.aria-label]="'Texto del contenido, bloque ' + ($index + 1)"></textarea>
                         }

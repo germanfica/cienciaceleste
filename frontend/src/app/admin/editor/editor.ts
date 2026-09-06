@@ -118,17 +118,39 @@ export class Editor implements OnInit, OnDestroy {
   private mediaAbort?: AbortController;
 
   private normalizeVisualText(value: string): string {
-    return value.replace(/\s+/g, " ");
+    let text = value.replace(/\s+/g, " ");
+    if (/^[ \t]*(?:\r?\n)/.test(value)) text = text.trimStart();
+    if (/(?:\r?\n)[ \t]*$/.test(value)) text = text.trimEnd();
+    return text;
+  }
+
+  private visualCaretOffset(value: string, offset: number): number {
+    const before = value.slice(0, offset);
+    const after = value.slice(offset);
+    let text = before.replace(/\s+/g, " ");
+    if (/^[ \t]*(?:\r?\n)/.test(before)) text = text.trimStart();
+    if (/(?:\r?\n)[ \t]*$/.test(before) && !/\S/.test(after)) text = text.trimEnd();
+    return text.length;
+  }
+
+  private normalizeVisualValue(value: string): string {
+    return this.splitContent(value)
+      .map(part => part.kind === "image"
+        ? part.text.trim()
+        : this.normalizeVisualText(part.text).trim())
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   private normalizeVisualContent(): void {
     if (this.sourceMode() || this.documentType() !== "rollo") return;
-    const parts = this.splitContent(this.contenido());
-    this.contenido.set(parts.map(part => part.kind === "image"
-      ? part.text.trim()
-      : this.normalizeVisualText(part.text).trim())
-      .filter(Boolean).join("\n\n"));
-    this.insertionPoint = null;
+    const value = this.contenido();
+    const point = this.insertionPoint;
+    const next = this.normalizeVisualValue(value);
+    this.contenido.set(next);
+    this.insertionPoint = point === null
+      ? null
+      : Math.min(this.normalizeVisualValue(value.slice(0, point)).length, next.length);
   }
 
   toggleSourceMode(): void {
@@ -145,9 +167,10 @@ export class Editor implements OnInit, OnDestroy {
     const appendText = (from: number, to: number, afterImage: boolean, beforeImage: boolean): void => {
       let start = from;
       let end = to;
-      if (afterImage) start += /^(?:\r?\n){1,2}/.exec(value.slice(start, end))?.[0].length ?? 0;
-      if (beforeImage) end -= /(?:\r?\n){1,2}$/.exec(value.slice(start, end))?.[0].length ?? 0;
-      result.push({ kind: "text", text: value.slice(start, end), src: "", alt: "", start, end });
+      if (afterImage) start += (/^(?:[ \t]*\r?\n)+/.exec(value.slice(start, end))?.[0].length ?? 0);
+      if (beforeImage) end -= (/(?:\r?\n[ \t]*)+$/.exec(value.slice(start, end))?.[0].length ?? 0);
+      if (start > end) end = start;
+      this.appendTextBlocks(result, value, start, end);
     };
     let start = 0;
     let afterImage = false;
@@ -165,6 +188,18 @@ export class Editor implements OnInit, OnDestroy {
     return result;
   }
 
+  private appendTextBlocks(result: ContentPart[], value: string, from: number, to: number): void {
+    const expression = /\r?\n[ \t]*\r?\n(?:[ \t]*\r?\n)*/g;
+    let start = from;
+    const end = Math.max(start, to);
+    for (const match of value.slice(start, end).matchAll(expression)) {
+      const index = start + match.index!;
+      result.push({ kind: "text", text: value.slice(start, index), src: "", alt: "", start, end: index });
+      start = index + match[0].length;
+    }
+    result.push({ kind: "text", text: value.slice(start, end), src: "", alt: "", start, end });
+  }
+
   imageUrl(value: string): string {
     try {
       const url = new URL(value, this.document.baseURI);
@@ -179,8 +214,8 @@ export class Editor implements OnInit, OnDestroy {
     const value = this.contenido();
     const raw = input.value;
     const text = this.normalizeVisualText(raw);
-    const caret = this.normalizeVisualText(raw.slice(0, input.selectionStart)).length;
-    const selectionEnd = this.normalizeVisualText(raw.slice(0, input.selectionEnd)).length;
+    const caret = this.visualCaretOffset(raw, input.selectionStart);
+    const selectionEnd = this.visualCaretOffset(raw, input.selectionEnd);
     const direction = input.selectionDirection;
     // Update the DOM even if normalization leaves the signal unchanged (for
     // example, when typing a second space). Preserve the selection position.
@@ -202,6 +237,10 @@ export class Editor implements OnInit, OnDestroy {
     }
     this.contenido.set(before + text + after);
     this.insertionPoint = before.length + caret;
+  }
+
+  preventVisualLineBreak(event: Event): void {
+    if (!(event as KeyboardEvent).isComposing) event.preventDefault();
   }
 
   rememberCaret(event: Event, start = 0): void {
