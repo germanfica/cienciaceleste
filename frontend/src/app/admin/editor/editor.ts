@@ -120,17 +120,28 @@ export class Editor implements OnInit, OnDestroy {
   private splitContent(value: string): ContentPart[] {
     const result: ContentPart[] = [];
     const expression = /^!\[([^\]\r\n]*)\]\(([^\r\n]+)\)[ \t]*$/gm;
+    // Keep image separators outside editable ranges. The textareas must never
+    // own the newlines required to serialize an image as a Markdown block.
+    const appendText = (from: number, to: number, afterImage: boolean, beforeImage: boolean): void => {
+      let start = from;
+      let end = to;
+      if (afterImage) start += /^(?:\r?\n){1,2}/.exec(value.slice(start, end))?.[0].length ?? 0;
+      if (beforeImage) end -= /(?:\r?\n){1,2}$/.exec(value.slice(start, end))?.[0].length ?? 0;
+      result.push({ kind: "text", text: value.slice(start, end), src: "", alt: "", start, end });
+    };
     let start = 0;
+    let afterImage = false;
     for (const match of value.matchAll(expression)) {
       const index = match.index!;
       const src = this.imageUrl(match[2] ?? "");
       if (!src) continue;
-      result.push({ kind: "text", text: value.slice(start, index), src: "", alt: "", start, end: index });
+      appendText(start, index, afterImage, true);
       const end = index + match[0].length;
       result.push({ kind: "image", text: match[0], src, alt: match[1] ?? "", start: index, end });
       start = end;
+      afterImage = true;
     }
-    result.push({ kind: "text", text: value.slice(start), src: "", alt: "", start, end: value.length });
+    appendText(start, value.length, afterImage, false);
     return result;
   }
 
@@ -143,8 +154,23 @@ export class Editor implements OnInit, OnDestroy {
 
   updatePart(part: ContentPart, event: Event): void {
     const input = event.target as HTMLTextAreaElement;
-    this.contenido.update(value => value.slice(0, part.start) + input.value + value.slice(part.end));
-    this.insertionPoint = part.start + input.selectionStart;
+    const value = this.contenido();
+    const text = input.value;
+    const caret = input.selectionStart;
+    let before = value.slice(0, part.start);
+    let after = value.slice(part.end);
+    // Older source may contain only one newline (or none at the document
+    // edges). Supply paragraph separators without putting them in the input.
+    if (before) {
+      const count = /(?:\r?\n)*$/.exec(before)?.[0].match(/\n/g)?.length ?? 0;
+      before += "\n".repeat(Math.max(0, 2 - count));
+    }
+    if (after) {
+      const count = /^(?:\r?\n)*/.exec(after)?.[0].match(/\n/g)?.length ?? 0;
+      after = "\n".repeat(Math.max(0, 2 - count)) + after;
+    }
+    this.contenido.set(before + text + after);
+    this.insertionPoint = before.length + caret;
   }
 
   rememberCaret(event: Event, start = 0): void {
