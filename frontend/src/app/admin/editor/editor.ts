@@ -117,6 +117,26 @@ export class Editor implements OnInit, OnDestroy {
   private insertionPoint: number | null = null;
   private mediaAbort?: AbortController;
 
+  private normalizeVisualText(value: string): string {
+    return value.replace(/\s+/g, " ");
+  }
+
+  private normalizeVisualContent(): void {
+    if (this.sourceMode() || this.documentType() !== "rollo") return;
+    const parts = this.splitContent(this.contenido());
+    this.contenido.set(parts.map(part => part.kind === "image"
+      ? part.text.trim()
+      : this.normalizeVisualText(part.text).trim())
+      .filter(Boolean).join("\n\n"));
+    this.insertionPoint = null;
+  }
+
+  toggleSourceMode(): void {
+    this.sourceMode.set(!this.sourceMode());
+    this.normalizeVisualContent();
+    this.insertionPoint = null;
+  }
+
   private splitContent(value: string): ContentPart[] {
     const result: ContentPart[] = [];
     const expression = /^!\[([^\]\r\n]*)\]\(([^\r\n]+)\)[ \t]*$/gm;
@@ -154,9 +174,20 @@ export class Editor implements OnInit, OnDestroy {
 
   updatePart(part: ContentPart, event: Event): void {
     const input = event.target as HTMLTextAreaElement;
+    // Wait for composition to finish before modifying text entered with an IME.
+    if ((event as InputEvent).isComposing) return;
     const value = this.contenido();
-    const text = input.value;
-    const caret = input.selectionStart;
+    const raw = input.value;
+    const text = this.normalizeVisualText(raw);
+    const caret = this.normalizeVisualText(raw.slice(0, input.selectionStart)).length;
+    const selectionEnd = this.normalizeVisualText(raw.slice(0, input.selectionEnd)).length;
+    const direction = input.selectionDirection;
+    // Update the DOM even if normalization leaves the signal unchanged (for
+    // example, when typing a second space). Preserve the selection position.
+    if (raw !== text) {
+      input.value = text;
+      input.setSelectionRange(caret, selectionEnd, direction);
+    }
     let before = value.slice(0, part.start);
     let after = value.slice(part.end);
     // Older source may contain only one newline (or none at the document
@@ -180,6 +211,7 @@ export class Editor implements OnInit, OnDestroy {
   removeImage(part: ContentPart): void {
     this.contenido.update(value => value.slice(0, part.start) + value.slice(part.end));
     this.insertionPoint = part.start;
+    this.normalizeVisualContent();
   }
 
   async openGallery(): Promise<void> {
@@ -227,6 +259,7 @@ export class Editor implements OnInit, OnDestroy {
     this.contenido.set(value.slice(0, point) + markdown + value.slice(point));
     this.insertionPoint = point + markdown.length;
     this.galleryOpen.set(false);
+    this.normalizeVisualContent();
   }
 
   private readonly sub = new Subscription();
@@ -286,6 +319,7 @@ export class Editor implements OnInit, OnDestroy {
         .subscribe({
           next: doc => {
             this.cargarDocumento(doc);
+            this.normalizeVisualContent();
             this.cargando.set(false);
           },
           error: () => {
