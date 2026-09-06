@@ -7,6 +7,7 @@ import {
   OnInit,
   signal
 } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
@@ -15,6 +16,9 @@ import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 import { EditorExportJson } from "../editor-export-json/editor-export-json";
+
+type MediaItem = { path: string; name: string; bytes: number; type: string };
+type ContentPart = { kind: "text" | "image"; text: string; src: string; alt: string; start: number; end: number };
 
 type DocumentType = "rollo" | "minirollo" | "ley";
 
@@ -99,9 +103,110 @@ export class Editor implements OnInit, OnDestroy {
     }
   });
 
+  readonly sourceMode = signal(false);
+  readonly galleryOpen = signal(false);
+  readonly mediaLoading = signal(false);
+  readonly mediaError = signal("");
+  readonly mediaQuery = signal("");
+  readonly mediaItems = signal<MediaItem[]>([]);
+  readonly mediaPage = signal(0);
+  readonly filteredMedia = computed(() => this.mediaItems().filter(item =>
+    item.name.toLowerCase().includes(this.mediaQuery().toLowerCase())));
+  readonly visibleMedia = computed(() => this.filteredMedia().slice(this.mediaPage() * 40, (this.mediaPage() + 1) * 40));
+  readonly contentParts = computed(() => this.splitContent(this.contenido()));
+  private insertionPoint: number | null = null;
+  private mediaAbort?: AbortController;
+
+  private splitContent(value: string): ContentPart[] {
+    const result: ContentPart[] = [];
+    const expression = /^!\[([^\]\r\n]*)\]\(([^\r\n]+)\)[ \t]*$/gm;
+    let start = 0;
+    for (const match of value.matchAll(expression)) {
+      const index = match.index!;
+      const src = this.imageUrl(match[2] ?? "");
+      if (!src) continue;
+      result.push({ kind: "text", text: value.slice(start, index), src: "", alt: "", start, end: index });
+      const end = index + match[0].length;
+      result.push({ kind: "image", text: match[0], src, alt: match[1] ?? "", start: index, end });
+      start = end;
+    }
+    result.push({ kind: "text", text: value.slice(start), src: "", alt: "", start, end: value.length });
+    return result;
+  }
+
+  imageUrl(value: string): string {
+    try {
+      const url = new URL(value, this.document.baseURI);
+      return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+    } catch { return ""; }
+  }
+
+  updatePart(part: ContentPart, event: Event): void {
+    const input = event.target as HTMLTextAreaElement;
+    this.contenido.update(value => value.slice(0, part.start) + input.value + value.slice(part.end));
+    this.insertionPoint = part.start + input.selectionStart;
+  }
+
+  rememberCaret(event: Event, start = 0): void {
+    this.insertionPoint = start + (event.target as HTMLTextAreaElement).selectionStart;
+  }
+
+  removeImage(part: ContentPart): void {
+    this.contenido.update(value => value.slice(0, part.start) + value.slice(part.end));
+    this.insertionPoint = part.start;
+  }
+
+  async openGallery(): Promise<void> {
+    this.galleryOpen.set(true);
+    await this.reloadMedia();
+  }
+
+  async reloadMedia(): Promise<void> {
+    this.mediaAbort?.abort();
+    const controller = new AbortController();
+    this.mediaAbort = controller;
+    this.mediaLoading.set(true);
+    this.mediaError.set("");
+    try {
+      const response = await fetch(new URL("media/index.json", this.document.baseURI), { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error("No se pudo cargar el índice. Ejecutá npm run gulp -- media:index y recargá la galería.");
+      const data: unknown = await response.json();
+      const index = data as { version?: unknown; items?: unknown };
+      if (!index || index.version !== 1 || !Array.isArray(index.items)) throw new Error("El índice multimedia no tiene un formato válido.");
+      const items: MediaItem[] = [];
+      for (const raw of index.items) {
+        const item = raw as Partial<MediaItem> | null;
+        if (!item || typeof item.path !== "string" || typeof item.name !== "string" || typeof item.bytes !== "number" || typeof item.type !== "string") continue;
+        // Only app-relative files from the static index, with no URL scheme or traversal.
+        if (!/^(?:[^/:?#\\]+\/)*[^/:?#\\]+$/.test(item.path)) continue;
+        let segments: string[];
+        try { segments = item.path.split("/").map(segment => decodeURIComponent(segment)); } catch { continue; }
+        if (segments.some(segment => segment === "." || segment === ".." || /[\\/\x00-\x1f]/.test(segment))) continue;
+        items.push(item as MediaItem);
+      }
+      this.mediaItems.set(items);
+      this.mediaPage.set(0);
+    } catch (error) {
+      if (!controller.signal.aborted) this.mediaError.set(error instanceof Error ? error.message : "No se pudo cargar la galería.");
+    } finally {
+      if (!controller.signal.aborted) this.mediaLoading.set(false);
+    }
+  }
+
+  insertImage(item: MediaItem): void {
+    const value = this.contenido();
+    const point = Math.min(this.insertionPoint ?? value.length, value.length);
+    const alt = item.name.replace(/[\[\]\r\n]/g, " ");
+    const markdown = `\n\n![${alt}](${item.path})\n\n`;
+    this.contenido.set(value.slice(0, point) + markdown + value.slice(point));
+    this.insertionPoint = point + markdown.length;
+    this.galleryOpen.set(false);
+  }
+
   private readonly sub = new Subscription();
 
   constructor(
+    @Inject(DOCUMENT) private readonly document: Document,
     private readonly route: ActivatedRoute,
     @Inject(DOCS) private readonly docs: DocsApi
   ) {}
@@ -116,6 +221,8 @@ export class Editor implements OnInit, OnDestroy {
           })),
           switchMap(({ routeId, documentType }) => {
             this.documentType.set(documentType);
+            this.insertionPoint = null;
+            this.galleryOpen.set(false);
 
             if (routeId === "nuevo") {
               this.documentId.set(null);
@@ -166,6 +273,7 @@ export class Editor implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    this.mediaAbort?.abort();
   }
 
   private parseDocumentType(value: unknown): DocumentType {

@@ -581,3 +581,18 @@ button.button {
   color: var(--red);
   font-weight: 700;
 }
+
+/* Galería y edición visual */
+.media-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.text-action { border: 0; padding: 3px 0; background: none; color: #001cff; text-decoration: underline; cursor: pointer; }
+.text-action:disabled { color: #666; cursor: default; }
+.text-action:focus-visible, .media-item:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.media-gallery { border: 1px solid var(--line); padding: 12px; display: grid; gap: 12px; }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.media-item { min-width: 0; border: 1px solid var(--line); background: white; padding: 6px; cursor: pointer; color: var(--blue); }
+.media-item img { width: 100%; height: 100px; object-fit: contain; }
+.media-item span { display: block; overflow-wrap: anywhere; font-size: .85rem; }
+.visual-content { display: grid; gap: 8px; }
+.visual-content figure, .preview-image { margin: 12px 0; }
+.visual-content img, .preview-image img { display: block; max-width: 100%; height: auto; margin: auto; }
+.visual-content textarea { min-height: 100px; }

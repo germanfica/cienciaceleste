@@ -57,3 +57,7 @@ task("write:ley", writeLeyHtml);
 
 // Default: full rollos
 task("default", buildAllRollos);
+
+const { mediaIndex, mediaImport } = require("./npm/media");
+task("media:index", mediaIndex);
+task("media:import", mediaImport);

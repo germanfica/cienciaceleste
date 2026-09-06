@@ -52,17 +52,70 @@
 
                 }
 
-                <label class="field field--grow">
+                <section class="field field--grow" aria-label="Contenido">
                   <span>Contenido</span>
+                  @if (documentType() === "rollo") {
+                    <div class="media-toolbar">
+                      <button type="button" class="text-action" (click)="openGallery()" [attr.aria-expanded]="galleryOpen()" aria-controls="media-gallery">Agregar imagen</button>
+                      <button type="button" class="text-action" (click)="sourceMode.set(!sourceMode())">{{ sourceMode() ? "Edición visual" : "Editar Markdown" }}</button>
+                    </div>
+                  }
+                  @if (sourceMode() || documentType() !== "rollo") {
+                    <textarea rows="8" [ngModel]="contenido()" (ngModelChange)="contenido.set($event)"
+                      (keyup)="rememberCaret($event)" (click)="rememberCaret($event)" (blur)="rememberCaret($event)"
+                      name="contenido" [attr.aria-label]="'Contenido ' + documentGenitiveName()"></textarea>
+                  } @else {
+                    <div class="visual-content">
+                      @for (part of contentParts(); track $index) {
+                        @if (part.kind === "image") {
+                          <figure>
+                            <img [src]="part.src" [alt]="part.alt" loading="lazy" />
+                            <figcaption><button class="text-action" type="button" (click)="removeImage(part)">Quitar del contenido</button></figcaption>
+                          </figure>
+                        } @else {
+                          <textarea rows="5" [value]="part.text" (input)="updatePart(part, $event)"
+                            (keyup)="rememberCaret($event, part.start)" (click)="rememberCaret($event, part.start)" (blur)="rememberCaret($event, part.start)"
+                            [attr.aria-label]="'Texto del contenido, bloque ' + ($index + 1)"></textarea>
+                        }
+                      }
+                    </div>
+                  }
+                </section>
 
-                  <textarea
-                    rows="8"
-                    [ngModel]="contenido()"
-                    (ngModelChange)="contenido.set($event)"
-                    name="contenido"
-                    [attr.aria-label]="'Contenido ' + documentGenitiveName()"
-                  ></textarea>
-                </label>
+                @if (galleryOpen() && documentType() === "rollo") {
+                  <section id="media-gallery" class="media-gallery" aria-label="Galería de imágenes">
+                    <div class="media-toolbar">
+                      <strong>Imágenes disponibles</strong>
+                      <button class="text-action" type="button" (click)="reloadMedia()">Recargar</button>
+                      <button class="text-action" type="button" (click)="galleryOpen.set(false)">Cerrar</button>
+                    </div>
+                    <label class="field"><span>Buscar por nombre</span>
+                      <input type="search" [ngModel]="mediaQuery()" (ngModelChange)="mediaQuery.set($event); mediaPage.set(0)" name="mediaQuery" />
+                    </label>
+                    @if (mediaLoading()) {
+                      <p role="status">Cargando imágenes...</p>
+                    } @else if (mediaError()) {
+                      <p role="alert">{{ mediaError() }}</p>
+                    } @else {
+                      <p>{{ filteredMedia().length }} imágenes. Seleccioná una para insertarla.</p>
+                      <div class="media-grid">
+                        @for (item of visibleMedia(); track item.path) {
+                          <button type="button" class="media-item" (click)="insertImage(item)" [attr.aria-label]="'Insertar ' + item.name">
+                            <img [src]="imageUrl(item.path)" alt="" loading="lazy" />
+                            <span>{{ item.name }}</span>
+                          </button>
+                        } @empty {
+                          <p>No hay imágenes para mostrar.</p>
+                        }
+                      </div>
+                      <div class="media-toolbar">
+                        <button type="button" class="text-action" [disabled]="mediaPage() === 0" (click)="mediaPage.set(mediaPage() - 1)">Anterior</button>
+                        <span>Página {{ mediaPage() + 1 }}</span>
+                        <button type="button" class="text-action" [disabled]="(mediaPage() + 1) * 40 >= filteredMedia().length" (click)="mediaPage.set(mediaPage() + 1)">Siguiente</button>
+                      </div>
+                    }
+                  </section>
+                }
 
                 @if (documentType() !== "ley") {
                   <div class="document-author">
@@ -108,7 +161,13 @@
                 </h3>
               }
 
-              <p>{{ contenido() }}</p>
+              @for (part of contentParts(); track $index) {
+                @if (part.kind === "image") {
+                  <figure class="preview-image"><img [src]="part.src" [alt]="part.alt" loading="lazy" /></figure>
+                } @else if (part.text.trim()) {
+                  <p>{{ part.text }}</p>
+                }
+              }
 
               @if (documentType() === "rollo") {
                 <p class="preview__author">Escribe: {{ autor }}</p>
