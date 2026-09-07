@@ -105,6 +105,7 @@ export class Editor implements OnInit, OnDestroy {
 
   readonly sourceMode = signal(false);
   readonly galleryOpen = signal(false);
+  readonly supportsRichContent = computed(() => this.documentType() !== "ley");
   readonly mediaLoading = signal(false);
   readonly mediaError = signal("");
   readonly mediaQuery = signal("");
@@ -143,7 +144,7 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   private normalizeVisualContent(): void {
-    if (this.sourceMode() || this.documentType() !== "rollo") return;
+    if (this.sourceMode() || !this.supportsRichContent()) return;
     const value = this.contenido();
     const point = this.insertionPoint;
     const next = this.normalizeVisualValue(value);
@@ -154,6 +155,7 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   toggleSourceMode(): void {
+    if (!this.supportsRichContent()) return;
     this.sourceMode.set(!this.sourceMode());
     this.normalizeVisualContent();
     this.insertionPoint = null;
@@ -161,6 +163,13 @@ export class Editor implements OnInit, OnDestroy {
 
   private splitContent(value: string): ContentPart[] {
     const result: ContentPart[] = [];
+    // Divinas leyes are plain text. Do not turn Markdown-looking text into
+    // image blocks in their preview, even if it is pasted into the field.
+    if (!this.supportsRichContent()) {
+      this.appendTextBlocks(result, value, 0, value.length);
+      return result;
+    }
+
     const expression = /^!\[([^\]\r\n]*)\]\(([^\r\n]+)\)[ \t]*$/gm;
     // Keep image separators outside editable ranges. The textareas must never
     // own the newlines required to serialize an image as a Markdown block.
@@ -239,6 +248,24 @@ export class Editor implements OnInit, OnDestroy {
     this.insertionPoint = before.length + caret;
   }
 
+  updatePlainContent(event: Event): void {
+    const input = event.target as HTMLTextAreaElement;
+    // Divinas leyes use one plain field, but keep the same whitespace rules as
+    // visual text blocks without exposing image or Markdown controls.
+    if ((event as InputEvent).isComposing) return;
+    const raw = input.value;
+    const text = this.normalizeVisualText(raw);
+    const caret = this.visualCaretOffset(raw, input.selectionStart);
+    const selectionEnd = this.visualCaretOffset(raw, input.selectionEnd);
+    const direction = input.selectionDirection;
+    if (raw !== text) {
+      input.value = text;
+      input.setSelectionRange(caret, selectionEnd, direction);
+    }
+    this.contenido.set(text);
+    this.insertionPoint = caret;
+  }
+
   preventVisualLineBreak(event: Event): void {
     if (!(event as KeyboardEvent).isComposing) event.preventDefault();
   }
@@ -248,12 +275,14 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   removeImage(part: ContentPart): void {
+    if (!this.supportsRichContent()) return;
     this.contenido.update(value => value.slice(0, part.start) + value.slice(part.end));
     this.insertionPoint = part.start;
     this.normalizeVisualContent();
   }
 
   async openGallery(): Promise<void> {
+    if (!this.supportsRichContent()) return;
     this.galleryOpen.set(true);
     await this.reloadMedia();
   }
@@ -291,6 +320,7 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   insertImage(item: MediaItem): void {
+    if (!this.supportsRichContent()) return;
     const value = this.contenido();
     const point = Math.min(this.insertionPoint ?? value.length, value.length);
     const alt = item.name.replace(/[\[\]\r\n]/g, " ");
@@ -320,6 +350,7 @@ export class Editor implements OnInit, OnDestroy {
           switchMap(({ routeId, documentType }) => {
             this.documentType.set(documentType);
             this.insertionPoint = null;
+            this.sourceMode.set(false);
             this.galleryOpen.set(false);
 
             if (routeId === "nuevo") {
