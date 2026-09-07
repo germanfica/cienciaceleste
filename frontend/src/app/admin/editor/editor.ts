@@ -11,10 +11,14 @@ import { DOCUMENT } from "@angular/common";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { combineLatest, EMPTY, Subscription, map, switchMap, throwError } from "rxjs";
+import { combineLatest, EMPTY, Observable, Subscription, map, switchMap, throwError } from "rxjs";
 import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
+import { DetailNav } from "../../doc-viewer/doc-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
+import { Detail } from "../../doc-viewer/detail";
+import { AdminNavbar } from "../admin-navbar/admin-navbar";
+import { Navigation } from "../../navbar/navigation";
 import { EditorExportJson } from "../editor-export-json/editor-export-json";
 
 type MediaItem = { path: string; name: string; bytes: number; type: string };
@@ -27,7 +31,8 @@ const DEFAULT_AUTHOR = "El Alfa y la Omega";
 @Component({
   selector: "app-editor",
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Footer, EditorExportJson],
+  imports: [CommonModule, FormsModule, RouterModule, Footer, AdminNavbar, EditorExportJson],
+  providers: [Navigation, Detail],
   templateUrl: "./editor.html",
   styleUrl: "./editor.scss",
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -78,18 +83,6 @@ export class Editor implements OnInit, OnDestroy {
         return "divinos rollos";
     }
   });
-  readonly publicListPath = computed(() => {
-    switch (this.documentType()) {
-      case "minirollo":
-        return "/divinos-minirollos";
-
-      case "ley":
-        return "/divinas-leyes";
-
-      default:
-        return "/divinos-rollos";
-    }
-  });
   readonly adminListPath = computed(() => {
     switch (this.documentType()) {
       case "minirollo":
@@ -102,7 +95,6 @@ export class Editor implements OnInit, OnDestroy {
         return "/admin/divinos-rollos";
     }
   });
-
   readonly sourceMode = signal(false);
   readonly galleryOpen = signal(false);
   readonly supportsRichContent = computed(() => this.documentType() !== "ley");
@@ -332,12 +324,19 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   private readonly sub = new Subscription();
+  readonly nav$: Observable<DetailNav>;
 
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly route: ActivatedRoute,
-    @Inject(DOCS) private readonly docs: DocsApi
-  ) {}
+    @Inject(DOCS) private readonly docs: DocsApi,
+    private readonly detail: Detail
+  ) {
+    this.nav$ = this.detail.buildNav$(
+      this.detail.buildId$(),
+      page => this.docs.getRolloIndexPageRemote(page)
+    );
+  }
 
   ngOnInit(): void {
     this.sub.add(

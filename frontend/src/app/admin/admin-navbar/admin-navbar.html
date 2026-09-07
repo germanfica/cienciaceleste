@@ -1,1 +1,20 @@
-<p>admin-navbar works!</p>
+@if (nav$ | async; as nav) {
+<nav class="rollo-nav" aria-label="Navegación">
+  <div class="rollo-nav__left">
+    <a [routerLink]="homeRoute">HOME</a>
+  </div>
+
+  <div class="rollo-nav__list">
+    <a [routerLink]="[listRoute, nav.page]">{{ listLabel }}</a>
+  </div>
+
+  <div class="rollo-nav__right">
+    @if (nav.hasPrev) {
+    <a [routerLink]="[detailRoute, nav.prevId]">ANTERIOR</a>
+    }
+    @if (nav.hasNext) {
+    <a [routerLink]="[detailRoute, nav.nextId]">SIGUIENTE</a>
+    }
+  </div>
+</nav>
+}

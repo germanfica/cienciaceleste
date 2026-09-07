@@ -146,15 +146,26 @@
             <h2 class="panel__title">Vista previa</h2>
 
             <article class="preview">
-              <nav class="preview__nav" aria-label="Navegación de vista previa">
-                <a routerLink="/">
-                  Home
-                </a>
+              @if (documentType() === "rollo" && documentId()) {
+                <app-admin-navbar
+                  class="preview__navbar"
+                  [nav$]="nav$"
+                  homeRoute="/admin"
+                  listRoute="/admin/divinos-rollos"
+                  listLabel="LISTADO DIVINOS ROLLOS"
+                  detailRoute="/admin/divino-rollo">
+                </app-admin-navbar>
+              } @else {
+                <nav class="preview__nav" aria-label="Navegación de vista previa">
+                  <a routerLink="/admin">
+                    Home
+                  </a>
 
-                <a [routerLink]="publicListPath()">
-                  Listado de {{ documentListName() }}
-                </a>
-              </nav>
+                  <a [routerLink]="adminListPath()">
+                    Listado de {{ documentListName() }}
+                  </a>
+                </nav>
+              }
 
               @if (documentType() === "minirollo") {
                 <h3 class="preview__minirollo-heading">
