@@ -228,6 +228,8 @@ a {
     border: 1px solid var(--blue);
     border-radius: 3px;
     outline: none;
+    font-size: 1rem;
+    //text-align: justify;
 
     &:focus {
       box-shadow: 0 0 0 3px rgba(0, 28, 255, 0.15);
@@ -301,9 +303,13 @@ a {
 
   h3 {
     margin: 0 0 20px;
-    font-size: clamp(1.25rem, 1.5vw, 1.6rem);
+    // font-size: clamp(1rem, 1.25vw, 1.35rem);
+    // Keep titles at the same size as the editor textarea too.
+    //font-size: 1rem;
+    font-size: 1rem;
     line-height: 1.18;
     text-transform: uppercase;
+    text-align: justify;
 
     a {
       color: var(--blue);
@@ -312,9 +318,12 @@ a {
 
   p {
     margin: 0 0 23px;
-    font-size: clamp(1rem, 1.25vw, 1.35rem);
+    // font-size: clamp(1rem, 1.25vw, 1.35rem);
+    // Keep content at the same size as the editor textarea in every preview.
+    font-size: 1rem;
     line-height: 1.24;
     white-space: pre-line;
+    text-align: justify;
   }
 
   audio {
@@ -547,14 +556,6 @@ button.button {
 
   .preview {
     padding: 18px 14px;
-
-    h3 {
-      font-size: 1.15rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
   }
 
   .preview__nav {
