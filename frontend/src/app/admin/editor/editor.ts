@@ -95,6 +95,14 @@ export class Editor implements OnInit, OnDestroy {
         return "/admin/divinos-rollos";
     }
   });
+  readonly adminDetailPath = computed(() =>
+    this.documentType() === "minirollo"
+      ? "/admin/divino-minirollo"
+      : "/admin/divino-rollo"
+  );
+  readonly adminNavbarListLabel = computed(() =>
+    `LISTADO ${this.documentListName().toLocaleUpperCase("es")}`
+  );
   readonly sourceMode = signal(false);
   readonly galleryOpen = signal(false);
   readonly supportsRichContent = computed(() => this.documentType() !== "ley");
@@ -332,9 +340,18 @@ export class Editor implements OnInit, OnDestroy {
     @Inject(DOCS) private readonly docs: DocsApi,
     private readonly detail: Detail
   ) {
-    this.nav$ = this.detail.buildNav$(
-      this.detail.buildId$(),
-      page => this.docs.getRolloIndexPageRemote(page)
+    this.nav$ = this.route.data.pipe(
+      map(data => this.parseDocumentType(data["documentType"])),
+      switchMap(documentType => {
+        if (documentType === "ley") return EMPTY;
+
+        return this.detail.buildNav$(
+          this.detail.buildId$(),
+          page => documentType === "minirollo"
+            ? this.docs.getMiniRolloIndexPageRemote(page)
+            : this.docs.getRolloIndexPageRemote(page)
+        );
+      })
     );
   }
 

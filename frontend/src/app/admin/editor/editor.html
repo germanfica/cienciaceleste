@@ -146,14 +146,14 @@
             <h2 class="panel__title">Vista previa</h2>
 
             <article class="preview">
-              @if (documentType() === "rollo" && documentId()) {
+              @if ((documentType() === "rollo" || documentType() === "minirollo") && documentId()) {
                 <app-admin-navbar
                   class="preview__navbar"
                   [nav$]="nav$"
                   homeRoute="/admin"
-                  listRoute="/admin/divinos-rollos"
-                  listLabel="LISTADO DIVINOS ROLLOS"
-                  detailRoute="/admin/divino-rollo">
+                  [listRoute]="adminListPath()"
+                  [listLabel]="adminNavbarListLabel()"
+                  [detailRoute]="adminDetailPath()">
                 </app-admin-navbar>
               } @else {
                 <nav class="preview__nav" aria-label="Navegación de vista previa">
