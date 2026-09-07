@@ -14,7 +14,7 @@ import { ActivatedRoute, RouterModule } from "@angular/router";
 import { combineLatest, EMPTY, Observable, Subscription, map, switchMap, throwError } from "rxjs";
 import { Footer } from "../../footer/footer";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
-import { DetailNav } from "../../doc-viewer/doc-types";
+import { DetailNav, DocumentType } from "../../doc-viewer/doc-types";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 import { Detail } from "../../doc-viewer/detail";
 import { AdminNavbar } from "../admin-navbar/admin-navbar";
@@ -23,8 +23,6 @@ import { EditorExportJson } from "../editor-export-json/editor-export-json";
 
 type MediaItem = { path: string; name: string; bytes: number; type: string };
 type ContentPart = { kind: "text" | "image"; text: string; src: string; alt: string; start: number; end: number };
-
-type DocumentType = "rollo" | "minirollo" | "ley";
 
 const DEFAULT_AUTHOR = "El Alfa y la Omega";
 
@@ -95,11 +93,18 @@ export class Editor implements OnInit, OnDestroy {
         return "/admin/divinos-rollos";
     }
   });
-  readonly adminDetailPath = computed(() =>
-    this.documentType() === "minirollo"
-      ? "/admin/divino-minirollo"
-      : "/admin/divino-rollo"
-  );
+  readonly adminDetailPath = computed(() => {
+    switch (this.documentType()) {
+      case "minirollo":
+        return "/admin/divino-minirollo";
+
+      case "ley":
+        return "/admin/divina-ley";
+
+      default:
+        return "/admin/divino-rollo";
+    }
+  });
   readonly adminNavbarListLabel = computed(() =>
     `LISTADO ${this.documentListName().toLocaleUpperCase("es")}`
   );
@@ -343,13 +348,21 @@ export class Editor implements OnInit, OnDestroy {
     this.nav$ = this.route.data.pipe(
       map(data => this.parseDocumentType(data["documentType"])),
       switchMap(documentType => {
-        if (documentType === "ley") return EMPTY;
-
         return this.detail.buildNav$(
           this.detail.buildId$(),
-          page => documentType === "minirollo"
-            ? this.docs.getMiniRolloIndexPageRemote(page)
-            : this.docs.getRolloIndexPageRemote(page)
+          page => {
+            switch (documentType) {
+              case "minirollo":
+                return this.docs.getMiniRolloIndexPageRemote(page);
+
+              case "ley":
+                return this.docs.getDivinaLeyIndexPageRemote(page);
+
+              default:
+                return this.docs.getRolloIndexPageRemote(page);
+            }
+          },
+          documentType
         );
       })
     );

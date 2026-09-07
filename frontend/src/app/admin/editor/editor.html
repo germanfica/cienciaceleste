@@ -146,7 +146,7 @@
             <h2 class="panel__title">Vista previa</h2>
 
             <article class="preview">
-              @if ((documentType() === "rollo" || documentType() === "minirollo") && documentId()) {
+              @if (documentId()) {
                 <app-admin-navbar
                   class="preview__navbar"
                   [nav$]="nav$"

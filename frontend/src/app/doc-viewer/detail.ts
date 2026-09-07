@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Navigation } from '../navbar/navigation';
 import { catchError, EMPTY, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { DocJson } from './md-types';
-import { DetailNav } from './doc-types';
+import { DetailNav, DocIndexPage, DocumentType } from './doc-types';
 
 @Injectable()
 export class Detail {
@@ -40,8 +40,9 @@ export class Detail {
 
   buildNav$(
     id$: Observable<number>,
-    fetchIndexPage: (page: number) => Observable<any>
+    fetchIndexPage: (page: number) => Observable<DocIndexPage>,
+    documentType: DocumentType = 'rollo'
   ): Observable<DetailNav> {
-    return this.navigation.createNav$(id$, fetchIndexPage);
+    return this.navigation.createNav$(id$, fetchIndexPage, documentType);
   }
 }
