@@ -200,7 +200,11 @@ export async function buildServer(config: Config, repository: Repository): Promi
     const statusCode = (error as { statusCode?: unknown }).statusCode;
 
     if (typeof statusCode === "number" && statusCode < 500) {
-      reply.code(statusCode).send({ error: error.message });
+      const message = error instanceof Error
+        ? error.message
+        : "La solicitud no pudo procesarse.";
+
+      reply.code(statusCode).send({ error: message });
       return;
     }
 
