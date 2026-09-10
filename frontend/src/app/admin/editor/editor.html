@@ -207,26 +207,35 @@
         </section>
 
         <footer class="actions">
-          <p>Sin base de datos · archivos locales</p>
+          <p>Documentos en archivos · sesiones en SQLite</p>
 
           <div class="actions__buttons">
             <button class="button button--cancel" type="button" [routerLink]="adminListPath()">
               Cancelar
             </button>
 
-            <button class="button button--save" type="button">
-              Guardar
+            <button class="button button--save" type="button" (click)="guardar(jsonExporter)"
+              [disabled]="cargando() || !!error() || saving()">
+              {{ saving() ? "Guardando..." : "Guardar" }}
             </button>
 
             <!-- <button class="button button--export" type="button">
               Exportar sitio
             </button> -->
 
-            <app-editor-export-json [documentType]="documentType()" [isNewDocument]="isNewDocument()"
+            <app-editor-export-json #jsonExporter [documentType]="documentType()" [isNewDocument]="isNewDocument()"
               [id]="documentId()" [pagina]="pagina()" [titulo]="titulo()" [contenido]="contenido()"
               [shownNumber]="shownNumber()" [indexInPage]="indexInPage()"
               [disabled]="cargando() || !!error()"></app-editor-export-json>
           </div>
+
+          @if (saveStatus()) {
+            <p class="editor-status" role="status">{{ saveStatus() }}</p>
+          }
+
+          @if (saveError()) {
+            <p class="editor-status editor-status--error" role="alert">{{ saveError() }}</p>
+          }
         </footer>
 
       </div> <!-- /.rollos-content -->

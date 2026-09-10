@@ -123,6 +123,17 @@ export class EditorExportJson {
     }
   }
 
+  // The editor reuses this exact request for the authenticated API. Keeping
+  // request generation here prevents the browser export and Guardar flows from
+  // calculating IDs or page numbers differently.
+  async createWriteRequest(): Promise<EditorWriteRequest> {
+    if (this.disabled) {
+      throw new Error("El documento todavía no está listo para guardar.");
+    }
+
+    return this.buildWriteRequest();
+  }
+
   private async buildWriteRequest(): Promise<EditorWriteRequest> {
     const contenido = this.requiredText(this.contenido, "El contenido");
     const firstIndexPage = await firstValueFrom(this.getIndexPage(1));

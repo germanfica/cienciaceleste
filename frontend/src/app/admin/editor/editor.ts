@@ -20,6 +20,7 @@ import { Detail } from "../../doc-viewer/detail";
 import { AdminNavbar } from "../admin-navbar/admin-navbar";
 import { Navigation } from "../../navbar/navigation";
 import { EditorExportJson } from "../editor-export-json/editor-export-json";
+import { DocumentPublishApi } from "./document-publish-api";
 
 type MediaItem = { path: string; name: string; bytes: number; type: string };
 type ContentPart = { kind: "text" | "image"; text: string; src: string; alt: string; start: number; end: number };
@@ -47,6 +48,9 @@ export class Editor implements OnInit, OnDestroy {
   readonly indexInPage = signal<number | null>(null);
   readonly cargando = signal(true);
   readonly error = signal("");
+  readonly saving = signal(false);
+  readonly saveStatus = signal("");
+  readonly saveError = signal("");
 
   readonly documentName = computed(() => {
     switch (this.documentType()) {
@@ -343,7 +347,8 @@ export class Editor implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly route: ActivatedRoute,
     @Inject(DOCS) private readonly docs: DocsApi,
-    private readonly detail: Detail
+    private readonly detail: Detail,
+    private readonly documentPublishApi: DocumentPublishApi
   ) {
     this.nav$ = this.route.data.pipe(
       map(data => this.parseDocumentType(data["documentType"])),
@@ -433,6 +438,54 @@ export class Editor implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.mediaAbort?.abort();
+  }
+
+  async guardar(exporter: EditorExportJson): Promise<void> {
+    if (this.saving() || this.cargando() || this.error()) {
+      return;
+    }
+
+    this.saving.set(true);
+    this.saveStatus.set("Validando el documento...");
+    this.saveError.set("");
+
+    try {
+      const request = await exporter.createWriteRequest();
+      const job = await this.documentPublishApi.queue(this.documentType(), request);
+      const completed = await this.documentPublishApi.waitForCompletion(job, current => {
+        this.saveStatus.set(
+          current.status === "queued"
+            ? "El documento está esperando para publicarse..."
+            : "Generando documentos y publicando en GitHub Pages..."
+        );
+      });
+
+      this.saveStatus.set(
+        completed.status === "succeeded"
+          ? "Cambios guardados y publicados."
+          : ""
+      );
+
+      if (this.isNewDocument()) {
+        const newDocumentId = "shownNumber" in request
+          ? request.shownNumber
+          : "id" in request
+            ? request.id
+            : null;
+
+        if (newDocumentId !== null) {
+          this.documentId.set(newDocumentId);
+          this.isNewDocument.set(false);
+        }
+      }
+    } catch (error) {
+      this.saveStatus.set("");
+      this.saveError.set(
+        error instanceof Error ? error.message : "No se pudo guardar el documento."
+      );
+    } finally {
+      this.saving.set(false);
+    }
   }
 
   private parseDocumentType(value: unknown): DocumentType {

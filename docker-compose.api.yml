@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file:
+      - ./api/.env
+    ports:
+      # Expose this through a reverse proxy with HTTPS in production. Keeping it
+      # bound to loopback avoids putting the Node process directly on the Internet.
+      - "127.0.0.1:3000:3000"
+    volumes:
+      # The API must see the same working tree whose existing Gulp commands you
+      # run today. Keep this checkout outside the web server public directory.
+      - ./:/workspace/cienciaceleste
+      - cienciaceleste_api_data:/var/lib/cienciaceleste
+    restart: unless-stopped
+    # Lets a running document pipeline finish before Docker sends SIGKILL.
+    stop_grace_period: 2h
+
+volumes:
+  cienciaceleste_api_data:
