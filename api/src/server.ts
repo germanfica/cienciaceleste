@@ -30,13 +30,15 @@ function cookieOptions(config: Config) {
   };
 }
 
-function csrfCookieOptions(config: Config) {
+function csrfCookieOptions(config: Config, expiresAt: number) {
   return {
-    path: "/api/v1",
+    // The admin page is /admin while the API is /api/v1. The CSRF cookie
+    // must be readable by the page and sent to the API.
+    path: "/",
     httpOnly: false,
     secure: config.cookieSecure,
     sameSite: "strict" as const,
-    maxAge: Math.floor(config.sessionTtlMs / 1_000)
+    maxAge: Math.max(1, Math.ceil((expiresAt - Date.now()) / 1_000))
   };
 }
 
@@ -84,6 +86,7 @@ async function authenticate(
   if (!session) {
     reply.clearCookie(SESSION_COOKIE, cookieOptionsForClear(request));
     reply.clearCookie(CSRF_COOKIE, csrfCookieOptionsForClear(request));
+    reply.clearCookie(CSRF_COOKIE, legacyCsrfCookieOptionsForClear());
     reply.code(401).send({ error: "La sesión no es válida o ya venció." });
     return null;
   }
@@ -98,7 +101,38 @@ function cookieOptionsForClear(_request: FastifyRequest) {
 }
 
 function csrfCookieOptionsForClear(_request: FastifyRequest) {
+  return { path: "/", httpOnly: false, sameSite: "strict" as const };
+}
+
+// Removes the pre-fix cookie, whose Path was /api/v1.
+function legacyCsrfCookieOptionsForClear() {
   return { path: "/api/v1", httpOnly: false, sameSite: "strict" as const };
+}
+
+// Moves an already valid CSRF cookie from the former API-only scope to the
+// root scope. This keeps existing sessions working after the deployment.
+function refreshCsrfCookie(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  config: Config,
+  auth: AuthContext
+): void {
+  const csrfToken = request.cookies[CSRF_COOKIE];
+
+  if (
+    !csrfToken ||
+    !safeEqual(hashOpaqueToken(csrfToken), auth.session.csrfTokenHash)
+  ) {
+    return;
+  }
+
+  reply
+    .clearCookie(CSRF_COOKIE, legacyCsrfCookieOptionsForClear())
+    .setCookie(
+      CSRF_COOKIE,
+      csrfToken,
+      csrfCookieOptions(config, auth.session.expiresAt)
+    );
 }
 
 function requireCsrf(
@@ -208,7 +242,12 @@ export async function buildServer(config: Config, repository: Repository): Promi
 
       reply
         .setCookie(SESSION_COOKIE, sessionToken, cookieOptions(config))
-        .setCookie(CSRF_COOKIE, csrfToken, csrfCookieOptions(config));
+        .clearCookie(CSRF_COOKIE, legacyCsrfCookieOptionsForClear())
+        .setCookie(
+          CSRF_COOKIE,
+          csrfToken,
+          csrfCookieOptions(config, expiresAt)
+        );
 
       return {
         user: { username: user.username },
@@ -223,6 +262,8 @@ export async function buildServer(config: Config, repository: Repository): Promi
     if (!auth) {
       return;
     }
+
+    refreshCsrfCookie(request, reply, config, auth);
 
     return {
       user: { username: auth.session.username },
@@ -249,7 +290,8 @@ export async function buildServer(config: Config, repository: Repository): Promi
 
     reply
       .clearCookie(SESSION_COOKIE, cookieOptionsForClear(request))
-      .clearCookie(CSRF_COOKIE, csrfCookieOptionsForClear(request));
+      .clearCookie(CSRF_COOKIE, csrfCookieOptionsForClear(request))
+      .clearCookie(CSRF_COOKIE, legacyCsrfCookieOptionsForClear());
     return reply.code(204).send();
   });
 
