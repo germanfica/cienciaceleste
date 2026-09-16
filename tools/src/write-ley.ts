@@ -369,11 +369,29 @@ function updateLeyRow(
     );
   }
 
-  const replacement = renderLeyRow(shownNumber ?? row.shownNumber, contenido);
-  const indent = indentationAt(html, row.start);
-  const newline = html.includes("\r\n") ? "\r\n" : "\n";
-  const rendered = replacement.replace(/\n/g, `${newline}${indent}`);
-  return html.slice(0, row.start) + rendered + html.slice(row.end);
+  let cellIndex = 0;
+  const replacement = row.html.replace(
+    /(<td\b[^>]*>)([\s\S]*?)(<\/td\s*>)/gi,
+    (_cell, openingTag: string, _currentContent: string, closingTag: string) => {
+      cellIndex += 1;
+
+      if (cellIndex === 1) {
+        return `${openingTag}${shownNumber ?? row.shownNumber}${closingTag}`;
+      }
+
+      if (cellIndex === 2) {
+        return `${openingTag}${renderText(contenido)}${closingTag}`;
+      }
+
+      return _cell;
+    },
+  );
+
+  if (cellIndex !== 2) {
+    throw new Error(`La ley ${indexInPage} de la página ${pagina} no tiene dos celdas.`);
+  }
+
+  return html.slice(0, row.start) + replacement + html.slice(row.end);
 }
 
 async function removeIfPresent(file: string): Promise<void> {
