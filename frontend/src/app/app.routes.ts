@@ -11,6 +11,9 @@ import { AdminRollos } from './admin/admin-rollos/admin-rollos';
 import { AdminMinirollos } from './admin/admin-minirollos/admin-minirollos';
 import { AdminDivinasLeyes } from './admin/admin-divinas-leyes/admin-divinas-leyes';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
+import { AdminLogin } from './admin/admin-login/admin-login';
+import { adminAuthGuard } from './admin/admin-auth/admin-auth-guard';
+import { adminLoginGuard } from './admin/admin-auth/admin-login-guard';
 
 export const routes: Routes = [
   { path: "", component: Home, title: "Divinos Rollos Telepáticos - Inicio" },
@@ -24,15 +27,43 @@ export const routes: Routes = [
   { path: "divinas-leyes/:id", component: DivinasLeyes, title: "Divinas Leyes - Listado" },
   { path: "doc-viewer/:kind/:id", component: DocViewer, title: "Doc Viewer - Detalle" },
   { path: "editor", component: Editor, title: "Editor" },
-  { path: "admin/divinos-rollos", component: AdminRollos, title: "Admin Divinos Rollos" },
-  { path: "admin/divinos-rollos/:id", component: AdminRollos, title: "Admin Divinos Rollos" },
-  { path: "admin/divino-rollo/:id", component: Editor, title: "Editor", data: { documentType: "rollo" } },
-  { path: "admin/divinos-minirollos", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
-  { path: "admin/divinos-minirollos/:id", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
-  { path: "admin/divino-minirollo/:id", component: Editor, title: "Editor", data: { documentType: "minirollo" } },
-  { path: "admin/divinas-leyes", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
-  { path: "admin/divinas-leyes/:id", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
-  { path: "admin/divina-ley/:id", component: Editor, title: "Editor", data: { documentType: "ley" } },
-  { path: "admin", component: AdminDashboard, title: "Editor" },
+  {
+    path: "admin",
+    pathMatch: "full",
+    component: AdminLogin,
+    canMatch: [adminLoginGuard],
+    title: "Iniciar sesión"
+  },
+  {
+    path: "admin",
+    canMatch: [adminAuthGuard],
+    children: [
+      { path: "", pathMatch: "full", component: AdminDashboard, title: "Administración" },
+      { path: "divinos-rollos", component: AdminRollos, title: "Admin Divinos Rollos" },
+      { path: "divinos-rollos/:id", component: AdminRollos, title: "Admin Divinos Rollos" },
+      {
+        path: "divino-rollo/:id",
+        component: Editor,
+        title: "Editor",
+        data: { documentType: "rollo" }
+      },
+      { path: "divinos-minirollos", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
+      { path: "divinos-minirollos/:id", component: AdminMinirollos, title: "Admin Divinos Minirollos" },
+      {
+        path: "divino-minirollo/:id",
+        component: Editor,
+        title: "Editor",
+        data: { documentType: "minirollo" }
+      },
+      { path: "divinas-leyes", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
+      { path: "divinas-leyes/:id", component: AdminDivinasLeyes, title: "Admin Divinas Leyes" },
+      {
+        path: "divina-ley/:id",
+        component: Editor,
+        title: "Editor",
+        data: { documentType: "ley" }
+      }
+    ]
+  },
   { path: "**", redirectTo: "" }
 ];
