@@ -373,6 +373,18 @@ a {
 }
 
 /* =========================================================
+   Mensaje de la acción
+   ========================================================= */
+
+.action-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--orange-light);
+  border-top: 6px solid var(--white);
+}
+
+/* =========================================================
    Acciones
    ========================================================= */
 

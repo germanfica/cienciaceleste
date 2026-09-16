@@ -206,9 +206,17 @@
 
         </section>
 
-        <footer class="actions">
-          <p>Documentos en archivos · sesiones en SQLite</p>
+        <div class="action-message">
+          @if (saveStatus()) {
+            <p class="editor-status" role="status">{{ saveStatus() }}</p>
+          }
 
+          @if (saveError()) {
+            <p class="editor-status editor-status--error" role="alert">{{ saveError() }}</p>
+          }
+        </div>
+
+        <footer class="actions">
           <div class="actions__buttons">
             <button class="button button--cancel" type="button" [routerLink]="adminListPath()">
               Cancelar
@@ -228,14 +236,6 @@
               [shownNumber]="shownNumber()" [indexInPage]="indexInPage()"
               [disabled]="cargando() || !!error()"></app-editor-export-json>
           </div>
-
-          @if (saveStatus()) {
-            <p class="editor-status" role="status">{{ saveStatus() }}</p>
-          }
-
-          @if (saveError()) {
-            <p class="editor-status editor-status--error" role="alert">{{ saveError() }}</p>
-          }
         </footer>
 
       </div> <!-- /.rollos-content -->
