@@ -12,13 +12,14 @@
       //document.documentElement.style.backgroundColor = "rgb(233, 7, 176)";
       //document.documentElement.style.backgroundColor = "rgb(0, 0, 0)";
       document.documentElement.style.backgroundColor = "#000";
+      const cieloEternoUrl = new URL("cieloeterno.gif", document.baseURI).href;
       const style = document.createElement("style");
       //style.textContent = "body { background-color: rgb(233, 7, 176) }";
       style.textContent = `
       html,
       body {
         background-color: #000;
-        background-image: url("/cieloeterno.gif");
+        background-image: url("${cieloEternoUrl}");
         background-repeat: repeat;
         background-position: top left;
       }
