@@ -7,9 +7,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="manifest" href="/cienciaceleste/manifest.webmanifest">
+  <script>
+    if (/\/admin(?:\/|$)/.test(location.pathname)) {
+      //document.documentElement.style.backgroundColor = "rgb(233, 7, 176)";
+      //document.documentElement.style.backgroundColor = "rgb(0, 0, 0)";
+      document.documentElement.style.backgroundColor = "#000";
+      const style = document.createElement("style");
+      //style.textContent = "body { background-color: rgb(233, 7, 176) }";
+      style.textContent = `
+      html,
+      body {
+        background-color: #000;
+        background-image: url("/cieloeterno.gif");
+        background-repeat: repeat;
+        background-position: top left;
+      }
+
+      @media (max-width: 768px) {
+        html,
+        body {
+          background: #fff !important;
+        }
+      }
+    `;
+      document.head.appendChild(style);
+    }
+  </script>
 <style>body{background-color:#0cf;margin:0}</style><link rel="stylesheet" href="/cienciaceleste/styles-ZEYAU6AN.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/cienciaceleste/styles-ZEYAU6AN.css"></noscript></head>
 <body>
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
-<script src="/cienciaceleste/main-OH6I3UGS.js" type="module"></script></body>
+<script src="/cienciaceleste/main-NEF6WNFE.js" type="module"></script></body>
 </html>
