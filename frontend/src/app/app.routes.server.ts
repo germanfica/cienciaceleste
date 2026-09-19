@@ -117,6 +117,13 @@ export const serverRoutes: ServerRoute[] = [
 
   { path: 'doc-viewer/:kind/:id', renderMode: RenderMode.Client },
 
+  // Admin: genera dist/browser/admin/index.html.
+  // Debe ser el login estático, no el HTML de Home.
+  { path: 'admin', renderMode: RenderMode.Prerender },
+
+  // Las rutas internas dependen de sesión y quedan del lado cliente.
+  { path: 'admin/**', renderMode: RenderMode.Client },
+
   // wildcard: infinito -> Client
   { path: '**', renderMode: RenderMode.Client },
 ];

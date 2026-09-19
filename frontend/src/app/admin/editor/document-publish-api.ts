@@ -1,5 +1,5 @@
-import { DOCUMENT } from "@angular/common";
-import { Inject, Injectable } from "@angular/core";
+import { DOCUMENT, isPlatformBrowser } from "@angular/common";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import type { EditorWriteRequest } from "../editor-export-json/editor-export-json";
 import type { DocumentType } from "../../doc-viewer/doc-types";
 
@@ -36,13 +36,11 @@ export class DocumentPublishError extends Error {
 export class DocumentPublishApi {
   private readonly baseUrl: string;
 
-  constructor(@Inject(DOCUMENT) private readonly document: Document) {
-    const configured = this.document.documentElement.dataset["apiBaseUrl"]?.trim();
-    const local = this.document.location.hostname === "localhost" || this.document.location.hostname === "127.0.0.1";
+  constructor(@Inject(DOCUMENT) private readonly document: Document, @Inject(PLATFORM_ID) platformId: object) {
+    const local = isPlatformBrowser(platformId)
+      && (this.document.location.hostname === "localhost" || this.document.location.hostname === "127.0.0.1");
 
-    // In production, serve Angular and /api/v1 behind the same HTTPS proxy. A
-    // data-api-base-url attribute can override this for a separate admin host.
-    this.baseUrl = configured || (local ? "http://localhost:3000/api/v1" : "/api/v1");
+    this.baseUrl = local ? "http://localhost:3000/api/v1" : "/api/v1";
   }
 
   async login(username: string, password: string): Promise<AdminSession> {
