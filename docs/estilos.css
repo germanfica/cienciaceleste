@@ -20,7 +20,7 @@
 }
 .textorollo {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 47px;
+	font-size: 1.25rem;
 	color: #006;
 	text-align: justify;
 }
@@ -51,7 +51,7 @@
 }
 .textoderecha {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 35px;
+	font-size: 1.25rem;
 	color: #006;
 	text-align: right;
 }
@@ -76,7 +76,7 @@
 }
 .titulorollo {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 38px;
+	font-size: 1.25rem;
 	color: #006;
 	font-weight: bold;
 	text-align: justify;
@@ -84,6 +84,6 @@
 
 .texto {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 30px;
+	font-size: 1.25rem;
 	color: #000;
 }

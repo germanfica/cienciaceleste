@@ -3,6 +3,10 @@ const { task } = require("gulp");
 const { clean } = require("./npm/rollos");
 const { cleanInit, cleanPost } = require("./npm/clean");
 const {
+    installAll,
+    writeRolloHtml,
+    writeMinirolloHtml,
+    writeLeyHtml,
     buildMdRollos,
     buildAllRollos,
     buildMdMiniRollos,
@@ -25,6 +29,9 @@ const { stripAngularScriptsGhpages } = require("./npm/deploy-ghpages");
 task("clean:init", cleanInit);
 task("clean:post", cleanPost);
 task("clean", clean);
+
+// Install
+task("install:all", installAll);
 
 // Rollos
 task("build:md:rollos", buildMdRollos);
@@ -54,5 +61,14 @@ task("frontend:test", frontendTest);
 task("frontend:strip:angular-scripts", stripAngularScriptsGhpages);
 task("frontend:deploy:ghpages", frontendDeployGhpages);
 
+// Write: JSON -> HTML
+task("write:rollo", writeRolloHtml);
+task("write:minirollo", writeMinirolloHtml);
+task("write:ley", writeLeyHtml);
+
 // Default: full rollos
 task("default", buildAllRollos);
+
+const { mediaIndex, mediaImport } = require("./npm/media");
+task("media:index", mediaIndex);
+task("media:import", mediaImport);

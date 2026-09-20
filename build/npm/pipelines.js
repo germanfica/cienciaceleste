@@ -11,6 +11,12 @@ const rollos = require("./rollos");
 const { cleanInit, cleanPost } = require("./clean");
 const mini = require("./divinos-minirollos");
 const leyes = require("./divinas-leyes");
+const { installTools, installFrontend } = require("./install");
+
+// Pipelines JSON -> HTML
+const writeRolloHtml = rollos.writeHtml;
+const writeMinirolloHtml = mini.writeHtml;
+const writeLeyHtml = leyes.writeHtml;
 
 const { genDocIds } = require("./gen-doc-ids");
 const frontend = require("./frontend");
@@ -98,8 +104,14 @@ const frontendBuild = series(frontend.frontendBuild);
 const frontendBuildProd = series(frontend.frontendBuildProd);
 const frontendBuildProdGhpages = series(frontend.frontendBuildProdGhpages);
 const frontendDeployGhpages = series(deployGhpages);
+// install frontend + tools
+const installAll = series(installFrontend, installTools);
 
 module.exports = {
+  installAll,
+  writeRolloHtml,
+  writeMinirolloHtml,
+  writeLeyHtml,
   buildMdRollos,
   buildAllRollos,
   buildMdMiniRollos,
