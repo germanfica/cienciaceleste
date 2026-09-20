@@ -14,9 +14,16 @@ const {
     buildMdLeyes,
     buildAllLeyes,
     buildAllDocs,
+    genDocIds,
+    frontendStart,
+    frontendWatch,
+    frontendTest,
+    frontendBuild,
+    frontendBuildProd,
+    frontendBuildProdGhpages,
+    frontendDeployGhpages,
 } = require("./npm/pipelines");
-const { frontendStart, frontendBuild, frontendWatch, frontendTest, frontendBuildProd, frontendBuildProdGhpages } = require("./npm/frontend");
-const { deployGhpages } = require("./npm/deploy-ghpages");
+const { stripAngularScriptsGhpages } = require("./npm/deploy-ghpages");
 
 // Clean tasks
 task("clean:init", cleanInit);
@@ -41,6 +48,9 @@ task("build:all:leyes", buildAllLeyes);
 // Rollos + Mini + Divinas Leyes
 task("build:all:docs", buildAllDocs);
 
+// Generar doc IDs
+task("gen:doc-ids", genDocIds);
+
 // Frontend
 task("frontend:start", frontendStart);
 task("frontend:build", frontendBuild);
@@ -48,7 +58,8 @@ task("frontend:build:prod", frontendBuildProd);
 task("frontend:build:prod:ghpages", frontendBuildProdGhpages);
 task("frontend:watch", frontendWatch);
 task("frontend:test", frontendTest);
-task("frontend:deploy:ghpages", deployGhpages);
+task("frontend:strip:angular-scripts", stripAngularScriptsGhpages);
+task("frontend:deploy:ghpages", frontendDeployGhpages);
 
 // Write: JSON -> HTML
 task("write:rollo", writeRolloHtml);

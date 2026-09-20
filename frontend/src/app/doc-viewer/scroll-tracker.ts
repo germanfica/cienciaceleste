@@ -17,10 +17,9 @@ export class ScrollTracker implements OnInit, OnDestroy {
   ngOnInit(): void {
     const opts: TrackOptions = {
       key: this.scrollProgress,
-      target: document.documentElement, // this.el.nativeElement,
       saveEveryMs: this.scrollProgressSaveEveryMs,
       restoreBehavior: this.scrollProgressBehavior,
-      version: this.scrollProgressVersion
+      version: this.scrollProgressVersion,
     };
     this.sp.startTracking(opts);
   }

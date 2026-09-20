@@ -1,8 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 // import { provideServiceWorker } from '@angular/service-worker';
 import { DOCS } from './doc-viewer/docs.api';
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(withFetch()), // HttpClient habilitado globalmente
+    provideClientHydration(withEventReplay()),
     {
       provide: APP_BASE_HREF,
       useFactory: (platformLocation: PlatformLocation) =>

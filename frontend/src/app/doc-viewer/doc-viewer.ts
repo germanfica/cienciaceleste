@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, OnInit, Inject } from "@angular/cor
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { EMPTY, Observable, switchMap, catchError, shareReplay } from "rxjs";
-import { Docs } from "./docs";
 import { Block, Inline, DocJson } from "./md-types";
 import { DOCS, DocsApi } from "./docs.api";
 

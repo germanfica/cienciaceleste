@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Block, DocJson, Inline } from "../../doc-viewer/md-types";
-import { CommonModule } from "@angular/common";
-import { Observable, Subscription } from "rxjs";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
+import { Observable, Subscription, tap } from "rxjs";
 import { DetailNav } from "../../doc-viewer/doc-types";
 import { Navbar } from "../../navbar/navbar";
 import { Navigation } from "../../navbar/navigation";
@@ -10,6 +10,7 @@ import { Detail } from "../../doc-viewer/detail";
 import { ScrollProgress } from "../../doc-viewer/scroll-progress";
 import { ScrollTracker } from "../../doc-viewer/scroll-tracker";
 import { Footer } from "../../footer/footer";
+import { Title } from '@angular/platform-browser';
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
 
 @Component({
@@ -26,17 +27,23 @@ export class RolloDetalle implements OnInit, OnDestroy {
   id$!: Observable<number>;
 
   private sub = new Subscription();
+  private readonly isBrowser: boolean;
 
-  constructor(@Inject(DOCS) private docs: DocsApi, private detail: Detail, private scrollProgress: ScrollProgress) { }
+  constructor(@Inject(DOCS) private docs: DocsApi, private detail: Detail, private scrollProgress: ScrollProgress, private title: Title, @Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
     this.id$ = this.detail.buildId$();
-    this.doc$ = this.detail.buildDoc$(id => this.docs.getRolloDoc(id));
+    this.doc$ = this.detail.buildDoc$(id => this.docs.getRolloDoc(id)).pipe(
+      tap(doc => this.title.setTitle(`Divino Rollo Telepático ${doc.id} | ${doc.titulo}`))
+    );
     this.nav$ = this.detail.buildNav$(this.id$, p => this.docs.getRolloIndexPageRemote(p));
 
     // arrancar/reiniciar tracking cuando cambia el id
     this.sub.add(
       this.id$.subscribe(id => {
+        if (!this.isBrowser) return;
         this.scrollProgress.stop();
         this.scrollProgress.startTracking({
           key: `rollo/${id}`,
