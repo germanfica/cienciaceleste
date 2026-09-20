@@ -1,0 +1,41 @@
+<main class="admin-login">
+  <section class="admin-login__card" aria-labelledby="admin-login-title">
+    <form class="admin-login__form" (ngSubmit)="submit()" novalidate>
+      <div class="admin-login__field">
+        <label for="admin-login-username">Usuario</label>
+        <input
+          id="admin-login-username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          required
+          [ngModel]="username()"
+          (ngModelChange)="username.set($event)"
+          [disabled]="submitting()"
+        >
+      </div>
+
+      <div class="admin-login__field">
+        <label for="admin-login-password">Contraseña</label>
+        <input
+          id="admin-login-password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          [disabled]="submitting()"
+        >
+      </div>
+
+      <p *ngIf="errorMessage()" class="admin-login__error" role="alert">
+        {{ errorMessage() }}
+      </p>
+
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? "Ingresando..." : "Iniciar sesión" }}
+      </button>
+    </form>
+  </section>
+</main>

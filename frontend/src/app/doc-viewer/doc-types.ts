@@ -26,3 +26,4 @@ export type DetailNav = {
   prevId: number; // 0 cuando no hay anterior
   nextId: number; // 0 cuando no hay siguiente
 };
+export type DocumentType = "rollo" | "minirollo" | "ley";

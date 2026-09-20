@@ -13,6 +13,11 @@ const mini = require("./divinos-minirollos");
 const leyes = require("./divinas-leyes");
 const { installTools, installFrontend } = require("./install");
 
+// Pipelines JSON -> HTML
+const writeRolloHtml = rollos.writeHtml;
+const writeMinirolloHtml = mini.writeHtml;
+const writeLeyHtml = leyes.writeHtml;
+
 // Pipelines para rollos
 const buildMdRollosCore = series(rollos.convert, rollos.dedup, rollos.checkSequence);
 const buildMdRollos = series(cleanInit, buildMdRollosCore, cleanPost);
@@ -83,6 +88,9 @@ const installAll = series(installFrontend, installTools);
 
 module.exports = {
   installAll,
+  writeRolloHtml,
+  writeMinirolloHtml,
+  writeLeyHtml,
   buildMdRollos,
   buildAllRollos,
   buildMdMiniRollos,

@@ -7,6 +7,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="manifest" href="manifest.webmanifest">
+  <script>
+    if (/\/admin(?:\/|$)/.test(location.pathname)) {
+      //document.documentElement.style.backgroundColor = "rgb(233, 7, 176)";
+      //document.documentElement.style.backgroundColor = "rgb(0, 0, 0)";
+      document.documentElement.style.backgroundColor = "#000";
+      const cieloEternoUrl = new URL("cieloeterno.gif", document.baseURI).href;
+      const style = document.createElement("style");
+      //style.textContent = "body { background-color: rgb(233, 7, 176) }";
+      style.textContent = `
+      html,
+      body {
+        background-color: #000;
+        background-image: url("${cieloEternoUrl}");
+        background-repeat: repeat;
+        background-position: top left;
+      }
+
+      @media (max-width: 768px) {
+        html,
+        body {
+          background: #fff !important;
+        }
+      }
+    `;
+      document.head.appendChild(style);
+    }
+  </script>
 </head>
 <body>
   <app-root></app-root>

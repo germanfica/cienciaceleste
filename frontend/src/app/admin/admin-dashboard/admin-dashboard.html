@@ -1,0 +1,26 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <img src="images/editortoplong.jpg" alt="Decoración superior" />
+  </div>
+
+  <div class="dashboard-body">
+    <div class="dashboard-inner" [style.backgroundImage]="'url(images/fondolong.jpg)'">
+      <main class="dashboard-content">
+        <section class="dashboard-panel" aria-labelledby="dashboard-title">
+          <h1 class="dashboard-panel__title" id="dashboard-title">Panel de administración</h1>
+
+          <div class="dashboard-sections">
+            <app-admin-menu></app-admin-menu>
+            <div class="dashboard-sections__content"></div>
+          </div>
+
+          <nav class="dashboard-navigation" aria-label="Navegación de administración">
+            <a routerLink="/">Volver al sitio</a>
+          </nav>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

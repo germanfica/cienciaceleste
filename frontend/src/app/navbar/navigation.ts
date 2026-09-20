@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable, of, shareReplay, switchMap } from 'rxjs';
-import { DetailNav, DocIndexPage } from '../doc-viewer/doc-types';
+import { DetailNav, DocIndexPage, DocumentType } from '../doc-viewer/doc-types';
+
+const PAGE_SIZE_BY_DOCUMENT_TYPE: Readonly<Record<DocumentType, number>> = {
+  rollo: 10,
+  minirollo: 10,
+  ley: 100,
+};
 
 @Injectable()
 export class Navigation {
-  private readonly DEFAULT_PAGE_SIZE = 10;
-
   createNav$(
     id$: Observable<number>,
-    fetchIndexPage: (page: number) => Observable<DocIndexPage>
+    fetchIndexPage: (page: number) => Observable<DocIndexPage>,
+    documentType: DocumentType = 'rollo'
   ): Observable<DetailNav> {
     return id$.pipe(
       switchMap(currentId => {
@@ -16,7 +21,8 @@ export class Navigation {
           return of({ page: 1, hasPrev: false, hasNext: false, prevId: 0, nextId: 0 } as DetailNav);
         }
 
-        const pageGuess = Math.floor((currentId - 1) / this.DEFAULT_PAGE_SIZE) + 1;
+        const pageSize = PAGE_SIZE_BY_DOCUMENT_TYPE[documentType];
+        const pageGuess = Math.floor((currentId - 1) / pageSize) + 1;
 
         return fetchIndexPage(pageGuess).pipe(
           switchMap(meta => {

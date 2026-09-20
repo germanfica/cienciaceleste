@@ -1,0 +1,151 @@
+:host {
+  --blue: #050867;
+  --cyan: #03c5e9;
+  // #FE9900 - naranja oficial
+  --orange: #ff9700;
+  --orange-light: #ffad13;
+  --red: #ff0909;
+  --white: #fff;
+  --line: #ff6a00;
+
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: var(--blue);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin-login {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 2rem 1rem;
+
+  //background-color: #000;
+  //background-image: url("/cieloeterno.gif");
+  //background-repeat: repeat;
+  //background-position: top left;
+}
+
+.admin-login__card {
+  box-sizing: border-box;
+  width: min(100%, 28rem);
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 0.5rem;
+  background: var(--white); //rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.12);
+}
+
+.admin-login__card h1 {
+  margin: 0;
+}
+
+.admin-login__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-login__field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.admin-login__field label {
+  font-weight: 600;
+}
+
+.admin-login__field input,
+.admin-login__form button {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.75rem;
+  font: inherit;
+}
+
+.admin-login__field input {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 0.25rem;
+}
+
+.admin-login__form button {
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.admin-login__form button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.admin-login__error {
+  margin: 0;
+  color: var(--red);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1030px) {
+  .admin-login {
+    padding: 1.5rem;
+  }
+
+  .admin-login__card {
+    width: min(100%, 32rem);
+    padding: 1.75rem;
+  }
+
+  .admin-login__card h1 {
+    font-size: 1.65rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-login {
+    display: block;
+    min-height: 100dvh;
+    padding: 0;
+    background: var(--white);
+  }
+
+  .admin-login__card {
+    width: 100%;
+    min-height: 100dvh;
+    padding: 2rem 1.5rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .admin-login__card h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-login__card {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-login__card h1 {
+    font-size: 1.35rem;
+  }
+
+  .admin-login__form {
+    gap: 1rem;
+  }
+
+  .admin-login__field input,
+  .admin-login__form button {
+    min-height: 3rem;
+    font-size: 1rem;
+  }
+
+  .admin-login__error {
+    line-height: 1.4;
+  }
+}

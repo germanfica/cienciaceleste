@@ -1,0 +1,72 @@
+:host {
+  --export-red: #ff0909;
+  --export-white: #fff;
+
+  display: inline-block;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.export-json {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+}
+
+.export-json__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  min-height: 42px;
+  padding: 8px 21px;
+  color: var(--export-white);
+  background: var(--export-red);
+  border: 2px solid var(--export-white);
+  border-radius: 7px;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    filter: brightness(0.96);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    filter: grayscale(0.65);
+    opacity: 0.65;
+  }
+}
+
+.export-json__error {
+  max-width: 260px;
+  margin: 0;
+  color: #9b0000;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+@media (max-width: 720px) {
+  :host,
+  .export-json__button {
+    width: 100%;
+  }
+
+  .export-json__button {
+    min-width: 0;
+  }
+
+  .export-json__error {
+    max-width: none;
+  }
+}

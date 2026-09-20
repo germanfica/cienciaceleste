@@ -1,7 +1,7 @@
 // docs.ts
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { map, Observable, throwError } from "rxjs";
 import { DocJson } from "./md-types";
 import { DocIndexPage } from "./doc-types";
 import { APP_BASE_HREF } from "@angular/common";
@@ -9,6 +9,7 @@ import { DocsApi } from "./docs.api";
 
 @Injectable({ providedIn: 'root' })
 export class Docs implements DocsApi {
+  private readonly divinaLeyPageSize = 100;
   constructor(private http: HttpClient, @Inject(APP_BASE_HREF) private baseHref: string) { }
 
   private url(path: string): string {
@@ -44,6 +45,41 @@ export class Docs implements DocsApi {
   }
 
   getLeyDoc(id: string | number): Observable<DocJson> {
+    return this.getDivinaLeyDocv2(id);
+  }
+
+  private getDivinaLeyDocv2(id: string | number): Observable<DocJson> {
+    const numericId = Number(id);
+
+    if (!Number.isInteger(numericId) || numericId < 1) {
+      return throwError(() => new Error(`Invalid divina ley ID: ${id}`));
+    }
+
+    const page = Math.ceil(numericId / this.divinaLeyPageSize);
+
+    return this.getDivinaLeyIndexPageRemote(page).pipe(
+      map(indexPage => {
+        const ley = indexPage.items.find(item => item.id === numericId);
+
+        if (!ley) {
+          throw new Error(`Divina ley ${numericId} was not found on index page ${page}`);
+        }
+
+        return {
+          id: ley.id,
+          titulo: ley.titulo,
+          autor: ley.autor,
+          bloques: [],
+        };
+      }),
+    );
+  }
+
+  /**
+   * @deprecated Use getDivinaLeyDocv2 instead. Divinas leyes are stored in the
+   * paginated index and no longer have an individual JSON document.
+   */
+  private getDivinaLeyDocv1(id: string | number): Observable<DocJson> {
     return this.getJson<DocJson>(`docs/divina-ley/${id}.json`);
   }
 

@@ -4,6 +4,9 @@ const { clean } = require("./npm/rollos");
 const { cleanInit, cleanPost } = require("./npm/clean");
 const {
     installAll,
+    writeRolloHtml,
+    writeMinirolloHtml,
+    writeLeyHtml,
     buildMdRollos,
     buildAllRollos,
     buildMdMiniRollos,
@@ -47,5 +50,14 @@ task("frontend:watch", frontendWatch);
 task("frontend:test", frontendTest);
 task("frontend:deploy:ghpages", deployGhpages);
 
+// Write: JSON -> HTML
+task("write:rollo", writeRolloHtml);
+task("write:minirollo", writeMinirolloHtml);
+task("write:ley", writeLeyHtml);
+
 // Default: full rollos
 task("default", buildAllRollos);
+
+const { mediaIndex, mediaImport } = require("./npm/media");
+task("media:index", mediaIndex);
+task("media:import", mediaImport);
