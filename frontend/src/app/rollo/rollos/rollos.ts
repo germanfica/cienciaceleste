@@ -5,8 +5,8 @@ import { Observable } from "rxjs";
 import { DocIndexPage } from "../../doc-viewer/doc-types";
 import { Pagination } from "../../doc-viewer/pagination";
 import { Footer } from "../../footer/footer";
-import { IndexPaginator } from "../../index-paginator/index-paginator";
 import { DOCS, DocsApi } from "../../doc-viewer/docs.api";
+import { IndexPaginator } from "../../index-paginator/index-paginator";
 
 @Component({
   selector: "app-rollos",
